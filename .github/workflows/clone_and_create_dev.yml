@@ -1,0 +1,37 @@
+#check updates in original helper scripts repo and make /dev update if needed
+name: clone_and_create_dev
+
+on:
+  schedule:
+    - cron: '0 2 * * *'  # Run every day at 2 AM UTC
+  push:
+    branches:
+      - dev
+jobs:
+  sync-repo:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout your repository
+      uses: actions/checkout@v4
+   
+    - name: Set up Git and add upstream
+      run: |
+        git config user.name 'samohosting'
+        git config user.email 'email@samohosting.ru'
+        git remote add upstream https://github.com/community-scripts/ProxmoxVE.git
+
+    - name: Create or update dev branch
+      run: |
+        # Check if the dev branch exists, if not create it
+        git switch -c dev || echo "dev branch already is there, switching to dev branch"
+        git switch dev
+
+        # creat a test file
+        touch test_dev_file.txt
+        git add .
+        git commit -m "test_dev_file_created: $(date +'%Y-%m-%d %H:%M:%S')"
+        git remote add origin https://github.com/samohosting-ru/samohosting-scripts.git
+        git push -u origin dev
+        echo "pushed test file in origin dev"
+        
