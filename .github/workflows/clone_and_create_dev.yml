@@ -26,7 +26,7 @@ jobs:
     - name: Create or update dev branch
       run: |
         # Check if the dev branch exists, if not create it
-        git fetch --all
+        git fetch samohosting-scripts
         BRANCH_EXISTS=$(git show-ref refs/heads/dev)
         if [ -z "$BRANCH_EXISTS" ]; then
           echo "dev branch does not exist"
