@@ -25,10 +25,11 @@ jobs:
       run: |
         git clone https://github.com/community-scripts/ProxmoxVE temp_repo
 
-    # - name: Create or update dev branch
-    #   run: |
-    #     # Check if the dev branch exists, if not create it
-    #     git checkout -b dev || git checkout dev
+    - name: Create or update dev branch
+      run: |
+        # Check if the dev branch exists, if not create it
+        git checkout -b dev || echo "dev branch already is there, switching to dev branch"
+        git checkout dev
         
     #     # Fetch the latest changes from the remote dev branch
     #     git fetch origin dev
