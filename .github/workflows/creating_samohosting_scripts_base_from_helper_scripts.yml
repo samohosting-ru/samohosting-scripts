@@ -71,7 +71,7 @@ jobs:
           
         # Merge changes into dev branch
           git checkout dev
-          git merge https://github.com/samohosting-ru/samohosting-scripts/tree/dev -m "Merge upstream changes: $(date +'%Y-%m-%d %H:%M:%S')" --no-commit --no-ff --allow-unrelated-histories
+          # git merge https://github.com/samohosting-ru/samohosting-scripts/tree/dev -m "Merge upstream changes: $(date +'%Y-%m-%d %H:%M:%S')" --no-commit --no-ff --allow-unrelated-histories
           git push dev origin/dev
         else
           echo "No changes detected in upstream main branch."
