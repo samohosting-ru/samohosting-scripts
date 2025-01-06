@@ -26,7 +26,6 @@ jobs:
     - name: Create or update dev branch
       run: |
         # Check if the dev branch exists, if not create it
-        git clone https://github.com/samohosting-ru/samohosting-scripts.git
         git switch -c dev || echo "dev branch already is there, switching to dev branch"
         git switch dev
 
