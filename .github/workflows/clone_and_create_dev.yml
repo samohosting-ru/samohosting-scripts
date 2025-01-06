@@ -28,7 +28,7 @@ jobs:
         # Check if the dev branch exists, if not create it
         git fetch samohosting-scripts
         branch_name=`git show-ref refs/heads/<dev>`
-        if [ -n "$exists" ]; then
+        if [ -z "$exists" ]; then
           echo 'branch exists!'
         else
           echo 'branch NOT exists!'
