@@ -40,14 +40,15 @@ jobs:
       run: |
         # Merge fetched updates with your current dev branch
         git merge dev
-        # git merge dev --no-commit --no-ff --allow-unrelated-histories
         
-    #     # Copy changes from target repo to your dev branch
-    #     cp -r temp_repo/* .
-        
+        # # Copy changes from target repo to your dev branch
+        # cp -r temp_repo/* .
+    
+    - name: Add and commit changes and push to github dev branch
+      run: |
         # Add and commit changes and push to github dev branch
-        git config user.name 'samohosting'
-        git config user.email 'email@samohosting.ru'
+        git config user.name --global 'samohosting'
+        git config user.email --global 'email@samohosting.ru'
         git add .
         if git diff --cached --exit-code; then
           echo "No changes to commit."
