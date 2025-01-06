@@ -26,18 +26,22 @@ jobs:
     - name: Create or update dev branch
       run: |
         # Check if the dev branch exists, if not create it
+        git fetch upstream
         git fetch samohosting-scripts
+        
         BRANCH_EXISTS=$(git show-ref refs/heads/dev)
+        
         if [ -z "$BRANCH_EXISTS" ]; then
           echo "dev branch does not exist"
-          # creat a test file
+          # Create a test file
           touch "test_dev_$(date '+%Y-%m-%d %H:%M:%S').txt"
+          
           git add .
           git commit -m "test_dev_file_created_by_workflow: $(date +'%Y-%m-%d %H:%M:%S')"
+          # Push the new branch
           git push -u samohosting-scripts dev
           echo "pushed test file in origin dev"
         else
-          echo "dev branch already is there, switching to dev branch"
+          echo "dev branch already exists, switching to dev branch"
           git switch dev
         fi
-
