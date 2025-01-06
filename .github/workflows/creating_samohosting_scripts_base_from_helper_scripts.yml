@@ -52,7 +52,7 @@ jobs:
     - name: Merge upstream changes into dev branch
       run: |
         # Merge fetched updates with your current dev branch
-        git merge origin/main --no-commit --no-ff --allow-unrelated-histories
+        git merge dev --no-commit --no-ff --allow-unrelated-histories
         
         # # Merge remote(upstream) into local dev branch
         # git merge origin --no-commit --no-ff --allow-unrelated-histories
