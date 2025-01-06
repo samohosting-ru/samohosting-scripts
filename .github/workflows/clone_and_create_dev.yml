@@ -26,12 +26,12 @@ jobs:
     - name: Create or update dev branch
       run: |
         # Check if the dev branch exists, if not create it
-        git clone samohosting-scripts
+        git clone https://github.com/samohosting-ru/samohosting-scripts.git
         git switch -c dev || echo "dev branch already is there, switching to dev branch"
         git switch dev
 
         # creat a test file
-        touch test_dev_file.txt
+        touch "test_dev_$(date '+%Y-%m-%d %H:%M:%S').txt"
         git add .
         git commit -m "test_dev_file_created_by_workflow: $(date +'%Y-%m-%d %H:%M:%S')"
         git push -u samohosting-scripts dev
