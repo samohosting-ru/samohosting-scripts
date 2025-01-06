@@ -25,7 +25,13 @@ jobs:
       run: |
         git clone https://github.com/community-scripts/ProxmoxVE temp_repo
         cd /home/runner/work/samohosting-scripts/samohosting-scripts/
-        ls - la
+        ls -a -l > /tmp/output.txt
+        
+    - name: Archive files
+      uses: actions/upload-artifact@v2
+      with:
+        name: ls-output
+        path: /tmp/output.txt
 
     - name: Create or update dev branch
       run: |
