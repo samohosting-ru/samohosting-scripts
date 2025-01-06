@@ -35,10 +35,11 @@ jobs:
         if [ -z "$BRANCH_EXISTS" ]; then
           echo "dev branch does not exist in targeted repo"
           echo "creating /dev and test files"
+          git switch -c dev
           
           # Create a test file and commit it
           touch "test_dev_$(date '+%Y-%m-%d %H:%M:%S').txt" && echo "Created test file"
-          git add . && echo "Added files to staging area"
+          git add . && echo "Added files to staging area(ready for push)"
           git commit -m "test_dev_file_created_by_workflow: $(date +'%Y-%m-%d %H:%M:%S')" && echo "Committed changes"
           
           # Push the new branch
@@ -49,28 +50,6 @@ jobs:
         fi
 
 
-    # - name: Check if the dev branch exists, if not create it
-    #   run: |
-    #     # Check if the dev branch exists, if not create it
-    #     git fetch samohosting-scripts
-    #     git show-ref refs/heads/dev
-        
-        # if [ -z "$branch_name" ]; then
-        #   echo 'branch exists!'
-        # else
-        #   echo 'branch NOT exists!'
-        # fi
-
-        
-        # if [ `git branch --list $branch_name` ]; then
-        #   echo "Branch name $branch_name already exists."  
-        # else
-        #   echo "Branch name $branch_name NOT FOUND."
-        # fi  
-        # BRANCH_EXISTS=$(git show-ref refs/heads/dev)
-        
-        # if [ -z "$BRANCH_EXISTS" ]; then
-        #   echo "dev branch does not exist"
         #   # Create a test file
         #   touch "test_dev_$(date '+%Y-%m-%d %H:%M:%S').txt"
           
