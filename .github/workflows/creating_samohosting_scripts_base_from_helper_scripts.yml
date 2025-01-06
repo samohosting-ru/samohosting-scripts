@@ -44,36 +44,38 @@ jobs:
         # # Copy changes from target repo to your dev branch
         # cp -r temp_repo/* .
     
-    - name: Add and commit changes and push to github dev branch
-      run: |
-        # Add and commit changes and push to github dev branch
-        git config user.name --global 'samohosting'
-        git config user.email --global 'email@samohosting.ru'
-        git add .
-        if git diff --cached --exit-code; then
-          echo "No changes to commit."
-        else
-          git commit -m "Sync with upstream: $(date +'%Y-%m-%d %H:%M:%S')"
-          git push dev https://github.com/samohosting-ru/samohosting-scripts
-        fi
+    # - name: Add and commit changes and push to github dev branch
+    #   run: |
+    #     # Add and commit changes and push to github dev branch
+    #     git config user.name --global 'samohosting'
+    #     git config user.email --global 'email@samohosting.ru'
+    #     git add .
+    #     if git diff --cached --exit-code; then
+    #       echo "No changes to commit."
+    #     else
+    #       git commit -m "Sync with upstream: $(date +'%Y-%m-%d %H:%M:%S')"
+    #       git push dev https://github.com/samohosting-ru/samohosting-scripts
+    #     fi
 
     # - name: Check for changes in main branch
     #   run: |
     #     # Fetch the latest changes from both repositories
-    #     git fetch upstream
-    #     git fetch origin
-        
-    #     # Compare the main branches
-    #     if ! git diff --exit-code origin/main upstream/main; then
-    #       echo "Changes NOT detected in upstream main branch."
+    #     git fetch dev
+    #     git fetch origin/dev
+
+    - name: Check for changes in main branch
+      run: |    
+        # Compare the main branches
+        if ! git diff --exit-code dev origin/dev; then
+        echo "Changes NOT detected in upstream main branch."
           
-    #       # Merge changes into dev branch
-    #       git checkout dev
-    #       git merge upstream/main -m "Merge upstream changes: $(date +'%Y-%m-%d %H:%M:%S')" --no-commit --no-ff --allow-unrelated-histories
-    #       git push origin dev
-    #     else
-    #       echo "No changes detected in upstream main branch."
-    #     fi
+        # Merge changes into dev branch
+          git checkout dev
+          git merge origin/dev -m "Merge upstream changes: $(date +'%Y-%m-%d %H:%M:%S')" --no-commit --no-ff --allow-unrelated-histories
+          git push dev origin/dev
+        else
+          echo "No changes detected in upstream main branch."
+        fi
 
     # - name: Notify on changes
     #   if: always()
