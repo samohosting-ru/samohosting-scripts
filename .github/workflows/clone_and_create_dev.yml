@@ -26,7 +26,6 @@ jobs:
     - name: Create or update dev branch
       run: |
         # Check if the dev branch exists, if not create it
-        git fetch upstream
         git fetch samohosting-scripts
         
         BRANCH_EXISTS=$(git show-ref refs/heads/dev)
