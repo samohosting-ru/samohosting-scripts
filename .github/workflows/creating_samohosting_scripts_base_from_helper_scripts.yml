@@ -34,6 +34,11 @@ jobs:
         # Fetch the latest changes from the remote(upstream) to local dev branch
         git fetch upstream
         
+    - name: Merge upstream changes into dev branch
+      run: |
+        # Merge fetched updates with your current dev branch
+        git merge upstream/dev
+        
         # # Merge remote(upstream) into local dev branch
         # git merge origin --no-commit --no-ff --allow-unrelated-histories
         
