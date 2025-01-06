@@ -45,16 +45,16 @@ jobs:
     #     # Copy changes from target repo to your dev branch
     #     cp -r temp_repo/* .
         
-    #     # Add and commit changes
-    #     git config user.name --global 'samohosting'
-    #     git config user.email --global 'email@samohosting.ru'
-    #     git add .
-    #     if git diff --cached --exit-code; then
-    #       echo "No changes to commit."
-    #     else
-    #       git commit -m "Sync with upstream: $(date +'%Y-%m-%d %H:%M:%S')"
-    #       git push origin dev
-    #     fi
+        # Add and commit changes and push to github dev branch
+        git config user.name 'samohosting'
+        git config user.email 'email@samohosting.ru'
+        git add .
+        if git diff --cached --exit-code; then
+          echo "No changes to commit."
+        else
+          git commit -m "Sync with upstream: $(date +'%Y-%m-%d %H:%M:%S')"
+          git push origin dev
+        fi
 
     # - name: Check for changes in main branch
     #   run: |
