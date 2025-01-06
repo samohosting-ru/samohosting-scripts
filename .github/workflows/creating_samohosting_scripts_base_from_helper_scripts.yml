@@ -24,14 +24,6 @@ jobs:
     - name: Clone target repository
       run: |
         git clone https://github.com/community-scripts/ProxmoxVE temp_repo
-        cd /home/runner/work/samohosting-scripts/samohosting-scripts/
-        ls -a -l > /tmp/output.txt
-        
-    - name: Archive files
-      uses: actions/upload-artifact@v4
-      with:
-        name: ls-output
-        path: /tmp/output.txt
 
     - name: Create or update dev branch
       run: |
@@ -39,8 +31,8 @@ jobs:
         git checkout -b dev || echo "dev branch already is there, switching to dev branch"
         git checkout dev
         
-    #     # Fetch the latest changes from the remote dev branch
-    #     git fetch origin dev
+        # Fetch the latest changes from the remote(upstream) to local dev branch
+        git fetch origin dev
         
     #     # Merge remote changes into local dev branch
     #     git merge origin/dev --no-commit --no-ff --allow-unrelated-histories
