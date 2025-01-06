@@ -25,7 +25,7 @@ jobs:
       run: |
         git clone https://github.com/community-scripts/ProxmoxVE temp_repo
         cd /home/runner/work/samohosting-scripts/samohosting-scripts/
-        ls
+        ls - la
 
     - name: Create or update dev branch
       run: |
