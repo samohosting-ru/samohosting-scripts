@@ -32,10 +32,10 @@ jobs:
         git checkout dev
         
         # Fetch the latest changes from the remote(upstream) to local dev branch
-        git fetch origin dev
+        git fetch upstream
         
     #     # Merge remote changes into local dev branch
-    #     git merge origin/dev --no-commit --no-ff --allow-unrelated-histories
+    #     git merge upstream/dev --no-commit --no-ff --allow-unrelated-histories
         
     #     # Copy changes from target repo to your dev branch
     #     cp -r temp_repo/* .
