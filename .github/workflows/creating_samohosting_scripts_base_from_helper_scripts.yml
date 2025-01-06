@@ -30,7 +30,22 @@ jobs:
         # Check if the dev branch exists, if not create it
         git checkout -b dev || echo "dev branch already is there, switching to dev branch"
         git checkout dev
+
+    - name: Create dev branch if it does not exist
+      run: |
+        echo "Checking if dev branch exists locally..."
+        git show-ref --verify --quiet refs/heads/dev
+    
+        # If the dev branch doesn't exist, create it
+        if [ $? != 0 ]; then
+          echo "Creating local dev branch..."
+          git checkout -b dev
+        else
+          echo "dev branch already exists"
+        fi
         
+    - name: Fetch the latest changes from the remote(upstream) to local dev branch
+      run: |   
         # Fetch the latest changes from the remote(upstream) to local dev branch
         git fetch upstream
         
