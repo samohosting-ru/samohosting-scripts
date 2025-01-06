@@ -32,7 +32,7 @@ jobs:
         touch test_dev_file.txt
         git add .
         git commit -m "test_dev_file_created: $(date +'%Y-%m-%d %H:%M:%S')"
-        git remote add origin https://github.com/samohosting-ru/samohosting-scripts.git
-        git push -u origin dev
+        git remote add samohosting-scripts https://github.com/samohosting-ru/samohosting-scripts.git
+        git push -u samohosting-scripts dev
         echo "pushed test file in origin dev"
         
