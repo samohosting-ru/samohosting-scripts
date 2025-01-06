@@ -21,9 +21,9 @@ jobs:
         git config user.email 'email@samohosting.ru'
         git remote add upstream https://github.com/community-scripts/ProxmoxVE
 
-    - name: Clone target repository
-      run: |
-        git clone https://github.com/community-scripts/ProxmoxVE temp_repo
+    # - name: Clone target repository
+    #   run: |
+    #     git clone https://github.com/community-scripts/ProxmoxVE temp_repo
 
     - name: Create or update dev branch
       run: |
