@@ -54,7 +54,7 @@ jobs:
           echo "No changes to commit."
         else
           git commit -m "Sync with upstream: $(date +'%Y-%m-%d %H:%M:%S')"
-          git push dev origin
+          git push dev https://github.com/samohosting-ru/samohosting-scripts
         fi
 
     # - name: Check for changes in main branch
