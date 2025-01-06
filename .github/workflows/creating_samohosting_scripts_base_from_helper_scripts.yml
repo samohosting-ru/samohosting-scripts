@@ -1,11 +1,11 @@
 name: creating_samohosting_scripts_base_from_helper_scripts
 
-on:
-  schedule:
-    - cron: '0 2 * * *'  # Run every day at 2 AM UTC
-  push:
-    branches:
-      - main
+# on:
+#   schedule:
+#     - cron: '0 2 * * *'  # Run every day at 2 AM UTC
+#   push:
+#     branches:
+#       - main
 
 jobs:
   sync-repo:
