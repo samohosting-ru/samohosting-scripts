@@ -34,8 +34,8 @@ jobs:
         # Fetch the latest changes from the remote(upstream) to local dev branch
         git fetch upstream
         
-        # Merge remote(upstream) into local dev branch
-        git merge https://github.com/community-scripts/ProxmoxVE --no-commit --no-ff --allow-unrelated-histories
+        # # Merge remote(upstream) into local dev branch
+        # git merge origin --no-commit --no-ff --allow-unrelated-histories
         
     #     # Copy changes from target repo to your dev branch
     #     cp -r temp_repo/* .
