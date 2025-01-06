@@ -35,7 +35,7 @@ jobs:
         git fetch upstream
         
         # Merge remote(upstream) into local dev branch
-        git merge origin/dev --no-commit --no-ff --allow-unrelated-histories
+        git merge upstream--no-commit --no-ff --allow-unrelated-histories
         
     #     # Copy changes from target repo to your dev branch
     #     cp -r temp_repo/* .
