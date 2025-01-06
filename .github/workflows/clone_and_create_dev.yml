@@ -29,9 +29,10 @@ jobs:
         git fetch samohosting-scripts
         branch_name=dev
         if [ `git branch --list $branch_name` ] then
-        echo "Branch name $branch_name already exists."  
-        fi
-        echo "Branch name $branch_name NOT FOUND."
+          echo "Branch name $branch_name already exists."  
+        else
+          echo "Branch name $branch_name NOT FOUND."
+        fi  
         # BRANCH_EXISTS=$(git show-ref refs/heads/dev)
         
         # if [ -z "$BRANCH_EXISTS" ]; then
