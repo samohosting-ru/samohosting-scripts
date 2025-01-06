@@ -67,11 +67,11 @@ jobs:
       run: |    
         # Compare the main branches
         if ! git diff --exit-code dev origin/dev; then
-        echo "Changes NOT detected in upstream main branch."
+        echo "Changes detected in upstream main(local dev) branch."
           
         # Merge changes into dev branch
           git checkout dev
-          git merge origin/dev -m "Merge upstream changes: $(date +'%Y-%m-%d %H:%M:%S')" --no-commit --no-ff --allow-unrelated-histories
+          git merge https://github.com/samohosting-ru/samohosting-scripts/tree/dev -m "Merge upstream changes: $(date +'%Y-%m-%d %H:%M:%S')" --no-commit --no-ff --allow-unrelated-histories
           git push dev origin/dev
         else
           echo "No changes detected in upstream main branch."
