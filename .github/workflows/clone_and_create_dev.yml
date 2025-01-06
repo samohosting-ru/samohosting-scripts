@@ -41,7 +41,7 @@ jobs:
           touch "created_dev_branch_testfile_$(date '+%Y-%m-%d %H:%M:%S').txt" && echo "Created test file"
           git add . && echo "Added files to staging area(ready for push)"
           git commit -m "created_dev_branch_testfile_was_created_by_workflow: $(date +'%Y-%m-%d %H:%M:%S')" && echo "Committed changes"
-          
+
           # Push the new branch
           git push -u samohosting-scripts dev && echo "Pushed test file in origin dev"
         else
@@ -50,4 +50,5 @@ jobs:
           touch "existed_dev_branch_testfile_$(date '+%Y-%m-%d %H:%M:%S').txt" && echo "Created test file"
           git add . && echo "Added files to staging area(ready for push)"
           git commit -m "existed_dev_branch_testfile_was_created_by_workflow: $(date +'%Y-%m-%d %H:%M:%S')" && echo "Committed changes"
+          git push -u samohosting-scripts dev && echo "Pushed test file in existed origin dev"
         fi
