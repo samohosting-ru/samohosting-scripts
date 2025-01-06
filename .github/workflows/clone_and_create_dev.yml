@@ -27,13 +27,14 @@ jobs:
       run: |
         # Fetch branches from both repositories to ensure you're working with the latest data
         # git fetch upstream && echo "Fetched from upstream"
-        git fetch samohosting-scripts && echo "Fetched from samohosting-scripts"
+        git fetch samohosting-scripts && echo "Fetched from samohosting-scripts $(date +'%Y-%m-%d %H:%M:%S')"
 
         # Check if dev branch exists in remote repository
         BRANCH_EXISTS=$(git ls-remote --heads samohosting-scripts refs/heads/dev)
 
         if [ -z "$BRANCH_EXISTS" ]; then
-          echo "dev branch does not exist"
+          echo "dev branch does not exist in targeted repo"
+          echo "creating /dev and test files"
           
           # Create a test file and commit it
           touch "test_dev_$(date '+%Y-%m-%d %H:%M:%S').txt" && echo "Created test file"
@@ -44,7 +45,7 @@ jobs:
           git push -u samohosting-scripts dev && echo "Pushed test file in origin dev"
         else
           echo "dev branch already exists, switching to dev branch"
-          git switch dev && echo "Switched to dev branch"
+          git switch dev && echo "Has switched to dev branch"
         fi
 
 
