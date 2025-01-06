@@ -24,6 +24,8 @@ jobs:
     - name: Clone target repository
       run: |
         git clone https://github.com/community-scripts/ProxmoxVE temp_repo
+        cd /home/runner/work/samohosting-scripts/samohosting-scripts/
+        ls
 
     - name: Create or update dev branch
       run: |
