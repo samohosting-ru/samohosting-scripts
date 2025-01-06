@@ -31,6 +31,7 @@ jobs:
 
         # Check if dev branch exists in remote repository
         BRANCH_EXISTS=$(git ls-remote --heads samohosting-scripts refs/heads/dev)
+        echo $BRANCH_EXISTS
 
         if [ -z "$BRANCH_EXISTS" ]; then
           echo "dev branch does not exist in targeted repo"
