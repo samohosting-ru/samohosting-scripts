@@ -28,7 +28,7 @@ jobs:
         ls -a -l > /tmp/output.txt
         
     - name: Archive files
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: ls-output
         path: /tmp/output.txt
