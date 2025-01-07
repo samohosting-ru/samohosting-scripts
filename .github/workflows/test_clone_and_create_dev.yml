@@ -1,13 +1,13 @@
 #check updates in original helper scripts repo and make /dev update if needed
-name: clone_and_create_dev
+name: test_clone_and_create_dev
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '0 2 * * *'  # Run every day at 2 AM UTC
-  push:
-    branches:
-      - dev
+  # schedule:
+  #   - cron: '0 2 * * *'  # Run every day at 2 AM UTC
+  # push:
+  #   branches:
+  #     - dev
 jobs:
   sync-repo:
     runs-on: ubuntu-latest
