@@ -30,8 +30,8 @@ jobs:
 
         # Check if dev branch exists in remote repository
         BRANCH_EXISTS=$(git ls-remote --heads samohosting-scripts refs/heads/dev)
-        echo "info: found targeted branch -> $BRANCH_EXISTS"
         if [ -z "$BRANCH_EXISTS" ]; then
+          echo "info: cant find targeted dev branch"
           #clone helper-scripts original repo
           git clone --single-branch --branch main https://github.com/community-scripts/ProxmoxVE.git temp_repo
           cp -r temp_repo/* .
@@ -40,6 +40,7 @@ jobs:
           git commit -m "pushed ProxmoxVE cloned repo to dev by workflow: $(date +'%Y-%m-%d %H:%M:%S')" && echo "info: Committed changes $(date +'%Y-%m-%d %H:%M:%S')"
           git push -u samohosting-scripts main:dev && echo "info: Pushed cloned repo in samohosting-scripts/dev $(date +'%Y-%m-%d %H:%M:%S')"
         else
+          echo "info: found targeted branch -> $BRANCH_EXISTS"
           echo "info: Fetch the latest changes from both repositories $(date +'%Y-%m-%d %H:%M:%S')"
           
           # Fetch the latest changes from both repositories
@@ -71,4 +72,3 @@ jobs:
           echo "info: No diff is detected in samohosting-scripts/dev VS community-scripts/ProxmoxVE"
           fi
         fi
-
