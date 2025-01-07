@@ -62,7 +62,9 @@ jobs:
           git add . && echo "info: DONE add . $(date +'%Y-%m-%d %H:%M:%S')"
           # git commit -m "update at ProxmoxVE repo found! Transfered to dev by workflow: $(date +'%Y-%m-%d %H:%M:%S')"
           # echo "info: Committed changes $(date +'%Y-%m-%d %H:%M:%S')"
-          rm -r .github/
+          ls
+          rm -r .github/ && echo "info:  rm -r .github/ "
+          ls
           git push -u -f samohosting-scripts main:dev 
           echo "info: Pushed repo update in samohosting-scripts/dev $(date +'%Y-%m-%d %H:%M:%S')"
           else
