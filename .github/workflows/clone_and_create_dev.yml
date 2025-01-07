@@ -38,7 +38,7 @@ jobs:
           git switch -c dev
 
           #clone helper-scripts original repo
-          git clone https://github.com/community-scripts/ProxmoxVE.git main
+          git clone --single-branch --branch main upstream
           # ls git
           # cd upstream
 
