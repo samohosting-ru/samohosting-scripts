@@ -54,6 +54,7 @@ jobs:
           git switch main && echo "info: switching to origin/main"
           echo "info: merging upstream/main" && git merge upstream/main --allow-unrelated-histories
           echo "info: sucsessfully merged"
+          git switch main
           git add . && echo "info: DONE add . $(date +'%Y-%m-%d %H:%M:%S')"
           git commit -m "update at ProxmoxVE repo found! Transfered to dev by workflow: $(date +'%Y-%m-%d %H:%M:%S')"
           echo "info: Committed changes $(date +'%Y-%m-%d %H:%M:%S')"
