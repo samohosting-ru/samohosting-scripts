@@ -39,10 +39,10 @@ jobs:
 
           #clone helper-scripts original repo
           git clone --single-branch --branch main https://github.com/community-scripts/ProxmoxVE.git
+          ls git
+          cd main
         else
           echo "exists!"
-          # ls git
-          # cd upstream
         fi
 
         #   git add . && echo "Added files to staging area(ready for push)"
