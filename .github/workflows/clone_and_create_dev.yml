@@ -37,7 +37,7 @@ jobs:
           git clone --single-branch --branch main https://github.com/community-scripts/ProxmoxVE.git
           git add . && echo " DONE add ."
           git commit -m "pushing cloned repo to dev by workflow: $(date +'%Y-%m-%d %H:%M:%S')" && echo "Committed changes"
-          git push -u samohosting-scripts dev && echo "Pushed cloned repo file in samohosting-scripts/dev"
+          git push -u samohosting-scripts main:dev && echo "Pushed cloned repo file in samohosting-scripts/dev"
         else
           echo "exists!"
         fi
