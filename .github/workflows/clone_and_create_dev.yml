@@ -36,7 +36,7 @@ jobs:
           #clone helper-scripts original repo
           git clone --single-branch --branch main https://github.com/community-scripts/ProxmoxVE.git temp_repo
           cp -r temp_repo/* .
-          rmdir -r temp_repo
+          rm -r temp_repo
           git add . && echo " DONE add ."
           git commit -m "pushing cloned repo to dev by workflow: $(date +'%Y-%m-%d %H:%M:%S')" && echo "Committed changes"
           git push -u samohosting-scripts main:dev && echo "Pushed cloned repo file in samohosting-scripts/dev"
