@@ -49,7 +49,7 @@ jobs:
           echo "info: checking diff samohosting-scripts/dev VS community-scripts/ProxmoxVE $(date +'%Y-%m-%d %H:%M:%S')"
           
           # Compare the main branches
-          if ! git diff -- . ":(exclude)./misc/" --name-only --exit-code samohosting-scripts/dev..upstream/main; then
+          if ! git diff -- . ":(exclude)misc/" --name-only --exit-code samohosting-scripts/dev..upstream/main; then
           echo "info: diff is detected in samohosting-scripts/dev VS community-scripts/ProxmoxVE"
           # git switch samohosting-scripts/dev
           # git merge upstream/main
