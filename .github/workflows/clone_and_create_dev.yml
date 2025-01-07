@@ -52,7 +52,7 @@ jobs:
           if ! git diff --name-only --exit-code samohosting-scripts/dev..upstream/main -- . ':!.github' ':!.editorconfig'; then
           echo "info: diff is detected in samohosting-scripts/dev VS community-scripts/ProxmoxVE"
           git switch main && echo "info: switching to origin/main"
-          git merge upstream/main && echo "info: merging upstream/main"
+          git merge upstream/main --allow-unrelated-histories && echo "info: merging upstream/main"
           echo "info: sucsessfully merged"
           else
           echo "info: No diff is detected in samohosting-scripts/dev VS community-scripts/ProxmoxVE"
