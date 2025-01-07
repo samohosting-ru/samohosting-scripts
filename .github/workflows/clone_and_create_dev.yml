@@ -59,13 +59,11 @@ jobs:
           echo "info: merging upstream/main" && git merge upstream/main --allow-unrelated-histories
           echo "info: sucsessfully merged"
           git add . && echo "info: DONE add . $(date +'%Y-%m-%d %H:%M:%S')"
-          # git commit -m "update at ProxmoxVE repo found! Transfered to dev by workflow: $(date +'%Y-%m-%d %H:%M:%S')"
-          # echo "info: Committed changes $(date +'%Y-%m-%d %H:%M:%S')"
-          ls -a
-          rm -rf .github && echo "info:  rm -r .github"
+          rm -rf .github && echo "info:  rm -rf .github"
+          rm -rf .github && echo "info:  rm -rf .editorconfig"
           ls -a
           git add .
-          git commit -m "rm -rf .github"
+          git commit -m "merged_changes_from_helper=scripts_updated"
           echo "info: start pushing origin $(date +'%Y-%m-%d %H:%M:%S')"
           git push -u -f samohosting-scripts main:dev 
           echo "info: Pushed repo update in samohosting-scripts/dev $(date +'%Y-%m-%d %H:%M:%S')"
