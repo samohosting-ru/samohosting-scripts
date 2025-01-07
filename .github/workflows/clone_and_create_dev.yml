@@ -38,6 +38,7 @@ jobs:
           cd ProxmoxVE
           git config user.name 'samohosting'
           git config user.email 'email@samohosting.ru'
+          git remote add samohosting-scripts https://github.com/samohosting-ru/samohosting-scripts.git
           git add . && echo " DONE add ."
           git commit -m "pushing cloned repo to dev by workflow: $(date +'%Y-%m-%d %H:%M:%S')" && echo "Committed changes"
           git push -u samohosting-scripts main:dev && echo "Pushed cloned repo file in samohosting-scripts/dev"
