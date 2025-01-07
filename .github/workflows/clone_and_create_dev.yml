@@ -38,9 +38,9 @@ jobs:
           git switch -c dev
 
           #clone helper-scripts original repo
-          git clone upstream main
-          ls git
-          cd upstream
+          git clone https://github.com/community-scripts/ProxmoxVE.git main
+          # ls git
+          # cd upstream
 
         #   git add . && echo "Added files to staging area(ready for push)"
         #   git commit -m "created_dev_branch_testfile_was_created_by_workflow: $(date +'%Y-%m-%d %H:%M:%S')" && echo "Committed changes"
