@@ -37,7 +37,7 @@ jobs:
           cp -r temp_repo/* .
           rm -r temp_repo
           git add . && echo "info: DONE add . $(date +'%Y-%m-%d %H:%M:%S')"
-          git commit -m "pushing cloned repo to dev by workflow: $(date +'%Y-%m-%d %H:%M:%S')" && echo "info: Committed changes $(date +'%Y-%m-%d %H:%M:%S')"
+          git commit -m "pushed ProxmoxVE cloned repo to dev by workflow: $(date +'%Y-%m-%d %H:%M:%S')" && echo "info: Committed changes $(date +'%Y-%m-%d %H:%M:%S')"
           git push -u samohosting-scripts main:dev && echo "info: Pushed cloned repo in samohosting-scripts/dev $(date +'%Y-%m-%d %H:%M:%S')"
         else
           echo "info: Fetch the latest changes from both repositories $(date +'%Y-%m-%d %H:%M:%S')"
