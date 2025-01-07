@@ -35,8 +35,11 @@ jobs:
         if [ -z "$BRANCH_EXISTS" ]; then
           #clone helper-scripts original repo
           git clone --single-branch --branch main https://github.com/community-scripts/ProxmoxVE.git
-          ls $$ echo "what do i see lvl 1"
-          cd ProxmoxVE $$ echo "what do i see lvl 2"
+          echo "what do i see lvl 1"
+          ls
+          echo "doing cd ProxmoxVE"
+          cd ProxmoxVE
+          echo "what do i see lvl 2"
           ls
           # git add . && echo " DONE add ."
           # git commit -m "pushing cloned repo to dev by workflow: $(date +'%Y-%m-%d %H:%M:%S')" && echo "Committed changes"
