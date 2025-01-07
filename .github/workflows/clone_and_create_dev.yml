@@ -51,11 +51,13 @@ jobs:
           # Compare the main branches
           if ! git diff --name-only --exit-code samohosting-scripts/dev..upstream/main -- . ':!.github' ':!.editorconfig'; then
           echo "info: diff is detected in samohosting-scripts/dev VS community-scripts/ProxmoxVE"
-          git switch main && echo "info: switching to origin/main"
+          echo "info: switching to origin/main"
+          # Switch to the main branch and pull changes from upstream.
+          git switch main && git pull
+          echo "info: switched and pulled"
           echo "info: merging upstream/main" && git merge upstream/main --allow-unrelated-histories
           echo "info: sucsessfully merged"
           echo "info: start pushing origin $(date +'%Y-%m-%d %H:%M:%S')"
-          git push origin
           echo "info: finished pushing origin $(date +'%Y-%m-%d %H:%M:%S')"
           git add . && echo "info: DONE add . $(date +'%Y-%m-%d %H:%M:%S')"
           git commit -m "update at ProxmoxVE repo found! Transfered to dev by workflow: $(date +'%Y-%m-%d %H:%M:%S')"
