@@ -23,37 +23,39 @@ jobs:
         git remote add upstream https://github.com/community-scripts/ProxmoxVE.git
         git remote add samohosting-scripts https://github.com/samohosting-ru/samohosting-scripts.git
 
-    - name: Check if the dev branch exists, create it if necessary
+    - name: Create\Update samohosting-scripts/dev
       run: |
-        # Fetch branches from both repositories to ensure you're working with the latest data
-        git fetch samohosting-scripts && echo "Fetched from samohosting-scripts $(date +'%Y-%m-%d %H:%M:%S')"
+        # Fetch data from samohosting-scripts
+        git fetch samohosting-scripts && echo "info: Fetched from samohosting-scripts $(date +'%Y-%m-%d %H:%M:%S')"
 
         # Check if dev branch exists in remote repository
         BRANCH_EXISTS=$(git ls-remote --heads samohosting-scripts refs/heads/dev)
-        echo $BRANCH_EXISTS
-
+        echo "info: found targeted branch -> $BRANCH_EXISTS"
         if [ -z "$BRANCH_EXISTS" ]; then
           #clone helper-scripts original repo
           git clone --single-branch --branch main https://github.com/community-scripts/ProxmoxVE.git temp_repo
           cp -r temp_repo/* .
           rm -r temp_repo
-          git add . && echo " DONE add ."
-          git commit -m "pushing cloned repo to dev by workflow: $(date +'%Y-%m-%d %H:%M:%S')" && echo "Committed changes"
-          git push -u samohosting-scripts main:dev && echo "Pushed cloned repo file in samohosting-scripts/dev"
+          git add . && echo "info: DONE add . $(date +'%Y-%m-%d %H:%M:%S')"
+          git commit -m "pushing cloned repo to dev by workflow: $(date +'%Y-%m-%d %H:%M:%S')" && echo "info: Committed changes $(date +'%Y-%m-%d %H:%M:%S')"
+          git push -u samohosting-scripts main:dev && echo "info: Pushed cloned repo in samohosting-scripts/dev $(date +'%Y-%m-%d %H:%M:%S')"
         else
-          echo "exists!"
+          echo "info: targeted branch exists!"
+          echo "info: Fetch the latest changes from both repositories $(date +'%Y-%m-%d %H:%M:%S')"
+          
+          # Fetch the latest changes from both repositories
+          git fetch samohosting-scripts dev
+          git fetch upstream main
+          
+          echo "info: checking diff samohosting-scripts/dev VS community-scripts/ProxmoxVE $(date +'%Y-%m-%d %H:%M:%S')"
+
+          # Compare the main branches
+          if ! git diff --name-only --exit-code samohosting-scripts/dev..upstream/main; then
+          echo "info: diff is detected in samohosting-scripts/dev VS community-scripts/ProxmoxVE"
+          # git switch samohosting-scripts/dev
+          # git merge upstream/main
+          else
+          echo "info: No diff is detected in samohosting-scripts/dev VS community-scripts/ProxmoxVE"
+          fi
         fi
 
-        #   git add . && echo "Added files to staging area(ready for push)"
-        #   git commit -m "created_dev_branch_testfile_was_created_by_workflow: $(date +'%Y-%m-%d %H:%M:%S')" && echo "Committed changes"
-
-        #   # Push the new branch
-        #   git push -u samohosting-scripts dev && echo "Pushed test file in origin dev"
-        # else
-        #   echo "dev branch already exists, switching to dev branch"
-        #   git switch dev && echo "Has switched to dev branch"
-        #   touch "existed_dev_branch_testfile_$(date '+%Y-%m-%d %H:%M:%S').txt" && echo "Created test file"
-        #   git add . && echo "Added files to staging area(ready for push)"
-        #   git commit -m "existed_dev_branch_testfile_was_created_by_workflow: $(date +'%Y-%m-%d %H:%M:%S')" && echo "Committed changes"
-        #   git push -u samohosting-scripts dev && echo "Pushed test file in existed origin dev"
-        # fi
