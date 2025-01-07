@@ -23,7 +23,7 @@ jobs:
         git remote add upstream https://github.com/community-scripts/ProxmoxVE.git
         git remote add samohosting-scripts https://github.com/samohosting-ru/samohosting-scripts.git
 
-    - name: Check if the dev branch exists, create it if necessary (Verbose)
+    - name: Check if the dev branch exists, create it if necessary
       run: |
         # Fetch branches from both repositories to ensure you're working with the latest data
         # git fetch upstream && echo "Fetched from upstream"
