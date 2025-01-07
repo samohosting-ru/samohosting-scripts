@@ -33,14 +33,11 @@ jobs:
         echo $BRANCH_EXISTS
 
         if [ -z "$BRANCH_EXISTS" ]; then
-          echo "dev branch does not exist in targeted repo"
-          echo "creating /dev and test files"
-          git switch -c dev
-
           #clone helper-scripts original repo
           git clone --single-branch --branch main https://github.com/community-scripts/ProxmoxVE.git
-          ls git
-          cd main
+          git add . && echo " DONE add ."
+          git commit -m "pushing cloned repo to dev by workflow: $(date +'%Y-%m-%d %H:%M:%S')" && echo "Committed changes"
+          git push -u samohosting-scripts dev && echo "Pushed cloned repo file in samohosting-scripts/dev"
         else
           echo "exists!"
         fi
