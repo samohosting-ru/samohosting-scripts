@@ -22,6 +22,7 @@ jobs:
         git pull
         git show-branch
         git switch dev
+        git pull
         find ./ -type f \( -name "*.sh" \) -exec sed -i "s|https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE|https://MY_LIINK/LICENS|g" {} +
         echo "LICENSE link was replaced"
         git add . && echo "info: DONE add . $(date +'%Y-%m-%d %H:%M:%S')"
