@@ -19,16 +19,31 @@ jobs:
 
     - name:  translation_en2ru
       run: |
-        git pull
-        git show-branch
         git switch dev
-        echo "dev looks now like that:" && ls
-        git pull
-        echo "after pull dev looks like that:" && ls
-        git merge
-        echo "after merge dev looks like that:" && ls
+        find ./ -type f \( -name "*.sh" \) -exec sed -i "s|https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func|https://MY_LIINK/build.func|g" {} +
         find ./ -type f \( -name "*.sh" \) -exec sed -i "s|https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE|https://MY_LIINK/LICENS|g" {} +
-        echo "LICENSE link was replaced"
+        echo "info: links were changed"
+        find ./ -type f \( -name "*.sh" \) -exec sed -i 's|msg_error "No ${APP} Installation Found!"|msg_error "Не найдена установленная версия! ${APP}"|g' {} +
+        find ./ -type f \( -name "*.sh" \) -exec sed -i 's|msg_info "Stopping ${APP}"|msg_info "Останавливаю работу приложения ${APP}"|g' {} +
+        find ./ -type f \( -name "*.sh" \) -exec sed -i 's|msg_ok "Stopped ${APP}"|msg_ok "Приложение ${APP} остановлено"|g' {} +
+        find ./ -type f \( -name "*.sh" \) -exec sed -i 's|msg_info "Backing up conf.yml"|msg_info "Делаю резервную копию Вашего файла conf.yml"|g' {} +
+        find ./ -type f \( -name "*.sh" \) -exec sed -i 's|msg_ok "Backed up conf.yml"|msg_ok "Забекапировал Ваш conf.yml"|g' {} +
+        find ./ -type f \( -name "*.sh" \) -exec sed -i 's|msg_info "Updating ${APP} to ${RELEASE}"|msg_info "Обновляю ${APP} до ${RELEASE}"|g' {} +
+        find ./ -type f \( -name "*.sh" \) -exec sed -i 's|msg_ok "Updated ${APP} to ${RELEASE}"|msg_ok "Приложение ${APP} обновлено до версии ${RELEASE}"|g' {} +
+        find ./ -type f \( -name "*.sh" \) -exec sed -i 's|msg_info "Restoring conf.yml"|msg_info "Восстанавливаю из бекапа Ваш conf.yml"|g' {} +
+        find ./ -type f \( -name "*.sh" \) -exec sed -i 's|msg_info "Cleaning"|msg_info "Удаляю временные файлы установки"|g' {} +
+        find ./ -type f \( -name "*.sh" \) -exec sed -i 's|msg_ok "Cleaned"|msg_ok "Все убрал, руки помыл. А не мытым трубочистам - стыд и срам"|g' {} +
+        find ./ -type f \( -name "*.sh" \) -exec sed -i 's|msg_ok "Started Dashy"|msg_ok "Стартую приложение Dashy"|g' {} +
+        find ./ -type f \( -name "*.sh" \) -exec sed -i 's|msg_ok "Updated Successfully"|msg_ok "Приложение успешно обновлено!"|g' {} +
+        find ./ -type f \( -name "*.sh" \) -exec sed -i 's|msg_ok "No update required. ${APP} is already at ${RELEASE}"|msg_ok "Обновление не требуется. ${APP} уже последней версии ${RELEASE}"|g' {} +
+        find ./ -type f \( -name "*.sh" \) -exec sed -i 's|msg_ok "Completed Successfully!\\n"|msg_ok "Установка успешно завершена!\\n"|g' {} +
+        find ./ -type f \( -name "*.sh" \) -exec sed -i 's|"${CREATING}${GN}${APP} setup has been successfully initialized!${CL}"|"${CREATING}${GN}${APP} Установка успешно завершена!${CL}"|g' {} +
+        find ./ -type f \( -name "*.sh" \) -exec sed -i 's|"${INFO}${YW} Access it using the following URL:${CL}"|"${INFO}${YW} Сервис доступен по ссылке URL:${CL}"|g' {} +
+        find ./ -type f \( -name "*.sh" \) -exec sed -i 's|msg_ok "Started ${APP}"|msg_ok "Запущено приложение ${APP}"|g' {} +
+        find ./ -type f \( -name "*.sh" \) -exec sed -i 's|msg_info "Starting ${APP}"|msg_info "Запускается приложение ${APP}"|g' {} +
+        find ./ -type f \( -name "*.sh" \) -exec sed -i 's|msg_info "Restoring assets directory"|msg_info "Происходит восстановление каталогов"|g' {} +
+        find ./ -type f \( -name "*.sh" \) -exec sed -i 's|msg_ok "Restored assets directory"|msg_ok "Каталоги восстановлены"|g' {} +
+        echo "info: translation done"
         git add . && echo "info: DONE add . $(date +'%Y-%m-%d %H:%M:%S')"
         git commit -m "repo was translated en2ru by workflow: $(date +'%Y-%m-%d %H:%M:%S')" && echo "info: Committed changes $(date +'%Y-%m-%d %H:%M:%S')"
-        git push -u samohosting-scripts dev:dev && echo "info: repo was translated en2ru by workflow $(date +'%Y-%m-%d %H:%M:%S')"
+        git push -u samohosting-scripts dev:dev && echo "info: pushed translated repo en2ru by workflow $(date +'%Y-%m-%d %H:%M:%S')"
