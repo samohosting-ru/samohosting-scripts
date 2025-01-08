@@ -4,7 +4,7 @@ name: update_dev_to_ru_dev
 on:
   schedule:
     - cron: '0 3 * * *'  # Run every day at 3 AM UTC
-    
+
 jobs:
   sync-repo:
     runs-on: ubuntu-latest
@@ -21,34 +21,34 @@ jobs:
         # git remote add upstream https://github.com/community-scripts/ProxmoxVE.git
         # git remote add samohosting-scripts https://github.com/samohosting-ru/samohosting-scripts.git
 
-    - name: Create/Update samohosting-scripts/ru_dev
-      run: |
-        # Fetch the latest changes from both remotes
-        # doesnot nedd in this case
-        # git fetch upstream dev
-        git fetch samohosting-scripts ru_dev
+    # - name: Create/Update samohosting-scripts/ru_dev
+    #   run: |
+    #     # Fetch the latest changes from both remotes
+    #     # doesnot nedd in this case
+    #     # git fetch upstream dev
+    #     git fetch samohosting-scripts ru_dev
 
-        # Check if ru_dev branch exists in samohosting-scripts
-        BRANCH_EXISTS=$(git ls-remote --heads samohosting-scripts refs/heads/ru_dev)
-        if [ -z "$BRANCH_EXISTS" ]; then
-          echo "info: ru_dev branch does not exist. Creating it..."
-          git checkout -b ru_dev dev
-          git push -u samohosting-scripts ru_dev
-          echo "info: Created and pushed ru_dev branch."
-        else
-          echo "info: ru_dev branch exists. Checking for updates..."
-          git checkout ru_dev
-          git pull samohosting-scripts ru_dev
+    #     # Check if ru_dev branch exists in samohosting-scripts
+    #     BRANCH_EXISTS=$(git ls-remote --heads samohosting-scripts refs/heads/ru_dev)
+    #     if [ -z "$BRANCH_EXISTS" ]; then
+    #       echo "info: ru_dev branch does not exist. Creating it..."
+    #       git checkout -b ru_dev dev
+    #       git push -u samohosting-scripts ru_dev
+    #       echo "info: Created and pushed ru_dev branch."
+    #     else
+    #       echo "info: ru_dev branch exists. Checking for updates..."
+    #       git checkout ru_dev
+    #       git pull samohosting-scripts ru_dev
 
-          # Check for differences between dev and ru_dev
-          if ! git diff --name-only --exit-code dev..HEAD -- . ':!.github' ':!.editorconfig'; then
-            echo "info: Changes detected in dev. Updating ru_dev..."
-            git merge dev --allow-unrelated-histories -m "Merge updates from dev into ru_dev"
-            git add .
-            git commit -m "Updated ru_dev with changes from dev"
-            git push samohosting-scripts ru_dev
-            echo "info: ru_dev branch updated and pushed."
-          else
-            echo "info: No changes detected. ru_dev is up to date."
-          fi
-        fi
+    #       # Check for differences between dev and ru_dev
+    #       if ! git diff --name-only --exit-code dev..HEAD -- . ':!.github' ':!.editorconfig'; then
+    #         echo "info: Changes detected in dev. Updating ru_dev..."
+    #         git merge dev --allow-unrelated-histories -m "Merge updates from dev into ru_dev"
+    #         git add .
+    #         git commit -m "Updated ru_dev with changes from dev"
+    #         git push samohosting-scripts ru_dev
+    #         echo "info: ru_dev branch updated and pushed."
+    #       else
+    #         echo "info: No changes detected. ru_dev is up to date."
+    #       fi
+    #     fi
