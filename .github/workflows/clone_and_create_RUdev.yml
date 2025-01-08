@@ -2,7 +2,7 @@
 name: update_dev_to_ru_dev
 
 on:
-  # workflow_dispatch:
+  workflow_dispatch:
   schedule:
     - cron: '0 2 * * *'  # Run every day at 2 AM UTC
   # push:
@@ -16,7 +16,7 @@ jobs:
     - name: Checkout your repository
       uses: actions/checkout@v4
    
-    - name: Set up Git and add upstream
+    - name: Setup name and mail
       run: |
         git config user.name 'samohosting'
         git config user.email 'email@samohosting.ru'
