@@ -2,7 +2,7 @@
 name: update_dev_to_ru_dev
 
 on:
-  # workflow_dispatch:
+  workflow_dispatch:
   schedule:
     - cron: '0 2 * * *'  # Run every day at 2 AM UTC
   # push:
