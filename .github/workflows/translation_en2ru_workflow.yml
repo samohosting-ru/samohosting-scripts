@@ -19,6 +19,8 @@ jobs:
 
     - name:  translation_en2ru
       run: |
+        git pull
+        git show-branch
         git switch dev
         find ./ -type f \( -name "*.sh" \) -exec sed -i "s|https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE|https://MY_LIINK/LICENS|g" {} +
         echo "LICENSE link was replaced"
