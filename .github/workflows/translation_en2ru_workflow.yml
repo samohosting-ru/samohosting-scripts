@@ -1,0 +1,24 @@
+#translation_en2ru and url update for all .sh
+name: translation_en2ru
+
+on:
+  workflow_dispatch:
+jobs:
+  sync-repo:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout your repository
+      uses: actions/checkout@v4
+   
+    - name: Set up Git and add upstream
+      run: |
+        git config user.name 'samohosting'
+        git config user.email 'email@samohosting.ru'
+        git remote add samohosting-scripts https://github.com/samohosting-ru/samohosting-scripts.git
+
+    - name:  translation_en2ru
+      run: |
+        git switch dev
+        find ./ -type f \( -name "*.sh" \) -exec sed -i "s|https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE|https://MY_LIINK/LICENS|g" {} +
+        echo "LICENSE link was replaced"
