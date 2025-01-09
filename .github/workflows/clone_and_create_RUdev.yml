@@ -19,9 +19,9 @@ jobs:
         git config user.email 'email@samohosting.ru'
         git remote add samohosting-scripts https://github.com/samohosting-ru/samohosting-scripts.git
 
-    # - name: Create/Update samohosting-scripts/ru_dev
-    #   run: |
-    #     git fetch samohosting-scripts ru_dev
+    - name: Create/Update samohosting-scripts/ru_dev
+      run: |
+        git fetch samohosting-scripts && echo "info: Fetched from samohosting-scripts $(date +'%Y-%m-%d %H:%M:%S')"
 
         BRANCH_EXISTS=$(git ls-remote --heads samohosting-scripts refs/heads/ru_dev)
         if [ -z "$BRANCH_EXISTS" ]; then
