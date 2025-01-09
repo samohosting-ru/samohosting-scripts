@@ -1,9 +1,13 @@
 name: update_dev_to_ru_dev
 
 on:
-  workflow_dispatch: 
+  workflow_dispatch:
+  push:
+    branches:
+      - dev
   schedule:           
-    - cron: '0 3 * * *'  
+    - cron: '0 3 * * *'
+    
 
 jobs:
   sync-repo:
