@@ -36,7 +36,7 @@ jobs:
 
           # Check and update
           git checkout ru_dev
-        if ! git diff --quiet origin/dev origin/ru_dev; then
+        if ! git diff -q origin/dev origin/ru_dev; then
           echo "info: Changes detected in dev. Merging into ru_dev..."
           git checkout ru_dev
           git merge origin/dev --allow-unrelated-histories -m "Merge updates from dev into ru_dev"
