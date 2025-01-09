@@ -12,72 +12,43 @@ jobs:
     steps:
     - name: Checkout your repository
       uses: actions/checkout@v4
-   
+
     - name: Setup name, email, and remote repository
       run: |
         git config user.name 'samohosting'
         git config user.email 'email@samohosting.ru'
+        git remote remove samohosting-scripts || true
         git remote add samohosting-scripts https://github.com/samohosting-ru/samohosting-scripts.git
 
-    - name: Create or update samohosting-scripts/ru_dev
+    - name: Create or update ru_dev branch
       run: |
-        # Fetch latest changes from dev branch
-        git fetch samohosting-scripts ru_dev || true
-        if ! git show-ref --verify --quite refs/remotes/origin/ru_dev; then  
-          echo "info: ru_dev branch does not exist. Creating it from dev..."
-           git checkout dev
-           git checkout -b ru_dev
-           git push origin:ru_dev
-        else
-          echo "info: ru_dev branch exists. Fetching updates..."
-          git checkout ru_dev
-          git pull origin ru_dev
+        # Fetch all branches
+        git fetch samohosting-scripts
+
+        # Ensure the dev branch exists locally
+        if ! git show-ref --verify --quiet refs/remotes/samohosting-scripts/dev; then
+          echo "error: Remote branch 'dev' does not exist. Aborting."
+          exit 1
         fi
 
-          # Check and update
+        # Check if ru_dev exists remotely
+        if ! git show-ref --verify --quiet refs/remotes/samohosting-scripts/ru_dev; then
+          echo "info: ru_dev branch does not exist. Creating it from dev..."
+          git checkout -b ru_dev samohosting-scripts/dev
+          git push samohosting-scripts ru_dev
+        else
+          echo "info: ru_dev branch exists. Checking out and updating..."
           git checkout ru_dev
-        if ! git diff -q origin/dev origin/ru_dev; then
+          git pull samohosting-scripts ru_dev
+        fi
+
+        # Merge dev into ru_dev if there are changes
+        git checkout ru_dev
+        git fetch samohosting-scripts dev
+        if ! git diff --quiet samohosting-scripts/dev; then
           echo "info: Changes detected in dev. Merging into ru_dev..."
-          git checkout ru_dev
-          git merge origin/dev --allow-unrelated-histories -m "Merge updates from dev into ru_dev"
-          git push origin ru_dev
+          git merge samohosting-scripts/dev --allow-unrelated-histories -m "Merge updates from dev into ru_dev"
+          git push samohosting-scripts ru_dev
         else
           echo "info: No changes detected. ru_dev is up to date."
         fi
-
-      #  Check for changes
-        # git checkout ru_dev
-        # if ! git diff --quiet origin/dev origin/ru_dev; then
-        #   echo "info: Changes detected in dev. Merging into ru_dev..."
-        #   git checkout ru_dev
-        #   git merge origin/dev --allow-unrelated-histories -m "Merge updates from dev into ru_dev"
-        #   git push origin ru_dev
-        # else
-        #   echo "info: No changes detected. ru_dev is up to date."
-        # fi
-
-
-
-        # # echo "info: Fetched dev branch from samohosting-scripts."
-        # # Check if ru_dev branch exists
-        # if git ls-remote --exit-code --heads samohosting-scripts ru_dev; then
-        #   echo "info: ru_dev branch exists. Checking for updates..."
-        #   git fetch samohosting-scripts ru_dev
-        #   git checkout ru_dev
-        #   git merge samohosting-scripts/dev --allow-unrelated-histories -m "Merge updates from dev into ru_dev"
-          
-        #   # Check for changes
-        #   if git diff --quiet; then
-        #     echo "info: No changes detected. ru_dev is up to date."
-        #   else
-        #     echo "info: Changes detected. Committing and pushing updates to ru_dev..."
-        #     git add .
-        #     git commit -m "Updated ru_dev with changes from dev"
-        #     git push samohosting-scripts ru_dev
-        #   fi
-        # else
-        #   echo "info: ru_dev branch does not exist. Creating it..."
-        #   git checkout -b ru_dev samohosting-scripts/dev
-        #   git push -u samohosting-scripts ru_dev
-        #   echo "info: Created and pushed ru_dev branch."
-        # fi
