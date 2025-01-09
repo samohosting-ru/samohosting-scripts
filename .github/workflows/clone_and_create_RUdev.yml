@@ -21,7 +21,7 @@ jobs:
 
     - name: Create\Update samohosting-scripts/ru_dev
       run: |
-        # Pull data from samohosting-scripts
+        # Pull data from samohosting DEV branch
         git pull samohosting-scripts dev && echo "info: Fetched from samohosting-scripts $(date +'%Y-%m-%d %H:%M:%S')"
         
 
