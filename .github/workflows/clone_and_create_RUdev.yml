@@ -28,7 +28,7 @@ jobs:
         BRANCH_EXISTS=$(git ls-remote --heads samohosting-scripts refs/heads/ru_dev)
         if [ -z "$BRANCH_EXISTS" ]; then
           echo "info: ru_dev branch does not exist. Creating it..."
-          git checkout -b ru_dev dev
+          git checkout -b ru_dev
           git push -u samohosting-scripts ru_dev
           echo "info: Created and pushed ru_dev branch."
         else
