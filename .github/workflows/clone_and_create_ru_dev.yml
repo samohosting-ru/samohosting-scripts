@@ -27,7 +27,7 @@ jobs:
           echo "info: ru_dev branch does not exist. Creating it from dev..."
            git checkout dev
            git checkout -b ru_dev
-           git push origin ru_dev
+           git push origin:ru_dev
         else
           echo "info: ru_dev branch exists. Fetching updates..."
           git checkout ru_dev
