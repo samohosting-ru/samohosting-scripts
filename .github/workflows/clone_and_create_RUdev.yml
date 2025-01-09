@@ -13,36 +13,37 @@ jobs:
     - name: Checkout your repository
       uses: actions/checkout@v4
    
-    - name: Setup name, mail, repo
+    - name: Setup name, email, and remote repository
       run: |
         git config user.name 'samohosting'
         git config user.email 'email@samohosting.ru'
-        git remote add samohosting-scripts https://github.com/samohosting-ru/samohosting-scripts.git dev
+        git remote add samohosting-scripts https://github.com/samohosting-ru/samohosting-scripts.git
 
-    - name: Create\Update samohosting-scripts/ru_dev
+    - name: Create or update samohosting-scripts/ru_dev
       run: |
-        # Pull data from samohosting DEV branch
-        git pull samohosting-scripts dev && echo "info: Fetched from samohosting-scripts $(date +'%Y-%m-%d %H:%M:%S')"
-        
+        # Fetch latest changes from dev branch
+        git fetch samohosting-scripts dev
+        echo "info: Fetched dev branch from samohosting-scripts."
 
-        BRANCH_EXISTS=$(git ls-remote --heads samohosting-scripts refs/heads/ru_dev)
-        if [ -z "$BRANCH_EXISTS" ]; then
-          echo "info: ru_dev branch does not exist. Creating it..."
-          git checkout -b ru_dev
-          git push -u samohosting-scripts ru_dev
-          echo "info: Created and pushed ru_dev branch."
-        else
+        # Check if ru_dev branch exists
+        if git ls-remote --exit-code --heads samohosting-scripts ru_dev; then
           echo "info: ru_dev branch exists. Checking for updates..."
+          git fetch samohosting-scripts ru_dev
           git checkout ru_dev
-          git pull samohosting-scripts ru_dev
-
-          if ! git diff --name-only --exit-code dev..HEAD -- . ':!.github' ':!.editorconfig'; then
-            echo "info: Changes detected in dev. Updating ru_dev..."
-            git merge dev --allow-unrelated-histories -m "Merge updates from dev into ru_dev"
+          git merge samohosting-scripts/dev --allow-unrelated-histories -m "Merge updates from dev into ru_dev"
+          
+          # Check for changes
+          if git diff --quiet; then
+            echo "info: No changes detected. ru_dev is up to date."
+          else
+            echo "info: Changes detected. Committing and pushing updates to ru_dev..."
             git add .
             git commit -m "Updated ru_dev with changes from dev"
             git push samohosting-scripts ru_dev
-            echo "info: ru_dev branch updated and pushed."
-          else
-            echo "info: No changes detected. ru_dev is up to date."
           fi
+        else
+          echo "info: ru_dev branch does not exist. Creating it..."
+          git checkout -b ru_dev samohosting-scripts/dev
+          git push -u samohosting-scripts ru_dev
+          echo "info: Created and pushed ru_dev branch."
+        fi
