@@ -22,7 +22,7 @@ jobs:
     - name: Create\Update samohosting-scripts/ru_dev
       run: |
         # Fetch data from samohosting-scripts
-        git fetch samohosting-scripts && echo "info: Fetched from samohosting-scripts $(date +'%Y-%m-%d %H:%M:%S')"
+        git pull samohosting-scripts && echo "info: Fetched from samohosting-scripts $(date +'%Y-%m-%d %H:%M:%S')"
 
         BRANCH_EXISTS=$(git ls-remote --heads samohosting-scripts refs/heads/ru_dev)
         if [ -z "$BRANCH_EXISTS" ]; then
