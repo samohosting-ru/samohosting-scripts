@@ -17,7 +17,7 @@ jobs:
       run: |
         git config user.name 'samohosting'
         git config user.email 'email@samohosting.ru'
-      # git remote add samohosting-scripts https://github.com/samohosting-ru/samohosting-scripts.git
+        git remote add samohosting-scripts https://github.com/samohosting-ru/samohosting-scripts.git
 
     - name: Create or update samohosting-scripts/ru_dev
       run: |
