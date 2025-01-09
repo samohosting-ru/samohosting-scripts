@@ -2,9 +2,9 @@ name: update_dev_to_ru_dev
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - dev
+  # push:
+  #   branches:
+  #     - dev
   schedule:           
     - cron: '0 3 * * *'
     
