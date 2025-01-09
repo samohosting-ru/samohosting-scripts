@@ -59,8 +59,10 @@ jobs:
           echo "info: merging upstream/main" && git merge upstream/main --allow-unrelated-histories
           echo "info: sucsessfully merged"
           git add . && echo "info: DONE add . $(date +'%Y-%m-%d %H:%M:%S')"
-          rm -rf .github -v !(clone_and_create_ru_dev.yml) && echo "info:  rm -rf .github"
+          mv .github/clone_and_create_ru_dev.yml ~/
+          rm -rf .github && echo "info:  rm -rf .github"
           rm -rf .editorconfig && echo "info:  rm -rf .editorconfig"
+          mv ~/clone_and_create_ru_dev.yml .github/
           ls -a
           git add .
           git commit -m "merged_changes_from_helper=scripts_updated"
