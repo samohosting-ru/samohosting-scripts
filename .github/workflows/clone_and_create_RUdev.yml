@@ -1,9 +1,9 @@
 name: update_dev_to_ru_dev
 
 on:
-  workflow_dispatch: # Триггер для ручного запуска рабочего процесса
-  schedule:          # Триггер для запуска по расписанию
-    - cron: '0 3 * * *'  # Запускать каждый день в 2:00 UTC
+  workflow_dispatch: 
+  schedule:           
+    - cron: '0 3 * * *'  
 
 jobs:
   sync-repo:
@@ -17,12 +17,12 @@ jobs:
       run: |
         git config user.name 'samohosting'
         git config user.email 'email@samohosting.ru'
-        git remote add samohosting-scripts https://github.com/samohosting-ru/samohosting-scripts.git
+        git remote add samohosting-scripts https://github.com/samohosting-ru/samohosting-scripts.git dev
 
     - name: Create\Update samohosting-scripts/ru_dev
       run: |
         # Fetch data from samohosting-scripts
-        git pull samohosting-scripts dev && echo "info: Fetched from samohosting-scripts $(date +'%Y-%m-%d %H:%M:%S')"
+        git fetch samohosting-scripts dev && echo "info: Fetched from samohosting-scripts $(date +'%Y-%m-%d %H:%M:%S')"
 
         BRANCH_EXISTS=$(git ls-remote --heads samohosting-scripts refs/heads/ru_dev)
         if [ -z "$BRANCH_EXISTS" ]; then
