@@ -1,10 +1,9 @@
-# Check updates in dev branch and update ru_dev if needed
 name: update_dev_to_ru_dev
 
 on:
-  workflow_dispatch:
-  # schedule:
-  #   - cron: '0 2 * * *'  # Run every day at 2 AM UTC
+  workflow_dispatch: # Триггер для ручного запуска рабочего процесса
+  schedule:          # Триггер для запуска по расписанию
+    - cron: '0 3 * * *'  # Запускать каждый день в 2:00 UTC
 
 jobs:
   sync-repo:
@@ -21,12 +20,8 @@ jobs:
 
     - name: Create/Update samohosting-scripts/ru_dev
       run: |
-        # Fetch the latest changes from both remotes
-        # doesnot nedd in this case
-        # git fetch upstream dev
         git fetch samohosting-scripts ru_dev
 
-        # Check if ru_dev branch exists in samohosting-scripts
         BRANCH_EXISTS=$(git ls-remote --heads samohosting-scripts refs/heads/ru_dev)
         if [ -z "$BRANCH_EXISTS" ]; then
           echo "info: ru_dev branch does not exist. Creating it..."
@@ -38,7 +33,6 @@ jobs:
           git checkout ru_dev
           git pull samohosting-scripts ru_dev
 
-          # Check for differences between dev and ru_dev
           if ! git diff --name-only --exit-code dev..HEAD -- . ':!.github' ':!.editorconfig'; then
             echo "info: Changes detected in dev. Updating ru_dev..."
             git merge dev --allow-unrelated-histories -m "Merge updates from dev into ru_dev"
@@ -49,4 +43,3 @@ jobs:
           else
             echo "info: No changes detected. ru_dev is up to date."
           fi
-        fi
