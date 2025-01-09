@@ -34,17 +34,23 @@ jobs:
           git pull origin ru_dev
         fi
 
+          # Сравниваем и сливаем изменения из dev в ru_dev
+        git checkout ru_dev
+        git merge dev --allow-unrelated-histories -m "Merge updates from dev into ru_dev"
+
+        # Пушим обновления в удалённый репозиторий
+        git push origin ru_dev
+
       #  Check for changes
-          git fetch origin dev
-        git checkout dev
-        if ! git diff --quiet origin/dev origin/ru_dev; then
-          echo "info: Changes detected in dev. Merging into ru_dev..."
-          git checkout ru_dev
-          git merge origin/dev --allow-unrelated-histories -m "Merge updates from dev into ru_dev"
-          git push origin ru_dev
-        else
-          echo "info: No changes detected. ru_dev is up to date."
-        fi
+        # git checkout ru_dev
+        # if ! git diff --quiet origin/dev origin/ru_dev; then
+        #   echo "info: Changes detected in dev. Merging into ru_dev..."
+        #   git checkout ru_dev
+        #   git merge origin/dev --allow-unrelated-histories -m "Merge updates from dev into ru_dev"
+        #   git push origin ru_dev
+        # else
+        #   echo "info: No changes detected. ru_dev is up to date."
+        # fi
 
 
 
