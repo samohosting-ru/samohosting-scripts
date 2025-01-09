@@ -17,7 +17,7 @@ jobs:
       run: |
         git config user.name 'samohosting'
         git config user.email 'email@samohosting.ru'
-        # git remote add samohosting-scripts https://github.com/samohosting-ru/samohosting-scripts.git
+      # git remote add samohosting-scripts https://github.com/samohosting-ru/samohosting-scripts.git
 
     - name: Create or update samohosting-scripts/ru_dev
       run: |
@@ -26,15 +26,15 @@ jobs:
         if ! git show-ref --verify --quite refs/remotes/origin/ru_dev; then  
           echo "info: ru_dev branch does not exist. Creating it from dev..."
            git checkout dev
-          git checkout -b ru_dev
-          git push origin ru_dev
+           git checkout -b ru_dev
+           git push origin ru_dev
         else
           echo "info: ru_dev branch exists. Fetching updates..."
           git checkout ru_dev
           git pull origin ru_dev
         fi
 
-          #  Check for changes
+      #  Check for changes
           git fetch origin dev
         git checkout dev
         if ! git diff --quiet origin/dev origin/ru_dev; then
