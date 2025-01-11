@@ -75,7 +75,7 @@ jobs:
         find ./ -type f \( -name "*.*" \) -exec sed -i 's|msg_ok "Using ${BL}$TEMPLATE_STORAGE${CL} ${GN}for Template Storage."|msg_ok "Использую ${BL}$TEMPLATE_STORAGE${CL} ${GN} для хранилища Шаблона."|g' {} +
         find ./ -type f \( -name "*.*" \) -exec sed -i 's|You need to set 'CTID' variable.|Требуется задать переменную 'CTID'.|g' {} +
         find ./ -type f \( -name "*.*" \) -exec sed -i 's|You need to set 'PCT_OSTYPE' variable.|Требуется задать переменную 'PCT_OSTYPE'.|g' {} +
-        find ./ -type f \( -name "*.*" \) -exec sed -i 's|backtitle "Proxmox VE Helper Scripts"|backtitle "Proxmox VE Helper Scripts | Samohosting Edition"|g' {} +
+        find ./ -type f \( -name "*.*" \) -exec sed -i 's|backtitle "Proxmox VE Helper Scripts"|backtitle "Proxmox VE Helper Scripts : Samohosting Edition"|g' {} +
         find ./ -type f \( -name "*.*" \) -exec sed -i 's|title "SUPPORT"|title "ПОДДЕРЖКА"|g' {} +
         find ./ -type f \( -name "*.*" \) -exec sed -i 's|"Check for Alpine Updates"|"Проверка обновлений Alpine"|g' {} +
         find ./ -type f \( -name "*.*" \) -exec sed -i 's|msg_error "There is currently no update path available."|msg_error "Обновления отсутствуют."|g' {} +
