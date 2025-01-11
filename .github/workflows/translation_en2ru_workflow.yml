@@ -211,10 +211,10 @@ jobs:
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|echo -e "${ADVANCED}${BOLD}${RD}Using Advanced Settings on node $PVEHOST_NAME${CL}"|echo -e "${ADVANCED}${BOLD}${RD}Использую расширенные настройки для node $PVEHOST_NAME${CL}"|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|title "SETTINGS"|title "НАСТРОЙКИ"|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|menu "Choose an option:"|menu "Выберите одну из опций:"|g' {} +
-        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|1 "Default Settings"|1 "Настройки по умолчанию"|g' {} +
-        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|2 "Default Settings (with verbose)"|2 "Настройки по умолчанию (режим отладки)"|g' {} +
-        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|3 "Advanced Settings"|3 "Расширенные настройки"|g' {} +
-        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|4 "Exit"|4 "Выход"|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|"1" "Default Settings"|"1" "Настройки по умолчанию"|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|"2" "Default Settings (with verbose)"|"2" "Настройки по умолчанию (режим отладки)"|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|"3" "Advanced Settings"|"3" "Расширенные настройки"|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|"4" "Exit"|"4" "Выход"|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|echo -e "${CROSS}${RD} Menu canceled. Exiting.${CL}"|echo -e "${CROSS}${RD} Действие(меню) отменено. Выхожу.${CL}"|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|echo -e "${DEFAULT}${BOLD}${BL}Using Default Settings on node $PVEHOST_NAME${CL}"|echo -e "${DEFAULT}${BOLD}${BL}Использую базовые настройки для node $PVEHOST_NAME${CL}"|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|echo -e "${DEFAULT}${BOLD}${BL}Using Default Settings on node $PVEHOST_NAME (${SEARCH}${BL}Verbose)${CL}"|echo -e "${DEFAULT}${BOLD}${BL}Использую базовые настройки для node $PVEHOST_NAME (${SEARCH}${BL}Verbose)${CL}"|g' {} +
