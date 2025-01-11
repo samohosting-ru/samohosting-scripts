@@ -79,7 +79,6 @@ jobs:
         find ./ -type f \( -name "*.*" \) -exec sed -i 's|title "SUPPORT"|title "ПОДДЕРЖКА"|g' {} +
         find ./ -type f \( -name "*.*" \) -exec sed -i 's|"Check for Alpine Updates"|"Проверка обновлений Alpine"|g' {} +
         find ./ -type f \( -name "*.*" \) -exec sed -i 's|msg_error "There is currently no update path available."|msg_error "Обновления отсутствуют."|g' {} +
-        find ./ -type f \( -name "*.*" \) -exec sed -i 's|error_message="${RD}[ERROR]${CL} in line ${RD}$line_number${CL}: exit code ${RD}$exit_code${CL}: while executing command ${YW}$command${CL}"|error_message="${RD}[ERROR]${CL} в строке ${RD}$line_number${CL}: exit code ${RD}$exit_code${CL}: во время выполнения команды ${YW}$command${CL}"|g' {} +
         find ./ -type f \( -name "*.*" \) -exec sed -i 's|https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func|https://MY_LIINK/build.func|g' {} +
         find ./ -type f \( -name "*.*" \) -exec sed -i 's|https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE|https://MY_LIINK/LICENSE|g' {} +
 
