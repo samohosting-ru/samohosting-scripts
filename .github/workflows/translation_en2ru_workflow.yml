@@ -60,7 +60,7 @@ jobs:
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_info "Stopping ${APP}"|msg_info "Останавливаю работу приложения ${APP}"|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_info "Updating ${APP} to ${RELEASE}"|msg_info "Обновляю ${APP} до ${RELEASE}"|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_info "Updating ${APP}"|msg_info "Обновляю ${APP}"|g' {} +
-        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_info "Updating |msg_info "Обновляю|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_info "Updating |msg_info "Обновляю |g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_info "Updating LXC Template List"|msg_info "Обновляю список LXC Шаблонов"|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_info "Updating System"|msg_info "Обновляю систему"|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_info "Validating Storage"|msg_info "Проверяю Хранилище"|g' {} +
@@ -253,13 +253,35 @@ jobs:
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|warn "Maximum number of attempts reached. IP address not found."|warn "Достигнуто максимальное кол-во попыток. IP адрес не найден."|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|info "LXC container '"'"'$CTID'"'"' was successfully created, and its IP address is ${IP}."|info "LXC Контейнер '"'"'$CTID'"'"' успешно создан, ему присвоен IP адрес: ${IP}."|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|info "Proceed to the LXC console to complete the setup."|info "Для завершения настройки - перейдите в консоль созданного LXC Контейнера."|g' {} +
-        
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|TAGS="community-script;"|TAGS="samohosting;"|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_info "Setting up Container OS"|msg_info "Настраиваю ОС Контейнера"|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_ok "Set up Container OS"|msg_ok "Настроил ОС Контейнера"|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|No Network After \$RETRY_NUM Tries|Сеть отсутствует после \$RETRY_NUM попыток|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|Check Network Settings"|Проверьте настройки сети"|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_ok "Network Connected:|msg_ok "Сеть подключена:|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_ok "Internet Connected"|msg_ok "Интернет соеденение доступно"|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_error "Internet NOT Connected"|msg_error "Интернет соеденение НЕ доступно"|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|"Would you like to continue anyway?|"Стоит ли продолжать?|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|Expect Issues Without Internet|Без доступа к интернету - ожидаются проблемы с работой скрипта|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_error "DNS Lookup Failure";|msg_error "Ошибка. DNS сервер не доступен ";|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_ok "DNS Resolved github.com to|msg_ok "Github.com зарезервирован как DNS сервер:|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_ok "Updated Container OS"|msg_ok "Обновлена ОС Контейнера"|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|LXC Container\${CL}"|LXC Контейнер\${CL}"|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|Provided by: \${GN}community-scripts ORG \${YW}\| Project: \${GN}ProxmoxVE \${YW}\| GitHub: \${GN}https://github.com/community-scripts/ProxmoxVE\${CL}\\n"|Кодовая база подготовлена: \${GN}community-scripts ORG \${YW}\| Project: \${GN}ProxmoxVE \${YW}\| GitHub: \${GN}https://github.com/community-scripts/ProxmoxVE\${CL}\\n\${YW}\| Переведено и доработано:\${GN}samohosting.ru\\n"|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_info "Customizing Container"|msg_info "Кастомизирую Контейнер"|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_ok "Customized Container"|msg_ok "Контейнер кастомезирован"|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|local error_message="\${RD}[ERROR]\${CL} in line \${RD}\$line_number\${CL}: exit code \${RD}\$exit_code\${CL}: while executing command \${YW}\$command\${CL}"|local error_message="\${RD}[ERROR]\${CL} в строке \${RD}\$line_number\${CL}: exit code \${RD}\$exit_code\${CL}: в ходе выполенения команды \${YW}\$command\${CL}"|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|echo -e "The silent function has suppressed the error, run the script with verbose mode enabled, which will provide more detailed output.\\n"|echo -e "В процессе тихой установки случились ошибки, включен режим отладки для более детализированого вывода событий в терминал.\\n"|g' {} +
         # find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|TEXT1|TEXT2|g' {} +
         # find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|TEXT1|TEXT2|g' {} +
         # find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|TEXT1|TEXT2|g' {} +
         # find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|TEXT1|TEXT2|g' {} +
         # find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|TEXT1|TEXT2|g' {} +
-
+        # find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|TEXT1|TEXT2|g' {} +
+        # find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|TEXT1|TEXT2|g' {} +
+        # find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|TEXT1|TEXT2|g' {} +
+        # find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|TEXT1|TEXT2|g' {} +
+        # find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|TEXT1|TEXT2|g' {} +
 
 
         echo "info: translation done"
