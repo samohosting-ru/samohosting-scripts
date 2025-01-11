@@ -230,7 +230,37 @@ jobs:
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|yesno "This will create a New ${APP} LXC. Proceed?"|yesno "Создать новый контейнер ${APP}. Продолжить?"|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|title "${APP} LXC UPDATE"|title "ОБНОВЛЕНИЕ КОНТЕЙНЕРА ${APP}"|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|yesno "Support/Update functions for ${APP} LXC.  Proceed?"|yesno "Запустить обновление\функцию поддержки для  ${APP} LXC.  Продолжить?"|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|title "Storage Pools"|title "ХРАНИЛИЩЕ ДЛЯ ДАННЫХ"|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|"Which storage pool you would like to use for the|"Выберите хранилище для данных|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|die "Menu aborted."|die "Меню выбора было закрыто."|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|echo "Loading..."|echo "Загрузка..."|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|title "All Templates"|title "Все Шаблоны"|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|yesno "This will allow for the creation of one of the many Template LXC Containers. Proceed?"|Хотите ли Вы создать LXC Контейнер использую один из наших многих Шаблонов? Продолжить?|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|radiolist "\\nSelect a Template LXC to create:\\n"|radiolist "\\Выберите Шаблон для создания LXC Контейнера:\\n"|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|title "No Template LXC Selected"|title "Не выбрано ни одного Шаблона LXC Конейнера"|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msgbox "It appears that no Template LXC container was selected"|msgbox "Кажется Вы не выбрали ни одного шаблона для создания"|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|needs to be selected for at least one storage location."|необходимо выбрать хотябы одно хранилище из списка."|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|die "Unable to detect valid storage location."|die "Не удалось найти валидное хранилище."|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|info "Using '"'"'$TEMPLATE_STORAGE'"'"' for template storage."|info "Использую '"'"'$TEMPLATE_STORAGE'"'"' для хранения Шаблона."|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|info "Using '"'"'$CONTAINER_STORAGE'"'"' for container storage."|info "Использую '"'"'$CONTAINER_STORAGE'"'"' для хранения данных."|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg "Downloading LXC template (Patience)..."|msg "Скачиваю Шаблон LXC (это может занять некоторое время)..."|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|die "A problem occured while downloading the LXC template."|die "При загрузке Шаблона LXC возникла проблема."|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg "Creating LXC container..."|msg "Создаю LXC Контейнер..."|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|die "A problem occured while trying to create container."|die "При попытке создать контейнер возникла проблема."|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg "Starting LXC Container..."|msg "Запускаю LXC Контейнер..."|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|warn "Attempt $attempt: IP address not found. Pausing for 5 seconds..."|warn "Попытка $attempt: IP адрес не найден. Делаю паузу на 5 секунд..."|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|warn "Maximum number of attempts reached. IP address not found."|warn "Достигнуто максимальное кол-во попыток. IP адрес не найден."|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|info "LXC container '"'"'$CTID'"'"' was successfully created, and its IP address is ${IP}."|info "LXC Контейнер '"'"'$CTID'"'"' успешно создан, ему присвоен IP адрес: ${IP}."|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|info "Proceed to the LXC console to complete the setup."|info "Для завершения настройки - перейдите в консоль созданного LXC Контейнера."|g' {} +
         
+        # find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|TEXT1|TEXT2|g' {} +
+        # find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|TEXT1|TEXT2|g' {} +
+        # find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|TEXT1|TEXT2|g' {} +
+        # find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|TEXT1|TEXT2|g' {} +
+        # find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|TEXT1|TEXT2|g' {} +
+
+
+
         echo "info: translation done"
         git add . && echo "info: DONE add . $(date +'%Y-%m-%d %H:%M:%S')"
         git commit -m "repo was translated en2ru by workflow: $(date +'%Y-%m-%d %H:%M:%S')" && echo "info: Committed changes $(date +'%Y-%m-%d %H:%M:%S')"
