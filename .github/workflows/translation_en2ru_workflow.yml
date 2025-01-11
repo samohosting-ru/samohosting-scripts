@@ -20,7 +20,7 @@ jobs:
     - name:  translation_en2ru
       run: |
         git pull
-        git switch dev
+        git switch ru_dev
         find ./ -type f \( -name "*.*" \) -exec sed -i 's|"${CREATING}${GN}${APP} setup has been successfully initialized!${CL}"|"${CREATING}${GN}${APP} Установка успешно завершена!${CL}"|g' {} +
         find ./ -type f \( -name "*.*" \) -exec sed -i 's|"${INFO}${YW} Access it using the following URL:${CL}"|"${INFO}${YW} Сервис доступен по ссылке URL:${CL}"|g' {} +
         find ./ -type f \( -name "*.*" \) -exec sed -i 's|echo -e "${CROSS}${RD} Menu aborted by user.${CL}"|echo -e "${CROSS}${RD} Меню отменено пользователем.${CL}"|g' {} +
