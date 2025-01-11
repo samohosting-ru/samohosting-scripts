@@ -1,3 +1,10 @@
+<div align="center">
+  <p align="center">
+    <a href="#">
+      <img src="https://raw.githubusercontent.com/LiaGen/samohosting/refs/heads/main/logo%20helper%20scripts%20samohosting%20edition.png" height="100px" />
+    </a>
+  </p>
+</div>
 ## 💾&nbsp; О Proxmox VE Helper-Scripts : samohosting edition. 
 
 Это форк [проекта](https://community-scripts.github.io/), который с конца 2024 года перешел от его создателя [tteck](https://github.com/tteck) к команде [Community-Scripts](https://github.com/community-scripts)
