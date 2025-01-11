@@ -13,6 +13,21 @@
 - перевод интерфейса установщика en->ru
 - создание дополнительных скриптов-установщиков на базе имеющейся кодовой базы
 - создание скриптов формата "Установим в 1 клик набор всех необходимых дома сервисов. Все-в-одном"
+  
+  <p align="center">
+  <a href="https://www.samohosting.ru">
+    <img src="https://img.shields.io/badge/сайт_самохостинг.ру-000000?style=for-the-badge&logo=pcgamingwiki&logoColor=white" alt="samosohsting.ru" />
+  </a> 
+  <a href="https://www.youtube.com/@samohosting">
+    <img src="https://img.shields.io/badge/YOUTUBE-FF0000?style=for-the-badge&logo=youtube&logoColor=white" alt="YOUTUBE" />
+  </a> 
+  <a href="https://t.me/samohosting">
+    <img src="https://img.shields.io/badge/Телеграм_канал-0088cc?style=for-the-badge&logo=telegram&logoColor=white" alt="Телеграм_канал" />
+  </a> 
+  <a href="https://t.me/samohosting_chats">
+    <img src="https://img.shields.io/badge/Телеграм_чаты-0088cc?style=for-the-badge&logo=telegram&logoColor=white" alt="Телеграм_чаты" />
+  </a> 
+</p>
 
   Все исходные материалы оставлены доступными для ознакомления ниже.
 
