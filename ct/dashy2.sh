@@ -6,7 +6,7 @@ source <(curl -s https://raw.githubusercontent.com/samohosting-ru/samohosting-sc
 # Source: https://dashy.to/
 
 # App Default Values
-APP="Dashy"
+APP="Dashy2"
 var_tags="dashboard"
 var_cpu="2"
 var_ram="2048"
