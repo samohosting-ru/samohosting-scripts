@@ -281,7 +281,7 @@ jobs:
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_error "IPv4 Internet Not Connected";|msg_error "IPv4 интернет соеденение НЕ установлено";|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_ok "IPv6 Internet Connected";|msg_ok "IPv4 интернет соеденение установлено";|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_error "IPv6 Internet Not Connected";|msg_error "IPv4 интернет соеденение НЕ установлено";|g' {} +
-        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|Container OS"|ОС контейнера"|g' {} +
+        # find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|Container OS"|ОС контейнера"|g' {} +
         # find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|TEXT1|TEXT2|g' {} +
         # find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|TEXT1|TEXT2|g' {} +
         # find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|TEXT1|TEXT2|g' {} +
