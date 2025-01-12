@@ -63,7 +63,7 @@ jobs:
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_info "Stopping ${APP}"|msg_info "Останавливаю работу приложения ${APP}"|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_info "Updating ${APP} to ${RELEASE}"|msg_info "Обновляю ${APP} до ${RELEASE}"|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_info "Updating ${APP}"|msg_info "Обновляю ${APP}"|g' {} +
-        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_info "Updating |msg_info "Обновляю |g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_info "Updating |msg_info "Обновляется |g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_info "Updating LXC Template List"|msg_info "Обновляю список LXC шаблонов"|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_info "Updating System"|msg_info "Обновляю систему"|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_info "Validating Storage"|msg_info "Проверяю Хранилище"|g' {} +
