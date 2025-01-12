@@ -240,7 +240,7 @@ jobs:
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|echo "Loading..."|echo "Загрузка..."|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|echo -e "Loading..."|echov -e "Загрузка..."|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|title "All Templates"|title "Все шаблоны"|g' {} +
-        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|yesno "This will allow for the creation of one of the many Template LXC Containers. Proceed?"|yesno "Хотите ли Вы создать LXC контейнер использую один из наших многих шаблонов? Продолжить?|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|yesno "This will allow for the creation of one of the many Template LXC Containers. Proceed?"|yesno "Хотите ли Вы создать LXC контейнер использую один из наших многих шаблонов? Продолжить?"|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|radiolist "\\nSelect a Template LXC to create:\\n"|radiolist "\\Выберите шаблон для создания LXC контейнера:\\n"|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|title "No Template LXC Selected"|title "Не выбрано ни одного шаблона LXC Конейнера"|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msgbox "It appears that no Template LXC container was selected"|msgbox "Кажется Вы не выбрали ни одного шаблона для создания"|g' {} +
