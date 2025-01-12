@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 
 set -e
 YW=$(echo "\033[33m")
@@ -29,7 +29,7 @@ function msg_error() {
   echo -e "${BFR} ${CROSS} ${RD}${msg}${CL}"
 }
 if command -v pveversion >/dev/null 2>&1; then msg_error "Can't Install on Proxmox "; exit; fi
-msg_info "Installing pyenv"
+msg_info "Устанавливаю pyenv"
 apt-get install -y \
   make \
   build-essential \
@@ -64,13 +64,13 @@ echo -e 'if command -v pyenv 1>/dev/null 2>&1; then\n eval "$(pyenv init --path)
 msg_ok "Installed pyenv"
 . ~/.bashrc
 set -e
-msg_info "Installing Python 3.11.1"
+msg_info "Устанавливаю Python 3.11.1"
 pyenv install 3.11.1 &>/dev/null
 pyenv global 3.11.1
 msg_ok "Installed Python 3.11.1"
 read -r -p "Would you like to install Home Assistant Beta? <y/N> " prompt
 if [[ "${prompt,,}" =~ ^(y|yes)$ ]]; then
-msg_info "Installing Home Assistant Beta"
+msg_info "Устанавливаю Home Assistant Beta"
 cat <<EOF >/etc/systemd/system/homeassistant.service
 [Unit]
 Description=Home Assistant
@@ -99,7 +99,7 @@ fi
 
 read -r -p "Would you like to install ESPHome Beta? <y/N> " prompt
 if [[ "${prompt,,}" =~ ^(y|yes)$ ]]; then
-msg_info "Installing ESPHome Beta"
+msg_info "Устанавливаю ESPHome Beta"
 mkdir /srv/esphome
 cd /srv/esphome
 python3 -m venv .
@@ -113,7 +113,7 @@ cat <<EOF >/srv/esphome/start.sh
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 
 source /srv/esphome/bin/activate
 esphome dashboard /srv/esphome/
@@ -141,7 +141,7 @@ fi
 
 read -r -p "Would you like to install Matter-Server (Beta)? <y/N> " prompt
 if [[ "${prompt,,}" =~ ^(y|yes)$ ]]; then
-msg_info "Installing Matter Server"
+msg_info "Устанавливаю Matter Server"
 apt-get install -y \
 libcairo2-dev \
 libjpeg62-turbo-dev \

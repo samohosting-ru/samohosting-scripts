@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/misc/build.func)
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 
 # App Default Values
 APP="Alpine-Vaultwarden"
@@ -29,7 +29,7 @@ function update_script() {
   fi
   while true; do
     CHOICE=$(
-      whiptail --backtitle "Proxmox VE Helper Scripts" --title "SUPPORT" --menu "Select option" 11 58 2 \
+      whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --title "ПОДДЕРЖКА" --menu "Select option" 11 58 2 \
         "1" "Update Vaultwarden" \
         "2" "Reset ADMIN_TOKEN" 3>&2 2>&1 1>&3
     )
@@ -45,7 +45,7 @@ function update_script() {
       exit
       ;;
     2)
-      if NEWTOKEN=$(whiptail --backtitle "Proxmox VE Helper Scripts" --passwordbox "Setup your ADMIN_TOKEN (make it strong)" 10 58 3>&1 1>&2 2>&3); then
+      if NEWTOKEN=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --passwordbox "Setup your ADMIN_TOKEN (make it strong)" 10 58 3>&1 1>&2 2>&3); then
         if [[ -z "$NEWTOKEN" ]]; then exit-script; fi
         if ! command -v argon2 >/dev/null 2>&1; then apk add argon2 &>/dev/null; fi
         TOKEN=$(echo -n ${NEWTOKEN} | argon2 "$(openssl rand -base64 32)" -e -id -k 19456 -t 2 -p 1)
@@ -67,6 +67,6 @@ start
 build_container
 description
 
-msg_ok "Completed Successfully!\n"
+msg_ok "Установка успешно завершена!\n"
 echo -e "${APP} should be reachable by going to the following URL.
          ${BL}http://${IP}:8000${CL} \n"

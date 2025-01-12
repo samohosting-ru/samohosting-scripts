@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 
 source /dev/stdin <<< "$FUNCTIONS_FILE_PATH"
 color
@@ -13,15 +13,15 @@ setting_up_container
 network_check
 update_os
 
-msg_info "Installing Dependencies"
+msg_info "Устанавливаю зависимости(необходимое ПО).."
 $STD apt-get install -y curl
 $STD apt-get install -y sudo
 $STD apt-get install -y mc
 $STD apt-get install -y apt-transport-https
 $STD apt-get install -y gnupg
-msg_ok "Installed Dependencies"
+msg_ok "Зависимости(необходимое ПО) установлены."
 
-msg_info "Installing Apache CouchDB"
+msg_info "Устанавливаю Apache CouchDB"
 ERLANG_COOKIE=$(openssl rand -base64 32)
 ADMIN_PASS="$(openssl rand -base64 18 | cut -c1-13)"
 debconf-set-selections <<< "couchdb couchdb/cookie string $ERLANG_COOKIE"
@@ -44,4 +44,4 @@ customize
 msg_info "Cleaning up"
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
-msg_ok "Cleaned"
+msg_ok "Временные файлы установки - удалены!"

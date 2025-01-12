@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: MickLesk
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 # Source: https://komo.do/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -13,13 +13,13 @@ setting_up_container
 network_check
 update_os
 
-msg_info "Installing Dependencies"
+msg_info "Устанавливаю зависимости(необходимое ПО).."
 $STD apt-get install -y \
   curl \
   sudo \
   mc \
   ca-certificates
-msg_ok "Installed Dependencies"
+msg_ok "Зависимости(необходимое ПО) установлены."
 
 msg_info "Setup Docker Repository"
 install -m 0755 -d /etc/apt/keyrings
@@ -32,7 +32,7 @@ echo \
 $STD apt-get update
 msg_ok "Setup Docker Repository"
 
-msg_info "Installing Docker"
+msg_info "Устанавливаю Docker"
 $STD apt-get install -y \
   docker-ce \
   docker-ce-cli \
@@ -92,4 +92,4 @@ customize
 msg_info "Cleaning up"
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
-msg_ok "Cleaned"
+msg_ok "Временные файлы установки - удалены!"

@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/misc/build.func)
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 # Source: https://heimdall.site/
 
 # App Default Values
@@ -29,21 +29,21 @@ function update_script() {
   check_container_storage
   check_container_resources
   if [[ ! -d /opt/Heimdall ]]; then
-    msg_error "No ${APP} Installation Found!"
+    msg_error "Отсутствует установленная версия ${APP}"
     exit
   fi
   RELEASE=$(curl -sX GET "https://api.github.com/repos/linuxserver/Heimdall/releases/latest" | awk '/tag_name/{print $4;exit}' FS='[""]')
   if [[ "${RELEASE}" != "$(cat /opt/${APP}_version.txt)" ]] || [[ ! -f /opt/${APP}_version.txt ]]; then
-    msg_info "Stopping ${APP}"
+    msg_info "Останавливаю работу приложения ${APP}"
     systemctl stop heimdall
     sleep 1
-    msg_ok "Stopped ${APP}"
+    msg_ok "Приложение ${APP} остановлено"
     msg_info "Backing up Data"
     cp -R /opt/Heimdall/database database-backup
     cp -R /opt/Heimdall/public public-backup
     sleep 1
     msg_ok "Backed up Data"
-    msg_info "Updating Heimdall Dashboard to ${RELEASE}"
+    msg_info "Обновляю Heimdall Dashboard to ${RELEASE}"
     wget -q https://github.com/linuxserver/Heimdall/archive/${RELEASE}.tar.gz
     tar xzf ${RELEASE}.tar.gz
     VER=$(curl -s https://api.github.com/repos/linuxserver/Heimdall/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
@@ -62,12 +62,12 @@ function update_script() {
     msg_info "Cleanup"
     rm -rf {${RELEASE}.tar.gz,Heimdall-${VER},public-backup,database-backup,Heimdall}
     sleep 1
-    msg_ok "Cleaned"
-    msg_info "Starting ${APP}"
+    msg_ok "Временные файлы установки - удалены!"
+    msg_info "Запускаю ${APP}"
     systemctl start heimdall.service
     sleep 2
-    msg_ok "Started ${APP}"
-    msg_ok "Updated Successfully"
+    msg_ok "Запустил ${APP}"
+    msg_ok "Приложение успешно обновлено!"
   else
     msg_ok "No update required.  ${APP} is already at ${RELEASE}."
   fi
@@ -78,7 +78,7 @@ start
 build_container
 description
 
-msg_ok "Completed Successfully!\n"
-echo -e "${CREATING}${GN}${APP} setup has been successfully initialized!${CL}"
-echo -e "${INFO}${YW} Access it using the following URL:${CL}"
+msg_ok "Установка успешно завершена!\n"
+echo -e "${CREATING}${GN}${APP} Установка успешно завершена!${CL}"
+echo -e "${INFO}${YW} Сервис доступен по ссылке:${CL}"
 echo -e "${TAB}${GATEWAY}${BGN}http://${IP}:7990${CL}"

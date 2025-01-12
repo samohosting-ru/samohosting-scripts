@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/misc/build.func)
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster) | Co-Author: Rogue-King
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 # Source: https://about.gitea.com/
 
 # App Default Values
@@ -29,11 +29,11 @@ function update_script() {
    check_container_storage
    check_container_resources
    if [[ ! -f /usr/local/bin/gitea ]]; then
-      msg_error "No ${APP} Installation Found!"
+      msg_error "Отсутствует установленная версия ${APP}"
       exit
    fi
    RELEASE=$(wget -q https://github.com/go-gitea/gitea/releases/latest -O - | grep "title>Release" | cut -d " " -f 4 | sed 's/^v//')
-   msg_info "Updating $APP to ${RELEASE}"
+   msg_info "Обновляю $APP to ${RELEASE}"
    wget -q https://github.com/go-gitea/gitea/releases/download/v$RELEASE/gitea-$RELEASE-linux-amd64
    systemctl stop gitea
    rm -rf /usr/local/bin/gitea
@@ -48,7 +48,7 @@ start
 build_container
 description
 
-msg_ok "Completed Successfully!\n"
-echo -e "${CREATING}${GN}${APP} setup has been successfully initialized!${CL}"
-echo -e "${INFO}${YW} Access it using the following URL:${CL}"
+msg_ok "Установка успешно завершена!\n"
+echo -e "${CREATING}${GN}${APP} Установка успешно завершена!${CL}"
+echo -e "${INFO}${YW} Сервис доступен по ссылке:${CL}"
 echo -e "${TAB}${GATEWAY}${BGN}http://${IP}:3000${CL}"

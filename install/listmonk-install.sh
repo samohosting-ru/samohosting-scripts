@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: bvdberg01
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 
 source /dev/stdin <<< "$FUNCTIONS_FILE_PATH"
 color
@@ -13,13 +13,13 @@ setting_up_container
 network_check
 update_os
 
-msg_info "Installing Dependencies"
+msg_info "Устанавливаю зависимости(необходимое ПО).."
 $STD apt-get install -y \
   curl \
   sudo \
   mc \
   postgresql
-msg_ok "Installed Dependencies"
+msg_ok "Зависимости(необходимое ПО) установлены."
 
 msg_info "Setting up PostgreSQL"
 DB_NAME=listmonk
@@ -35,7 +35,7 @@ echo -e "listmonk Database Name: \e[32m$DB_NAME\e[0m"
 } >> ~/listmonk.creds
 msg_ok "Set up PostgreSQL"
 
-msg_info "Installing listmonk"
+msg_info "Устанавливаю listmonk"
 cd /opt
 mkdir /opt/listmonk
 mkdir /opt/listmonk/uploads
@@ -77,4 +77,4 @@ msg_info "Cleaning up"
 rm -rf "/opt/listmonk_${RELEASE}_linux_amd64.tar.gz"
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
-msg_ok "Cleaned"
+msg_ok "Временные файлы установки - удалены!"

@@ -4,7 +4,7 @@
 # Author: tteck
 # Co-Author: MickLesk (Canbiz)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 # Source: https://github.com/ellite/wallos
 
 source /dev/stdin <<< "$FUNCTIONS_FILE_PATH"
@@ -15,7 +15,7 @@ setting_up_container
 network_check
 update_os
 
-msg_info "Installing Dependencies"
+msg_info "Устанавливаю зависимости(необходимое ПО).."
 $STD apt-get install -y \
   curl \
   sudo \
@@ -23,9 +23,9 @@ $STD apt-get install -y \
   apache2 \
   libapache2-mod-php \
   php8.2-{mbstring,gd,curl,intl,imagick,bz2,sqlite3,zip,xml} 
-msg_ok "Installed Dependencies"
+msg_ok "Зависимости(необходимое ПО) установлены."
 
-msg_info "Installing Wallos (Patience)"
+msg_info "Устанавливаю Wallos (Patience)"
 cd /opt
 RELEASE=$(curl -s https://api.github.com/repos/ellite/Wallos/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
 wget -q "https://github.com/ellite/Wallos/archive/refs/tags/v${RELEASE}.zip"
@@ -79,4 +79,4 @@ msg_info "Cleaning up"
 rm -rf /opt/v${RELEASE}.zip
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
-msg_ok "Cleaned"
+msg_ok "Временные файлы установки - удалены!"

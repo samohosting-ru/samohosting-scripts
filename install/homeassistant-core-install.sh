@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
 color
@@ -13,7 +13,7 @@ setting_up_container
 network_check
 update_os
 
-msg_info "Installing Dependencies (Patience)"
+msg_info "Устанавливаю Dependencies (Patience)"
 $STD apt-get install -y \
   curl \
   git \
@@ -45,7 +45,7 @@ $STD apt-get install -y \
   libmariadb-dev-compat \
   libatlas-base-dev \
   software-properties-common
-msg_ok "Installed Dependencies"
+msg_ok "Зависимости(необходимое ПО) установлены."
 
 msg_info "Setup Python3"
 $STD add-apt-repository -y ppa:deadsnakes/ppa
@@ -57,7 +57,7 @@ $STD apt-get install -y \
   python3.13-venv
 msg_ok "Setup Python3"
 
-msg_info "Installing UV"
+msg_info "Устанавливаю UV"
 $STD pip install uv
 msg_ok "Installed UV"
 
@@ -68,7 +68,7 @@ uv venv . &>/dev/null
 source bin/activate
 msg_ok "Created virtual environment with UV"
 
-msg_info "Installing Home Assistant-Core and packages"
+msg_info "Устанавливаю Home Assistant-Core and packages"
 $STD uv pip install webrtcvad wheel homeassistant mysqlclient psycopg2-binary isal
 mkdir -p /root/.homeassistant
 msg_ok "Installed Home Assistant-Core and required packages"
@@ -97,4 +97,4 @@ customize
 msg_info "Cleaning up"
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
-msg_ok "Cleaned"
+msg_ok "Временные файлы установки - удалены!"

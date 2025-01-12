@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/misc/build.func)
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 # Source: https://docs.jellyseerr.dev/
 
 # App Default Values
@@ -30,7 +30,7 @@ function update_script() {
     check_container_resources
 
     if [[ ! -d /opt/jellyseerr ]]; then 
-        msg_error "No ${APP} Installation Found!"
+        msg_error "Отсутствует установленная версия ${APP}"
         exit
     fi
 
@@ -41,7 +41,7 @@ function update_script() {
         msg_ok "pnpm is already installed."
     fi
 
-    msg_info "Updating $APP"
+    msg_info "Обновляю $APP"
     cd /opt/jellyseerr
     output=$(git pull --no-rebase)
     
@@ -83,7 +83,7 @@ start
 build_container
 description
 
-msg_ok "Completed Successfully!\n"
-echo -e "${CREATING}${GN}${APP} setup has been successfully initialized!${CL}"
-echo -e "${INFO}${YW} Access it using the following URL:${CL}"
+msg_ok "Установка успешно завершена!\n"
+echo -e "${CREATING}${GN}${APP} Установка успешно завершена!${CL}"
+echo -e "${INFO}${YW} Сервис доступен по ссылке:${CL}"
 echo -e "${TAB}${GATEWAY}${BGN}http://${IP}:5055${CL}"

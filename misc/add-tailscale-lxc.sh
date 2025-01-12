@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 
 function header_info {
 clear
@@ -27,7 +27,7 @@ while true; do
   esac
 done
 header_info
-echo "Loading..."
+echo "Загрузка..."
 function msg() {
   local TEXT="$1"
   echo -e "$TEXT"
@@ -46,7 +46,7 @@ while read -r line; do
 done < <(pct list | awk 'NR>1')
 
 while [ -z "${CTID:+x}" ]; do
-  CTID=$(whiptail --backtitle "Proxmox VE Helper Scripts" --title "Containers on $NODE" --radiolist \
+  CTID=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --title "Containers on $NODE" --radiolist \
     "\nSelect a container to add Tailscale to:\n" \
     16 $(($MSG_MAX_LENGTH + 23)) 6 \
     "${CTID_MENU[@]}" 3>&1 1>&2 2>&3) || exit

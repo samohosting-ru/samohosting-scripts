@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/misc/build.func)
 # Copyright (c) 2021-2025 tteck
 # Author: MickLesk (Canbiz)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 # Source: https://github.com/matze/wastebin
 
 # App Default Values
@@ -29,7 +29,7 @@ function update_script() {
   check_container_storage
   check_container_resources
   if [[ ! -d /opt/wastebin ]]; then
-    msg_error "No ${APP} Installation Found!"
+    msg_error "Отсутствует установленная версия ${APP}"
     exit
   fi
   RELEASE=$(curl -s https://api.github.com/repos/matze/wastebin/releases/latest | grep "tag_name" | awk '{print substr($2, 2, length($2)-3) }')
@@ -38,7 +38,7 @@ function update_script() {
     systemctl stop wastebin
     msg_ok "Wastebin Stopped"
 
-    msg_info "Updating Wastebin"
+    msg_info "Обновляю Wastebin"
     wget -q https://github.com/matze/wastebin/releases/download/${RELEASE}/wastebin_${RELEASE}_x86_64-unknown-linux-musl.tar.zst
     tar -xf wastebin_${RELEASE}_x86_64-unknown-linux-musl.tar.zst
     cp -f wastebin /opt/wastebin/
@@ -46,14 +46,14 @@ function update_script() {
     echo "${RELEASE}" >/opt/${APP}_version.txt
     msg_ok "Updated Wastebin"
 
-    msg_info "Starting Wastebin"
+    msg_info "Запускаю Wastebin"
     systemctl start wastebin
-    msg_ok "Started Wastebin"
+    msg_ok "Запустил Wastebin"
 
-    msg_info "Cleaning Up"
+    msg_info "Провожу уборку. Удаляю временные файлы установки"
     rm -rf wastebin_${RELEASE}_x86_64-unknown-linux-musl.tar.zst
-    msg_ok "Cleaned"
-    msg_ok "Updated Successfully"
+    msg_ok "Временные файлы установки - удалены!"
+    msg_ok "Приложение успешно обновлено!"
   else
     msg_ok "No update required. ${APP} is already at v${RELEASE}"
   fi
@@ -64,7 +64,7 @@ start
 build_container
 description
 
-msg_ok "Completed Successfully!\n"
-echo -e "${CREATING}${GN}${APP} setup has been successfully initialized!${CL}"
-echo -e "${INFO}${YW} Access it using the following URL:${CL}"
+msg_ok "Установка успешно завершена!\n"
+echo -e "${CREATING}${GN}${APP} Установка успешно завершена!${CL}"
+echo -e "${INFO}${YW} Сервис доступен по ссылке:${CL}"
 echo -e "${TAB}${GATEWAY}${BGN}http://${IP}:8088${CL}"

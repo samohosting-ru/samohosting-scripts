@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: MickLesk (Canbiz)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 # Source: https://github.com/gitsang/lxc-iptag
 
 function header_info {
@@ -116,10 +116,10 @@ if [[ -f "$FILE_PATH" ]]; then
   exit 0
 fi
 
-msg_info "Installing Dependencies"
+msg_info "Устанавливаю зависимости(необходимое ПО).."
 apt-get update &>/dev/null
 apt-get install -y ipcalc net-tools &>/dev/null
-msg_ok "Installed Dependencies"
+msg_ok "Зависимости(необходимое ПО) установлены."
 
 msg_info "Setting up IP-Tag Scripts"
 mkdir -p /opt/lxc-iptag
@@ -349,9 +349,9 @@ fi
 
 msg_ok "Setup IP-Tag Scripts"
 
-msg_info "Starting Service"
+msg_info "Запускаю Service"
 systemctl daemon-reload &>/dev/null
 systemctl enable -q --now iptag.service &>/dev/null
-msg_ok "Started Service"
+msg_ok "Запустил Service"
 SPINNER_PID=""
 echo -e "\n${APP} installation completed successfully! ${CL}\n"

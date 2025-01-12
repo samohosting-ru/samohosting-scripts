@@ -4,7 +4,7 @@
 # Author: tteck (tteckster)
 # Co-Author: MickLesk (Canbiz)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 # Source: https://github.com/ajnart/homarr
 
 source /dev/stdin <<< "$FUNCTIONS_FILE_PATH"
@@ -15,7 +15,7 @@ setting_up_container
 network_check
 update_os
 
-msg_info "Installing Dependencies"
+msg_info "Устанавливаю зависимости(необходимое ПО).."
 $STD apt-get install -y \
   sudo \
   mc \
@@ -25,21 +25,21 @@ $STD apt-get install -y \
   make \
   g++ \
   build-essential
-msg_ok "Installed Dependencies"
+msg_ok "Зависимости(необходимое ПО) установлены."
 
-msg_info "Setting up Node.js Repository"
+msg_info "Настраиваю Node.js Репозиторий"
 mkdir -p /etc/apt/keyrings
 curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
 echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" >/etc/apt/sources.list.d/nodesource.list
-msg_ok "Set up Node.js Repository"
+msg_ok "Репозиторий Node.js настроен"
 
-msg_info "Installing Node.js/Yarn"
+msg_info "Устанавливаю Node.js/Yarn"
 $STD apt-get update
 $STD apt-get install -y nodejs
 $STD npm install -g yarn
 msg_ok "Installed Node.js/Yarn"
 
-msg_info "Installing Homarr (Patience)"
+msg_info "Устанавливаю Homarr (Patience)"
 RELEASE=$(curl -s https://api.github.com/repos/ajnart/homarr/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
 wget -q "https://github.com/ajnart/homarr/archive/refs/tags/v${RELEASE}.zip"
 unzip -q v${RELEASE}.zip
@@ -83,4 +83,4 @@ customize
 msg_info "Cleaning up"
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
-msg_ok "Cleaned"
+msg_ok "Временные файлы установки - удалены!"

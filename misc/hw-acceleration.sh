@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 # Execute within the Proxmox shell
 # bash -c "$(wget -qLO - https://github.com/community-scripts/ProxmoxVE/raw/main/misc/hw-acceleration.sh)"
 
@@ -30,7 +30,7 @@ HOLD="-"
 CM="${GN}✓${CL}"
 set -e
 header_info
-echo "Loading..."
+echo "Загрузка..."
 function msg_info() {
   local msg="$1"
   echo -ne " ${HOLD} ${YW}${msg}..."
@@ -49,7 +49,7 @@ if ! pveversion | grep -Eq "pve-manager/(8\.[1-3])"; then
   exit
 fi
 
-whiptail --backtitle "Proxmox VE Helper Scripts" --title "Add Intel HW Acceleration" --yesno "This Will Add Intel HW Acceleration to an existing LXC Container. Proceed?" 8 72 || exit
+whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --title "Add Intel HW Acceleration" --yesno "This Will Add Intel HW Acceleration to an existing LXC Container. Proceed?" 8 72 || exit
 NODE=$(hostname)
 PREV_MENU=()
 MSG_MAX_LENGTH=0
@@ -66,7 +66,7 @@ while read -r TAG ITEM; do
   PREV_MENU+=("$TAG" "$ITEM " "OFF")
 done < <(echo "$privileged_containers")
 
-privileged_container=$(whiptail --backtitle "Proxmox VE Helper Scripts" --title "Privileged Containers on $NODE" --checklist "\nSelect a Container To Add Intel HW Acceleration:\n" 16 $((MSG_MAX_LENGTH + 23)) 6 "${PREV_MENU[@]}" 3>&1 1>&2 2>&3 | tr -d '"') || exit
+privileged_container=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --title "Privileged Containers on $NODE" --checklist "\nSelect a Container To Add Intel HW Acceleration:\n" 16 $((MSG_MAX_LENGTH + 23)) 6 "${PREV_MENU[@]}" 3>&1 1>&2 2>&3 | tr -d '"') || exit
 header_info
 read -r -p "Verbose mode? <y/N> " prompt
   if [[ ${prompt,,} =~ ^(y|yes)$ ]]; then
@@ -88,7 +88,7 @@ EOF
 read -r -p "Do you need the intel-media-va-driver-non-free driver (Debian 12 only)? <y/N> " prompt
 if [[ ${prompt,,} =~ ^(y|yes)$ ]]; then
   header_info
-  msg_info "Installing Hardware Acceleration (non-free)"
+  msg_info "Устанавливаю Hardware Acceleration (non-free)"
   pct exec ${privileged_container} -- bash -c "cat <<EOF >/etc/apt/sources.list.d/non-free.list
 
 deb http://deb.debian.org/debian bookworm main contrib non-free non-free-firmware
@@ -105,12 +105,12 @@ EOF"
   msg_ok "Installed Hardware Acceleration (non-free)"
 else
   header_info
-  msg_info "Installing Hardware Acceleration"
+  msg_info "Устанавливаю Hardware Acceleration"
   pct exec ${privileged_container} -- bash -c "silent() { \"\$@\" >/dev/null 2>&1; } && $STD apt-get install -y va-driver-all ocl-icd-libopencl1 intel-opencl-icd vainfo intel-gpu-tools && chgrp video /dev/dri && chmod 755 /dev/dri && $STD adduser \$(id -u -n) video && $STD adduser \$(id -u -n) render"
   msg_ok "Installed Hardware Acceleration"
 fi
 sleep 1
-whiptail --backtitle "Proxmox VE Helper Scripts" --msgbox --title "Added tools" "vainfo, execute command 'vainfo'\nintel-gpu-tools, execute command 'intel_gpu_top'" 8 58
+whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --msgbox --title "Added tools" "vainfo, execute command 'vainfo'\nintel-gpu-tools, execute command 'intel_gpu_top'" 8 58
 
-msg_ok "Completed Successfully!\n"
+msg_ok "Установка успешно завершена!\n"
 echo -e "Reboot container ${BL}$privileged_container${CL} to apply the new settings\n"

@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 source /dev/stdin <<< "$FUNCTIONS_FILE_PATH"
 
 color
@@ -13,16 +13,16 @@ setting_up_container
 network_check
 update_os
 
-msg_info "Installing Dependencies"
+msg_info "Устанавливаю зависимости(необходимое ПО).."
 $STD apk add newt
 $STD apk add curl
 $STD apk add openssh
 $STD apk add tzdata
 $STD apk add nano
 $STD apk add mc
-msg_ok "Installed Dependencies"
+msg_ok "Зависимости(необходимое ПО) установлены."
 
-msg_info "Installing Docker"
+msg_info "Устанавливаю Docker"
 $STD apk add docker
 $STD rc-service docker start
 $STD rc-update add docker default
@@ -37,7 +37,7 @@ PORTAINER_AGENT_LATEST_VERSION=$(get_latest_release "portainer/agent")
 
 read -r -p "Would you like to add Portainer? <y/N> " prompt
 if [[ "${prompt,,}" =~ ^(y|yes)$ ]]; then
-  msg_info "Installing Portainer $PORTAINER_LATEST_VERSION"
+  msg_info "Устанавливаю Portainer $PORTAINER_LATEST_VERSION"
   docker volume create portainer_data >/dev/null
   $STD docker run -d \
     -p 8000:8000 \
@@ -51,7 +51,7 @@ if [[ "${prompt,,}" =~ ^(y|yes)$ ]]; then
 else
   read -r -p "Would you like to add the Portainer Agent? <y/N> " prompt
   if [[ "${prompt,,}" =~ ^(y|yes)$ ]]; then
-    msg_info "Installing Portainer agent $PORTAINER_AGENT_LATEST_VERSION"
+    msg_info "Устанавливаю Portainer agent $PORTAINER_AGENT_LATEST_VERSION"
     $STD docker run -d \
       -p 9001:9001 \
       --name portainer_agent \
@@ -64,7 +64,7 @@ else
 fi
 read -r -p "Would you like to add Docker Compose? <y/N> " prompt
 if [[ "${prompt,,}" =~ ^(y|yes)$ ]]; then
-  msg_info "Installing Docker Compose $DOCKER_COMPOSE_LATEST_VERSION"
+  msg_info "Устанавливаю Docker Compose $DOCKER_COMPOSE_LATEST_VERSION"
   DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
   mkdir -p $DOCKER_CONFIG/cli-plugins
   curl -sSL https://github.com/docker/compose/releases/download/$DOCKER_COMPOSE_LATEST_VERSION/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose

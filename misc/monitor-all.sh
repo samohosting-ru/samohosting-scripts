@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 
 clear
 cat <<"EOF"
@@ -145,7 +145,7 @@ OPTIONS=(Add "Add Monitor-All to Proxmox VE" \
          Remove "Remove Monitor-All from Proxmox VE")
 
 # Show the whiptail menu and save the user's choice
-CHOICE=$(whiptail --backtitle "Proxmox VE Helper Scripts" --title "Monitor-All for Proxmox VE" --menu "Select an option:" 10 58 2 \
+CHOICE=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --title "Monitor-All for Proxmox VE" --menu "Select an option:" 10 58 2 \
           "${OPTIONS[@]}" 3>&1 1>&2 2>&3)
 
 # Check the user's choice and perform the corresponding action

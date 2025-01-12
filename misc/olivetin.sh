@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 
 function header_info {
 clear
@@ -50,13 +50,13 @@ function msg_ok() {
   echo -e "${BFR} ${CM} ${GN}${msg}${CL}"
 }
 
-msg_info "Installing ${APP}"
+msg_info "Устанавливаю ${APP}"
 wget -q https://github.com/OliveTin/OliveTin/releases/latest/download/OliveTin_linux_amd64.deb
 dpkg -i OliveTin_linux_amd64.deb &>/dev/null
 systemctl enable --now OliveTin &>/dev/null
 rm OliveTin_linux_amd64.deb
 msg_ok "Installed ${APP} on $hostname"
 
-msg_ok "Completed Successfully!\n"
+msg_ok "Установка успешно завершена!\n"
 echo -e "${APP} should be reachable by going to the following URL.
          ${BL}http://$IP:1337${CL} \n"

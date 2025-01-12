@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/misc/build.func)
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster) | Co-Author: MickLesk (Canbiz)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 # Source: https://myspeed.dev/
 
 # App Default Values
@@ -29,7 +29,7 @@ function update_script() {
   check_container_storage
   check_container_resources
   if [[ ! -d /opt/myspeed ]]; then
-    msg_error "No ${APP} Installation Found!"
+    msg_error "Отсутствует установленная версия ${APP}"
     exit
   fi
   RELEASE=$(wget -q https://github.com/gnmyt/myspeed/releases/latest -O - | grep "title>Release" | cut -d " " -f 5)
@@ -39,7 +39,7 @@ function update_script() {
     systemctl stop myspeed
     msg_ok "Stopped ${APP} Service"
 
-    msg_info "Updating ${APP} to ${RELEASE}"
+    msg_info "Обновляю ${APP} до ${RELEASE}"
     cd /opt
     rm -rf myspeed_bak
     mv myspeed myspeed_bak
@@ -48,19 +48,19 @@ function update_script() {
     cd myspeed
     npm install >/dev/null 2>&1
     echo "${RELEASE}" >/opt/${APP}_version.txt
-    msg_ok "Updated ${APP} to ${RELEASE}"
+    msg_ok "Приложение ${APP} обновлено до версии ${RELEASE}"
 
-    msg_info "Starting ${APP} Service"
+    msg_info "Запускаю ${APP} Service"
     systemctl start myspeed
-    msg_ok "Started ${APP} Service"
+    msg_ok "Запустил ${APP} Service"
 
     msg_info "Cleaning up"
     rm -rf MySpeed-$RELEASE.zip
-    msg_ok "Cleaned"
+    msg_ok "Временные файлы установки - удалены!"
 
     msg_ok "Updated Successfully!\n"
   else
-    msg_ok "No update required. ${APP} is already at ${RELEASE}"
+    msg_ok "Обновление не требуется. ${APP} уже последней версии ${RELEASE}"
   fi
   exit
 }
@@ -69,7 +69,7 @@ start
 build_container
 description
 
-msg_ok "Completed Successfully!\n"
-echo -e "${CREATING}${GN}${APP} setup has been successfully initialized!${CL}"
-echo -e "${INFO}${YW} Access it using the following URL:${CL}"
+msg_ok "Установка успешно завершена!\n"
+echo -e "${CREATING}${GN}${APP} Установка успешно завершена!${CL}"
+echo -e "${INFO}${YW} Сервис доступен по ссылке:${CL}"
 echo -e "${TAB}${GATEWAY}${BGN}http://${IP}:5216${CL}"

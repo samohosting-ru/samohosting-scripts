@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/misc/build.func)
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 # Source: https://dashy.to/
 
 # App Default Values
@@ -29,26 +29,26 @@ function update_script() {
   check_container_storage
   check_container_resources
   if [[ ! -d /opt/dashy/public/ ]]; then
-    msg_error "No ${APP} Installation Found!"
+    msg_error "Отсутствует установленная версия ${APP}"
     exit
   fi
 
   RELEASE=$(curl -sL https://api.github.com/repos/Lissy93/dashy/releases/latest | grep '"tag_name":' | cut -d'"' -f4)
   if [[ "${RELEASE}" != "$(cat /opt/${APP}_version.txt)" ]] || [[ ! -f /opt/${APP}_version.txt ]]; then
-    msg_info "Stopping ${APP}"
+    msg_info "Останавливаю работу приложения ${APP}"
     systemctl stop dashy
-    msg_ok "Stopped ${APP}"
+    msg_ok "Приложение ${APP} остановлено"
 
-    msg_info "Backing up conf.yml"
+    msg_info "Делаю резервную копию Вашего файла conf.yml"
     cd ~
     if [[ -f /opt/dashy/public/conf.yml ]]; then
       cp -R /opt/dashy/public/conf.yml conf.yml
     else
       cp -R /opt/dashy/user-data/conf.yml conf.yml
     fi
-    msg_ok "Backed up conf.yml"
+    msg_ok "Забекапировал Ваш conf.yml"
 
-    msg_info "Updating ${APP} to ${RELEASE}"
+    msg_info "Обновляю ${APP} до ${RELEASE}"
     rm -rf /opt/dashy
     mkdir -p /opt/dashy
     wget -qO- https://github.com/Lissy93/dashy/archive/refs/tags/${RELEASE}.tar.gz | tar -xz -C /opt/dashy --strip-components=1
@@ -56,23 +56,23 @@ function update_script() {
     npm install
     npm run build
     echo "${RELEASE}" >/opt/${APP}_version.txt
-    msg_ok "Updated ${APP} to ${RELEASE}"
+    msg_ok "Приложение ${APP} обновлено до версии ${RELEASE}"
 
-    msg_info "Restoring conf.yml"
+    msg_info "Восстанавливаю из бекапа Ваш conf.yml"
     cd ~
     cp -R conf.yml /opt/dashy/user-data
     msg_ok "Restored conf.yml"
 
-    msg_info "Cleaning"
+    msg_info "Провожу уборку. Удаляю временные файлы установки"
     rm -rf conf.yml /opt/dashy/public/conf.yml
-    msg_ok "Cleaned"
+    msg_ok "Временные файлы установки - удалены!"
 
-    msg_info "Starting Dashy"
+    msg_info "Запускаю Dashy"
     systemctl start dashy
-    msg_ok "Started Dashy"
-    msg_ok "Updated Successfully"
+    msg_ok "Запустил Dashy"
+    msg_ok "Приложение успешно обновлено!"
   else
-    msg_ok "No update required. ${APP} is already at ${RELEASE}"
+    msg_ok "Обновление не требуется. ${APP} уже последней версии ${RELEASE}"
   fi
   exit
 }
@@ -81,7 +81,7 @@ start
 build_container
 description
 
-msg_ok "Completed Successfully!\n"
-echo -e "${CREATING}${GN}${APP} setup has been successfully initialized!${CL}"
-echo -e "${INFO}${YW} Access it using the following URL:${CL}"
+msg_ok "Установка успешно завершена!\n"
+echo -e "${CREATING}${GN}${APP} Установка успешно завершена!${CL}"
+echo -e "${INFO}${YW} Сервис доступен по ссылке:${CL}"
 echo -e "${TAB}${GATEWAY}${BGN}http://${IP}:4000${CL}"

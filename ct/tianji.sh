@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/misc/build.func)
 # Copyright (c) 2021-2025 tteck
 # Author: MickLesk (Canbiz)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 # Source: https://tianji.msgbyte.com/
 
 # App Default Values
@@ -28,7 +28,7 @@ function update_script() {
   check_container_storage
   check_container_resources
   if [[ ! -d /opt/tianji ]]; then
-    msg_error "No ${APP} Installation Found!"
+    msg_error "Отсутствует установленная версия ${APP}"
     exit
   fi
   RELEASE=$(curl -s https://api.github.com/repos/msgbyte/tianji/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
@@ -37,7 +37,7 @@ function update_script() {
     systemctl stop tianji
     msg_ok "Stopped ${APP} Service"
     
-    msg_info "Updating ${APP} to v${RELEASE}"
+    msg_info "Обновляю ${APP} to v${RELEASE}"
     cd /opt
     cp /opt/tianji/src/server/.env /opt/.env
     mv /opt/tianji /opt/tianji_bak
@@ -57,9 +57,9 @@ function update_script() {
     echo "${RELEASE}" >/opt/${APP}_version.txt
     msg_ok "Updated ${APP} to v${RELEASE}"
     
-    msg_info "Starting ${APP}"
+    msg_info "Запускаю ${APP}"
     systemctl start tianji
-    msg_ok "Started ${APP}"
+    msg_ok "Запустил ${APP}"
     
     msg_info "Cleaning up"
     rm -R /opt/v${RELEASE}.zip
@@ -67,8 +67,8 @@ function update_script() {
     rm -rf /opt/tianji/src/client
     rm -rf /opt/tianji/website
     rm -rf /opt/tianji/reporter
-    msg_ok "Cleaned"
-    msg_ok "Updated Successfully"
+    msg_ok "Временные файлы установки - удалены!"
+    msg_ok "Приложение успешно обновлено!"
   else
     msg_ok "No update required.  ${APP} is already at v${RELEASE}."
   fi
@@ -79,7 +79,7 @@ start
 build_container
 description
 
-msg_ok "Completed Successfully!\n"
-echo -e "${CREATING}${GN}${APP} setup has been successfully initialized!${CL}"
-echo -e "${INFO}${YW} Access it using the following URL:${CL}"
+msg_ok "Установка успешно завершена!\n"
+echo -e "${CREATING}${GN}${APP} Установка успешно завершена!${CL}"
+echo -e "${INFO}${YW} Сервис доступен по ссылке:${CL}"
 echo -e "${TAB}${GATEWAY}${BGN}http://${IP}:12345${CL}"

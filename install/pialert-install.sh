@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 
 source /dev/stdin <<< "$FUNCTIONS_FILE_PATH"
 color
@@ -13,7 +13,7 @@ setting_up_container
 network_check
 update_os
 
-msg_info "Installing Dependencies"
+msg_info "Устанавливаю зависимости(необходимое ПО).."
 $STD apt-get -y install \
   sudo \
   mc \
@@ -32,9 +32,9 @@ $STD apt-get -y install \
   zip \
   aria2 \
   wakeonlan
-msg_ok "Installed Dependencies"
+msg_ok "Зависимости(необходимое ПО) установлены."
 
-msg_info "Installing PHP Dependencies"
+msg_info "Устанавливаю PHP Dependencies"
 $STD apt-get -y install \
   php \
   php-cgi \
@@ -46,7 +46,7 @@ $STD lighttpd-enable-mod fastcgi-php
 service lighttpd force-reload
 msg_ok "Installed PHP Dependencies"
 
-msg_info "Installing Python Dependencies"
+msg_info "Устанавливаю Python Dependencies"
 $STD apt-get -y install \
   python3-pip \
   python3-requests \
@@ -59,7 +59,7 @@ $STD pip3 install cryptography
 $STD pip3 install pyunifi
 msg_ok "Installed Python Dependencies"
 
-msg_info "Installing Pi.Alert"
+msg_info "Устанавливаю Pi.Alert"
 curl -sL https://github.com/leiweibau/Pi.Alert/raw/main/tar/pialert_latest.tar | tar xvf - -C /opt >/dev/null 2>&1
 rm -rf /var/lib/ieee-data /var/www/html/index.html
 sed -i -e 's#^sudo cp -n /usr/share/ieee-data/.* /var/lib/ieee-data/#\# &#' -e '/^sudo mkdir -p 2_backup$/s/^/# /' -e '/^sudo cp \*.txt 2_backup$/s/^/# /' -e '/^sudo cp \*.csv 2_backup$/s/^/# /' /opt/pialert/back/update_vendors.sh
@@ -99,4 +99,4 @@ customize
 msg_info "Cleaning up"
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
-msg_ok "Cleaned"
+msg_ok "Временные файлы установки - удалены!"

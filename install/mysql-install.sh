@@ -4,7 +4,7 @@
 # Author: tteck
 # Co-Author: MickLesk (Canbiz)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 # Source: https://www.mysql.com/products/community | https://www.phpmyadmin.net
 
 source /dev/stdin <<< "$FUNCTIONS_FILE_PATH"
@@ -15,14 +15,14 @@ setting_up_container
 network_check
 update_os
 
-msg_info "Installing Dependencies"
+msg_info "Устанавливаю зависимости(необходимое ПО).."
 $STD apt-get install -y \
   sudo \
   lsb-release \
   curl \
   gnupg \
   mc
-msg_ok "Installed Dependencies"
+msg_ok "Зависимости(необходимое ПО) установлены."
 
 RELEASE_REPO="mysql-8.0"
 RELEASE_AUTH="mysql_native_password"
@@ -32,7 +32,7 @@ if [[ "${prompt,,}" =~ ^(y|yes)$ ]]; then
       RELEASE_AUTH="caching_sha2_password"
 fi
 
-msg_info "Installing MySQL"
+msg_info "Устанавливаю MySQL"
 curl -fsSL https://repo.mysql.com/RPM-GPG-KEY-mysql-2023 | gpg --dearmor  -o /usr/share/keyrings/mysql.gpg
 echo "deb [signed-by=/usr/share/keyrings/mysql.gpg] http://repo.mysql.com/apt/debian $(lsb_release -sc) ${RELEASE_REPO}" >/etc/apt/sources.list.d/mysql.list
 $STD apt-get update
@@ -52,7 +52,7 @@ msg_ok "MySQL Server configured"
 
 read -r -p "Would you like to add PhpMyAdmin? <y/N> " prompt
 if [[ ${prompt,,} =~ ^(y|yes)$ ]]; then
-  msg_info "Installing phpMyAdmin"
+  msg_info "Устанавливаю phpMyAdmin"
   $STD apt-get install -y \
     apache2 \
     php \
@@ -85,4 +85,4 @@ customize
 msg_info "Cleaning up"
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
-msg_ok "Cleaned"
+msg_ok "Временные файлы установки - удалены!"

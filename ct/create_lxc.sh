@@ -4,7 +4,7 @@
 # Author: tteck (tteckster)
 # Co-Author: MickLesk
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 
 # This sets verbose mode if the global variable is set to "yes"
 # if [ "$VERBOSE" == "yes" ]; then set -x; fi
@@ -86,15 +86,15 @@ function msg_error() {
 }
 
 # This checks for the presence of valid Container Storage and Template Storage locations
-msg_info "Validating Storage"
+msg_info "Проверяю Хранилище"
 VALIDCT=$(pvesm status -content rootdir | awk 'NR>1')
 if [ -z "$VALIDCT" ]; then
-  msg_error "Unable to detect a valid Container Storage location."
+  msg_error "Не удалось определить корректное расположение хранилища для контейнера"
   exit 1
 fi
 VALIDTMP=$(pvesm status -content vztmpl | awk 'NR>1')
 if [ -z "$VALIDTMP" ]; then
-  msg_error "Unable to detect a valid Template Storage location."
+  msg_error "Не удалось определить корректное расположение хранилища для шаблона"
   exit 1
 fi
 
@@ -135,12 +135,12 @@ function select_storage() {
   else
     local STORAGE
     while [ -z "${STORAGE:+x}" ]; do
-      STORAGE=$(whiptail --backtitle "Proxmox VE Helper Scripts" --title "Storage Pools" --radiolist \
+      STORAGE=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --title "ХРАНИЛИЩЕ ДЛЯ ДАННЫХ" --radiolist \
       "Which storage pool you would like to use for the ${CONTENT_LABEL,,}?\nTo make a selection, use the Spacebar.\n" \
       16 $(($MSG_MAX_LENGTH + 23)) 6 \
       "${MENU[@]}" 3>&1 1>&2 2>&3) || exit "Menu aborted."
       if [ $? -ne 0 ]; then
-        echo -e "${CROSS}${RD} Menu aborted by user.${CL}"
+        echo -e "${CROSS}${RD} Меню отменено пользователем.${CL}"
         exit 0 
       fi
     done
@@ -158,21 +158,21 @@ function select_storage() {
 if pct status $CTID &>/dev/null; then
   echo -e "ID '$CTID' is already in use."
   unset CTID
-  exit "Cannot use ID that is already in use."
+  exit "Не могу использовать ID который уже занят другим контейнером."
 fi
 
 # Get template storage
 TEMPLATE_STORAGE=$(select_storage template) || exit
-msg_ok "Using ${BL}$TEMPLATE_STORAGE${CL} ${GN}for Template Storage."
+msg_ok "Использую ${BL}$TEMPLATE_STORAGE${CL} ${GN} для хранилища шаблона."
 
 # Get container storage
 CONTAINER_STORAGE=$(select_storage container) || exit
-msg_ok "Using ${BL}$CONTAINER_STORAGE${CL} ${GN}for Container Storage."
+msg_ok "Использую ${BL}$CONTAINER_STORAGE${CL} ${GN} для хранилища контейнера."
 
 # Update LXC template list
-msg_info "Updating LXC Template List"
+msg_info "Обновляю LXC Template List"
 pveam update >/dev/null
-msg_ok "Updated LXC Template List"
+msg_ok "Обновлен список LXC шаблонов."
 
 # Get LXC template string
 TEMPLATE_SEARCH=${PCT_OSTYPE}-${PCT_OSVERSION:-}
@@ -182,10 +182,10 @@ TEMPLATE="${TEMPLATES[-1]}"
 
 # Download LXC template if needed
 if ! pveam list $TEMPLATE_STORAGE | grep -q $TEMPLATE; then
-  msg_info "Downloading LXC Template"
+  msg_info "Скачиваю LXC шаблон"
   pveam download $TEMPLATE_STORAGE $TEMPLATE >/dev/null ||
     exit "A problem occured while downloading the LXC template."
-  msg_ok "Downloaded LXC Template"
+  msg_ok "Скачиваю LXC шаблон"
 fi
 
 # Combine all options
@@ -196,7 +196,7 @@ PCT_OPTIONS=(${PCT_OPTIONS[@]:-${DEFAULT_PCT_OPTIONS[@]}})
 [[ " ${PCT_OPTIONS[@]} " =~ " -rootfs " ]] || PCT_OPTIONS+=(-rootfs $CONTAINER_STORAGE:${PCT_DISK_SIZE:-8})
 
 # Create container
-msg_info "Creating LXC Container"
+msg_info "Создаю LXC контейнер"
 pct create $CTID ${TEMPLATE_STORAGE}:vztmpl/${TEMPLATE} ${PCT_OPTIONS[@]} >/dev/null ||
-  exit "A problem occured while trying to create container."
-msg_ok "LXC Container ${BL}$CTID${CL} ${GN}was successfully created."
+  exit "Возникла проблема при попытке создать контейнер!"
+msg_ok "LXC контейнер ${BL}$CTID${CL} ${GN}был успешно создан."

@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 
 function header_info {
     clear
@@ -28,7 +28,7 @@ CM="${GN}✓${CL}"
 silent() { "$@" >/dev/null 2>&1; }
 set -e
 header_info
-echo "Loading..."
+echo "Загрузка..."
 function msg_info() {
   local msg="$1"
   echo -ne " ${HOLD} ${YW}${msg}..."
@@ -64,11 +64,11 @@ install() {
   rm -rf netdata-repo_2-2+debian12_all.deb
   msg_ok "Set up repository"
 
-  msg_info "Installing Netdata"
+  msg_info "Устанавливаю Netdata"
   $STD apt-get update
   $STD apt-get install -y netdata
   msg_ok "Installed Netdata"
-  msg_ok "Completed Successfully!\n"
+  msg_ok "Установка успешно завершена!\n"
   echo -e "\n Netdata should be reachable at${BL} http://$(hostname -I | awk '{print $1}'):19999 ${CL}\n"
 }
 
@@ -91,7 +91,7 @@ uninstall() {
   $STD apt autoremove -y
   $STD userdel netdata
   msg_ok "Uninstalled Netdata"
-  msg_ok "Completed Successfully!\n"
+  msg_ok "Установка успешно завершена!\n"
 }
 
 if ! pveversion | grep -Eq "pve-manager/(8\.[0-9])"; then
@@ -105,7 +105,7 @@ fi
 OPTIONS=(Install "Install NetData on Proxmox VE" \
          Uninstall "Uninstall NetData from Proxmox VE")
 
-CHOICE=$(whiptail --backtitle "Proxmox VE Helper Scripts" --title "NetData" --menu "Select an option:" 10 58 2 \
+CHOICE=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --title "NetData" --menu "Select an option:" 10 58 2 \
           "${OPTIONS[@]}" 3>&1 1>&2 2>&3)
 
 case $CHOICE in

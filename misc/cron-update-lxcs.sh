@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 # bash -c "$(wget -qLO - https://github.com/community-scripts/ProxmoxVE/raw/main/misc/cron-update-lxcs.sh)"
 
 clear
@@ -39,7 +39,7 @@ remove() {
 OPTIONS=(Add "Add Crontab Schedule"
   Remove "Remove Crontab Schedule")
 
-CHOICE=$(whiptail --backtitle "Proxmox VE Helper Scripts" --title "Cron Update LXCs" --menu "Select an option:" 10 58 2 \
+CHOICE=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --title "Cron Update LXCs" --menu "Select an option:" 10 58 2 \
   "${OPTIONS[@]}" 3>&1 1>&2 2>&3)
 
 case $CHOICE in

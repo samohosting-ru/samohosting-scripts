@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 tteck
 # Author: MickLesk (Canbiz) & vhsdream
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 
 source /dev/stdin <<< "$FUNCTIONS_FILE_PATH"
 color
@@ -13,7 +13,7 @@ setting_up_container
 network_check
 update_os
 
-msg_info "Installing Dependencies"
+msg_info "Устанавливаю зависимости(необходимое ПО).."
 $STD apt-get install -y \
   g++ \
   build-essential \
@@ -25,16 +25,16 @@ $STD apt-get install -y \
   chromium/stable \
   chromium-common/stable \
   mc
-msg_ok "Installed Dependencies"
+msg_ok "Зависимости(необходимое ПО) установлены."
 
-msg_info "Installing Additional Tools"
+msg_info "Устанавливаю Additional Tools"
 wget -q https://github.com/Y2Z/monolith/releases/latest/download/monolith-gnu-linux-x86_64 -O /usr/bin/monolith
 chmod +x /usr/bin/monolith
 wget -q https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp_linux -O /usr/bin/yt-dlp
 chmod +x /usr/bin/yt-dlp
 msg_ok "Installed Additional Tools"
 
-msg_info "Installing Meilisearch"
+msg_info "Устанавливаю Meilisearch"
 cd /tmp
 wget -q https://github.com/meilisearch/meilisearch/releases/latest/download/meilisearch.deb
 $STD dpkg -i meilisearch.deb
@@ -50,15 +50,15 @@ sed -i \
     /etc/meilisearch.toml
 msg_ok "Installed Meilisearch"
 
-msg_info "Installing Node.js"
+msg_info "Устанавливаю Node.js"
 mkdir -p /etc/apt/keyrings
 curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
 echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_22.x nodistro main" >/etc/apt/sources.list.d/nodesource.list
 $STD apt-get update
 $STD apt-get install -y nodejs
-msg_ok "Installed Node.js"
+msg_ok "Node.js установлен"
 
-msg_info "Installing Hoarder"
+msg_info "Устанавливаю Hoarder"
 cd /opt
 RELEASE=$(curl -s https://api.github.com/repos/hoarder-app/hoarder/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
 wget -q "https://github.com/hoarder-app/hoarder/archive/refs/tags/v${RELEASE}.zip"
@@ -178,4 +178,4 @@ rm -rf /tmp/meilisearch.deb
 rm -f /opt/v${RELEASE}.zip
 $STD apt-get autoremove -y
 $STD apt-get autoclean -y
-msg_ok "Cleaned"
+msg_ok "Временные файлы установки - удалены!"

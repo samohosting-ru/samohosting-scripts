@@ -2,7 +2,7 @@
 # Author: tteck (tteckster)
 # Co-Author: MickLesk
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 
 # This function sets color variables for formatting output in the terminal
 color() {
@@ -64,7 +64,7 @@ error_handler() {
   local error_message="${RD}[ERROR]${CL} in line ${RD}$line_number${CL}: exit code ${RD}$exit_code${CL}: while executing command ${YW}$command${CL}"
   echo -e "\n$error_message"
   if [[ "$line_number" -eq 23 ]]; then
-    echo -e "The silent function has suppressed the error, run the script with verbose mode enabled, which will provide more detailed output.\n"
+    echo -e "В процессе тихой установки случились ошибки, включен режим отладки для более детализированого вывода событий в терминал.\n"
   fi
 }
 
@@ -110,7 +110,7 @@ msg_error() {
 
 # This function sets up the Container OS by generating the locale, setting the timezone, and checking the network connection
 setting_up_container() {
-  msg_info "Setting up Container OS"
+  msg_info "Настраиваю операционную систему контейнера.."
   sed -i "/$LANG/ s/\(^# \)//" /etc/locale.gen
   locale_line=$(grep -v '^#' /etc/locale.gen | grep -E '^[a-zA-Z]' | awk '{print $1}' | head -n 1)
   echo "LANG=${locale_line}" >/etc/default/locale
@@ -122,18 +122,18 @@ setting_up_container() {
     if [ "$(hostname -I)" != "" ]; then
       break
     fi
-    echo 1>&2 -en "${CROSS}${RD} No Network! "
+    echo 1>&2 -en "${CROSS}${RD} Отсутствует Сеть! "
     sleep $RETRY_EVERY
   done
   if [ "$(hostname -I)" = "" ]; then
-    echo 1>&2 -e "\n${CROSS}${RD} No Network After $RETRY_NUM Tries${CL}"
-    echo -e "${NETWORK}Check Network Settings"
+    echo 1>&2 -e "\n${CROSS}${RD} Сеть отсутствует после $RETRY_NUM попыток${CL}"
+    echo -e "${NETWORK}Проверьте настройки сети"
     exit 1
   fi
   rm -rf /usr/lib/python3.*/EXTERNALLY-MANAGED
   systemctl disable -q --now systemd-networkd-wait-online.service
-  msg_ok "Set up Container OS"
-  msg_ok "Network Connected: ${BL}$(hostname -I)"
+  msg_ok "Настроил операционную систему контейнера."
+  msg_ok "Контейнер подключен к Вашей сети. IP: ${BL}$(hostname -I)"
 }
 
 # This function checks the network connection by pinging a known IP address and prompts the user to continue if the internet is not connected
@@ -145,40 +145,40 @@ network_check() {
   sleep 1
 # Check IPv4 connectivity to Google, Cloudflare & Quad9 DNS servers.
   if ping -c 1 -W 1 1.1.1.1 &>/dev/null || ping -c 1 -W 1 8.8.8.8 &>/dev/null || ping -c 1 -W 1 9.9.9.9 &>/dev/null; then 
-    msg_ok "IPv4 Internet Connected";
+    msg_ok "IPv4 интернет соеденение установлено.";
     ipv4_connected=true
   else
-    msg_error "IPv4 Internet Not Connected";
+    msg_error "IPv4 интернет соеденение НЕ установлено.";
   fi
 
 # Check IPv6 connectivity to Google, Cloudflare & Quad9 DNS servers.
   if ping6 -c 1 -W 1 2606:4700:4700::1111 &>/dev/null || ping6 -c 1 -W 1 2001:4860:4860::8888 &>/dev/null || ping6 -c 1 -W 1 2620:fe::fe &>/dev/null; then
-    msg_ok "IPv6 Internet Connected";
+    msg_ok "IPv6 интернет соеденение установлено.";
     ipv6_connected=true
   else
-    msg_error "IPv6 Internet Not Connected";
+    msg_error "IPv6 интернет соеденение НЕ установлено.";
   fi
 
 # If both IPv4 and IPv6 checks fail, prompt the user
   if [[ $ipv4_connected == false && $ipv6_connected == false ]]; then
     read -r -p "No Internet detected,would you like to continue anyway? <y/N> " prompt
     if [[ "${prompt,,}" =~ ^(y|yes)$ ]]; then
-      echo -e "${INFO}${RD}Expect Issues Without Internet${CL}"
+      echo -e "${INFO}${RD}Без доступа к интернету - ожидаются проблемы с работой скрипта${CL}"
     else
-      echo -e "${NETWORK}Check Network Settings"
+      echo -e "${NETWORK}Проверьте настройки сети"
       exit 1
     fi
   fi
 
   RESOLVEDIP=$(getent hosts github.com | awk '{ print $1 }')
-  if [[ -z "$RESOLVEDIP" ]]; then msg_error "DNS Lookup Failure"; else msg_ok "DNS Resolved github.com to ${BL}$RESOLVEDIP${CL}"; fi
+  if [[ -z "$RESOLVEDIP" ]]; then msg_error "Ошибка. DNS сервер не доступен "; else msg_ok "DNS сервером зарезервирован github.com: ${BL}$RESOLVEDIP${CL}"; fi
   set -e
   trap 'error_handler $LINENO "$BASH_COMMAND"' ERR
 }
 
 # This function updates the Container OS by running apt-get update and upgrade
 update_os() {
-  msg_info "Updating Container OS"
+  msg_info "Обновляю операционная система контейнера"
   if [[ "$CACHER" == "yes" ]]; then
     echo "Acquire::http::Proxy-Auto-Detect \"/usr/local/bin/apt-proxy-detect.sh\";" >/etc/apt/apt.conf.d/00aptproxy
     cat <<EOF >/usr/local/bin/apt-proxy-detect.sh
@@ -194,7 +194,7 @@ EOF
   $STD apt-get update
   $STD apt-get -o Dpkg::Options::="--force-confold" -y dist-upgrade
   rm -rf /usr/lib/python3.*/EXTERNALLY-MANAGED
-  msg_ok "Updated Container OS"
+  msg_ok "Обновлена операционная система контейнера."
 }
 
 # This function modifies the message of the day (motd) and SSH settings
@@ -218,8 +218,8 @@ motd_ssh() {
   MOTD_FILE="/etc/motd"
   if [ -f "$MOTD_FILE" ]; then
     # Start MOTD with application info and link
-    echo -e "\n${BOLD}${APPLICATION} LXC Container${CL}" > "$MOTD_FILE"
-    echo -e "${TAB}${GATEWAY}${YW} Provided by: ${GN}community-scripts ORG ${YW}| GitHub: ${GN}https://github.com/community-scripts/ProxmoxVE${CL}\n" >> "$MOTD_FILE"
+    echo -e "\n${BOLD}${APPLICATION} LXC контейнер${CL}" > "$MOTD_FILE"
+    echo -e "${TAB}${GATEWAY}${YW} Кодовая база подготовлена: ${GN}community-scripts ORG ${YW}| GitHub: ${GN}https://github.com/community-scripts/ProxmoxVE${CL}\n${YW}        Перевод и модификации: ${GN}samohosting.ru\n" >> "$MOTD_FILE"
 
     # Add system information with icons
     echo -e "${TAB}${OS}${YW} OS: ${GN}${OS_NAME} - Version: ${OS_VERSION}${CL}" >> "$MOTD_FILE"
@@ -241,7 +241,7 @@ motd_ssh() {
 # This function customizes the container by modifying the getty service and enabling auto-login for the root user
 customize() {
   if [[ "$PASSWORD" == "" ]]; then
-    msg_info "Customizing Container"
+    msg_info "Кастомизирую контейнер.."
     GETTY_OVERRIDE="/etc/systemd/system/container-getty@1.service.d/override.conf"
     mkdir -p $(dirname $GETTY_OVERRIDE)
     cat <<EOF >$GETTY_OVERRIDE
@@ -251,7 +251,7 @@ customize() {
 EOF
     systemctl daemon-reload
     systemctl restart $(basename $(dirname $GETTY_OVERRIDE) | sed 's/\.d//')
-    msg_ok "Customized Container"
+    msg_ok "Контейнер кастомезирован."
   fi
   echo "bash -c \"\$(wget -qLO - https://github.com/community-scripts/ProxmoxVE/raw/main/ct/${app}.sh)\"" >/usr/bin/update
   chmod +x /usr/bin/update

@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: Don Locke (DonLocke)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 # Source: https://github.com/wavelog/wavelog
 
 source /dev/stdin <<< "$FUNCTIONS_FILE_PATH"
@@ -14,7 +14,7 @@ setting_up_container
 network_check
 update_os
 
-msg_info "Installing Dependencies"
+msg_info "Устанавливаю зависимости(необходимое ПО).."
 $STD apt-get install -y \
   curl \
   libapache2-mod-php \
@@ -23,7 +23,7 @@ $STD apt-get install -y \
   php8.2-{curl,mbstring,mysql,xml,zip,gd} \
   sudo \
   unzip
-msg_ok "Installed Dependencies"
+msg_ok "Зависимости(необходимое ПО) установлены."
 
 msg_info "Setting up Database"
 DB_NAME=wavelog
@@ -46,7 +46,7 @@ sed -i '/memory_limit/s/= .*/= 256M/' /etc/php/8.2/apache2/php.ini
 sed -i '/upload_max_filesize/s/= .*/= 8M/' /etc/php/8.2/apache2/php.ini
 msg_ok "Set up PHP"
 
-msg_info "Installing Wavelog"
+msg_info "Устанавливаю Wavelog"
 RELEASE=$(curl -s https://api.github.com/repos/wavelog/wavelog/releases/latest | grep "tag_name" | awk '{print substr($2, 2, length($2)-3) }')
 wget -q "https://github.com/wavelog/wavelog/archive/refs/tags/${RELEASE}.zip"
 unzip -q ${RELEASE}.zip
@@ -85,4 +85,4 @@ msg_info "Cleaning up"
 rm -f ${RELEASE}.zip
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
-msg_ok "Cleaned"
+msg_ok "Временные файлы установки - удалены!"

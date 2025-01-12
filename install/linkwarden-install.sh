@@ -4,7 +4,7 @@
 # Author: tteck (tteckster)
 # Co-Author: MickLesk (Canbiz)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 
 source /dev/stdin <<< "$FUNCTIONS_FILE_PATH"
 color
@@ -14,7 +14,7 @@ setting_up_container
 network_check
 update_os
 
-msg_info "Installing Dependencies"
+msg_info "Устанавливаю зависимости(необходимое ПО).."
 $STD apt-get install -y \
   curl \
   sudo \
@@ -23,21 +23,21 @@ $STD apt-get install -y \
   postgresql \
   cargo \
   gnupg
-msg_ok "Installed Dependencies"
+msg_ok "Зависимости(необходимое ПО) установлены."
 
-msg_info "Setting up Node.js Repository"
+msg_info "Настраиваю Node.js Репозиторий"
 mkdir -p /etc/apt/keyrings
 curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
 echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" >/etc/apt/sources.list.d/nodesource.list
-msg_ok "Set up Node.js Repository"
+msg_ok "Репозиторий Node.js настроен"
 
-msg_info "Installing Node.js/Yarn"
+msg_info "Устанавливаю Node.js/Yarn"
 $STD apt-get update
 $STD apt-get install -y nodejs
 $STD npm install -g yarn
 msg_ok "Installed Node.js/Yarn"
 
-msg_info "Installing Monolith"
+msg_info "Устанавливаю Monolith"
 $STD cargo install monolith
 export PATH=~/.cargo/bin:$PATH
 msg_ok "Installed Monolith"
@@ -63,7 +63,7 @@ msg_ok "Set up PostgreSQL DB"
 
 read -r -p "Would you like to add Adminer? <y/N> " prompt
 if [[ "${prompt,,}" =~ ^(y|yes)$ ]]; then
-  msg_info "Installing Adminer"
+  msg_info "Устанавливаю Adminer"
   $STD apt install -y adminer
   $STD a2enconf adminer
   systemctl reload apache2
@@ -86,7 +86,7 @@ if [[ "${prompt,,}" =~ ^(y|yes)$ ]]; then
   msg_ok "Installed Adminer"
 fi
 
-msg_info "Installing Linkwarden (Patience)"
+msg_info "Устанавливаю Linkwarden (Patience)"
 cd /opt
 RELEASE=$(curl -s https://api.github.com/repos/linkwarden/linkwarden/releases/latest | grep "tag_name" | awk '{print substr($2, 2, length($2)-3) }')
 wget -q "https://github.com/linkwarden/linkwarden/archive/refs/tags/${RELEASE}.zip"
@@ -133,4 +133,4 @@ msg_info "Cleaning up"
 rm -rf /opt/${RELEASE}.zip
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
-msg_ok "Cleaned"
+msg_ok "Временные файлы установки - удалены!"

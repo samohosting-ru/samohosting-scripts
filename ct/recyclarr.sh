@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/misc/build.func)
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: MrYadro
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 # Source: https://recyclarr.dev/wiki/
 
 # App Default Values
@@ -29,17 +29,17 @@ function update_script() {
     check_container_storage
     check_container_resources
     if [[ ! -f /root/.config/recyclarr/recyclarr.yml ]]; then
-        msg_error "No ${APP} Installation Found!"
+        msg_error "Отсутствует установленная версия ${APP}"
         exit
     fi
 
-    msg_info "Updating ${APP}"
+    msg_info "Обновляю ${APP}"
     wget -q $(curl -s https://api.github.com/repos/recyclarr/recyclarr/releases/latest | grep download | grep linux-x64 | cut -d\" -f4)
     tar -C /usr/local/bin -xJf recyclarr*.tar.xz
     rm -rf recyclarr*.tar.xz
     msg_ok "Updated ${APP}"
 
-    msg_ok "Updated Successfully"
+    msg_ok "Приложение успешно обновлено!"
     exit
 }
 
@@ -47,7 +47,7 @@ start
 build_container
 description
 
-msg_ok "Completed Successfully!\n"
-echo -e "${CREATING}${GN}${APP} setup has been successfully initialized!${CL}"
+msg_ok "Установка успешно завершена!\n"
+echo -e "${CREATING}${GN}${APP} Установка успешно завершена!${CL}"
 echo -e "${INFO}${YW} Access it using the following IP:${CL}"
 echo -e "${TAB}${GATEWAY}${BGN}${IP}${CL}"

@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 
 function header_info {
   cat <<"EOF"
@@ -21,7 +21,7 @@ EOF
 }
 clear
 header_info
-echo -e "Loading..."
+echov -e "Загрузка..."
 GEN_MAC=$(echo '00 60 2f'$(od -An -N3 -t xC /dev/urandom) | sed -e 's/ /:/g' | tr '[:lower:]' '[:upper:]')
 USEDID=$(pvesh get /cluster/resources --type vm --output-format yaml | egrep -i 'vmid' | awk '{print substr($2, 1, length($2)-0) }')
 NEXTID=$(pvesh get /cluster/nextid)
@@ -76,7 +76,7 @@ if ! command -v whiptail &> /dev/null; then
     apt-get update &>/dev/null
     apt-get install -y whiptail &>/dev/null
 fi
-if (whiptail --backtitle "Proxmox VE Helper Scripts" --title "PiMox HAOS VM" --yesno "This will create a New PiMox HAOS VM. Proceed?" 10 58); then
+if (whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --title "PiMox HAOS VM" --yesno "This will create a New PiMox HAOS VM. Proceed?" 10 58); then
   echo "User selected Yes"
 else
   clear
@@ -129,14 +129,14 @@ function default_settings() {
   echo -e "${BL}Creating a HAOS VM using the above default settings${CL}"
 }
 function advanced_settings() {
-  BRANCH=$(whiptail --backtitle "Proxmox VE Helper Scripts" --title "HAOS VERSION" --radiolist "Choose Version" --cancel-button Exit-Script 10 58 3 \
+  BRANCH=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --title "HAOS VERSION" --radiolist "Выберите версию" --cancel-button Exit-Script 10 58 3 \
     "$STABLE" "Stable" ON \
     "$BETA" "Beta" OFF \
     "$DEV" "Dev" OFF \
     3>&1 1>&2 2>&3)
   exitstatus=$?
   if [ $exitstatus = 0 ]; then echo -e "${DGN}Using HAOS Version: ${BGN}$BRANCH${CL}"; fi
-  VMID=$(whiptail --backtitle "Proxmox VE Helper Scripts" --inputbox "Set Virtual Machine ID" 8 58 $NEXTID --title "VIRTUAL MACHINE ID" --cancel-button Exit-Script 3>&1 1>&2 2>&3)
+  VMID=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --inputbox "Set Virtual Machine ID" 8 58 $NEXTID --title "VIRTUAL MACHINE ID" --cancel-button Exit-Script 3>&1 1>&2 2>&3)
   exitstatus=$?
   if [ -z $VMID ]; then
     VMID="$NEXTID"
@@ -151,7 +151,7 @@ function advanced_settings() {
       if [ $exitstatus = 0 ]; then echo -e "${DGN}Virtual Machine ID: ${BGN}$VMID${CL}"; fi
     fi
   fi
-  VM_NAME=$(whiptail --backtitle "Proxmox VE Helper Scripts" --inputbox "Set Hostname" 8 58 haos${BRANCH} --title "HOSTNAME" --cancel-button Exit-Script 3>&1 1>&2 2>&3)
+  VM_NAME=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --inputbox "Укажите имя хоста(hostname)" 8 58 haos${BRANCH} --title "ИМЯ ХОСТА(HOSTNAME)" --cancel-button Exit-Script 3>&1 1>&2 2>&3)
   exitstatus=$?
   if [ -z $VM_NAME ]; then
     HN="haos${BRANCH}"
@@ -162,7 +162,7 @@ function advanced_settings() {
       echo -e "${DGN}Using Hostname: ${BGN}$HN${CL}"
     fi
   fi
-  CORE_COUNT=$(whiptail --backtitle "Proxmox VE Helper Scripts" --inputbox "Allocate CPU Cores" 8 58 2 --title "CORE COUNT" --cancel-button Exit-Script 3>&1 1>&2 2>&3)
+  CORE_COUNT=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --inputbox "Укажите кол-во процессорных ядер(CPU count)" 8 58 2 --title "КОЛИЧЕСТВО ПРОЦЕССОРНЫХ ЯДЕР(CPU COUNT)" --cancel-button Exit-Script 3>&1 1>&2 2>&3)
   exitstatus=$?
   if [ -z $CORE_COUNT ]; then
     CORE_COUNT="2"
@@ -170,7 +170,7 @@ function advanced_settings() {
   else
     if [ $exitstatus = 0 ]; then echo -e "${DGN}Allocated Cores: ${BGN}$CORE_COUNT${CL}"; fi
   fi
-  RAM_SIZE=$(whiptail --backtitle "Proxmox VE Helper Scripts" --inputbox "Allocate RAM in MiB" 8 58 4096 --title "RAM" --cancel-button Exit-Script 3>&1 1>&2 2>&3)
+  RAM_SIZE=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --inputbox "Укажите ОЗУ в MiB" 8 58 4096 --title "ОЗУ" --cancel-button Exit-Script 3>&1 1>&2 2>&3)
   exitstatus=$?
   if [ -z $RAM_SIZE ]; then
     RAM_SIZE="4096"
@@ -178,7 +178,7 @@ function advanced_settings() {
   else
     if [ $exitstatus = 0 ]; then echo -e "${DGN}Allocated RAM: ${BGN}$RAM_SIZE${CL}"; fi
   fi
-  BRG=$(whiptail --backtitle "Proxmox VE Helper Scripts" --inputbox "Set a Bridge" 8 58 vmbr0 --title "BRIDGE" --cancel-button Exit-Script 3>&1 1>&2 2>&3)
+  BRG=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --inputbox "Укажите сетевой мост(bridge)" 8 58 vmbr0 --title "СЕТЕВОЙ МОСТ(BRIDGE)" --cancel-button Exit-Script 3>&1 1>&2 2>&3)
   exitstatus=$?
   if [ -z $BRG ]; then
     BRG="vmbr0"
@@ -186,7 +186,7 @@ function advanced_settings() {
   else
     if [ $exitstatus = 0 ]; then echo -e "${DGN}Using Bridge: ${BGN}$BRG${CL}"; fi
   fi
-  MAC1=$(whiptail --backtitle "Proxmox VE Helper Scripts" --inputbox "Set a MAC Address" 8 58 $GEN_MAC --title "MAC ADDRESS" --cancel-button Exit-Script 3>&1 1>&2 2>&3)
+  MAC1=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --inputbox "Set a MAC Address" 8 58 $GEN_MAC --title "MAC АДРЕС" --cancel-button Exit-Script 3>&1 1>&2 2>&3)
   exitstatus=$?
   if [ -z $MAC1 ]; then
     MAC="$GEN_MAC"
@@ -197,7 +197,7 @@ function advanced_settings() {
       echo -e "${DGN}Using MAC Address: ${BGN}$MAC1${CL}"
     fi
   fi
-  VLAN1=$(whiptail --backtitle "Proxmox VE Helper Scripts" --inputbox "Set a Vlan(leave blank for default)" 8 58 --title "VLAN" --cancel-button Exit-Script 3>&1 1>&2 2>&3)
+  VLAN1=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --inputbox "Укажите Vlan(оставьте пустым для использования параметров по умолчанию)" 8 58 --title "VLAN" --cancel-button Exit-Script 3>&1 1>&2 2>&3)
   exitstatus=$?
   if [ $exitstatus = 0 ]; then
     if [ -z $VLAN1 ]; then
@@ -208,7 +208,7 @@ function advanced_settings() {
       echo -e "${DGN}Using Vlan: ${BGN}$VLAN1${CL}"
     fi
   fi
-  MTU1=$(whiptail --backtitle "Proxmox VE Helper Scripts" --inputbox "Set Interface MTU Size (leave blank for default)" 8 58 --title "MTU SIZE" --cancel-button Exit-Script 3>&1 1>&2 2>&3)
+  MTU1=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --inputbox "Set Interface MTU Size (оставьте пустым для использования параметров по умолчанию)" 8 58 --title "MTU SIZE" --cancel-button Exit-Script 3>&1 1>&2 2>&3)
   exitstatus=$?
   if [ $exitstatus = 0 ]; then
     if [ -z $MTU1 ]; then
@@ -219,14 +219,14 @@ function advanced_settings() {
       echo -e "${DGN}Using Interface MTU Size: ${BGN}$MTU1${CL}"
     fi
   fi
-  if (whiptail --backtitle "Proxmox VE Helper Scripts" --title "START VIRTUAL MACHINE" --yesno "Start VM when completed?" 10 58); then
+  if (whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --title "START VIRTUAL MACHINE" --yesno "Start VM when completed?" 10 58); then
     echo -e "${DGN}Start VM when completed: ${BGN}yes${CL}"
     START_VM="yes"
   else
     echo -e "${DGN}Start VM when completed: ${BGN}no${CL}"
     START_VM="no"
   fi
-  if (whiptail --backtitle "Proxmox VE Helper Scripts" --title "ADVANCED SETTINGS COMPLETE" --yesno "Ready to create HAOS ${BRANCH} VM?" --no-button Do-Over 10 58); then
+  if (whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --title "РАСШИРЕННЫЕ НАСТРОЙКИ ЗАВЕРШЕНЫ" --yesno "Ready to create HAOS ${BRANCH} VM?" --no-button Do-Over 10 58); then
     echo -e "${RD}Creating a HAOS VM using the above advanced settings${CL}"
   else
     clear
@@ -236,7 +236,7 @@ function advanced_settings() {
   fi
 }
 function START_SCRIPT() {
-  if (whiptail --backtitle "Proxmox VE Helper Scripts" --title "SETTINGS" --yesno "Use Default Settings?" --no-button Advanced 10 58); then
+  if (whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --title "НАСТРОЙКИ" --yesno "Use Default Settings?" --no-button Advanced 10 58); then
     clear
     header_info
     echo -e "${BL}Using Default Settings${CL}"
@@ -262,13 +262,13 @@ while read -r line; do
   STORAGE_MENU+=("$TAG" "$ITEM" "OFF")
 done < <(pvesm status -content images | awk 'NR>1')
 if [ $((${#STORAGE_MENU[@]} / 3)) -eq 0 ]; then
-  echo -e "'Disk image' needs to be selected for at least one storage location."
-  die "Unable to detect valid storage location."
+  echo -e "'Disk image' необходимо выбрать хотябы одно хранилище из списка."
+  die "Не удалось найти валидное хранилище."
 elif [ $((${#STORAGE_MENU[@]} / 3)) -eq 1 ]; then
   STORAGE=${STORAGE_MENU[0]}
 else
   while [ -z "${STORAGE:+x}" ]; do
-    STORAGE=$(whiptail --backtitle "Proxmox VE Helper Scripts" --title "Storage Pools" --radiolist \
+    STORAGE=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --title "ХРАНИЛИЩЕ ДЛЯ ДАННЫХ" --radiolist \
       "Which storage pool you would like to use for the HAOS VM?\n\n" \
       16 $(($MSG_MAX_LENGTH + 23)) 6 \
       "${STORAGE_MENU[@]}" 3>&1 1>&2 2>&3) || exit
@@ -310,7 +310,7 @@ qm set $VMID \
   -scsi0 ${DISK1_REF},size=32G >/dev/null
 qm set $VMID \
   -boot order=scsi0 \
-  -description "<div align='center'><a href='https://Helper-Scripts.com'><img src='https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/images/logo-81x112.png'/></a>
+  -description "<div align='center'><a href='https://www.samohosting.ru'><img src='https://raw.githubusercontent.com/LiaGen/samohosting/refs/heads/main/samohostinglogo6round.png'/></a>
 
   # Home Assistant OS
 
@@ -318,8 +318,8 @@ qm set $VMID \
   </div>" >/dev/null
 msg_ok "Created HAOS VM ${CL}${BL}(${HN})"
 if [ "$START_VM" == "yes" ]; then
-  msg_info "Starting Home Assistant OS VM"
+  msg_info "Запускаю Home Assistant OS VM"
   qm start $VMID
-  msg_ok "Started Home Assistant OS VM"
+  msg_ok "Запустил Home Assistant OS VM"
 fi
-msg_ok "Completed Successfully!\n"
+msg_ok "Установка успешно завершена!\n"

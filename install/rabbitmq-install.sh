@@ -4,7 +4,7 @@
 # Author: tteck
 # Co-Author: MickLesk (Canbiz)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 # Source: https://www.rabbitmq.com/
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -15,7 +15,7 @@ setting_up_container
 network_check
 update_os
 
-msg_info "Installing Dependencies"
+msg_info "Устанавливаю зависимости(необходимое ПО).."
 $STD apt-get install -y \
   sudo \
   lsb-release \
@@ -24,7 +24,7 @@ $STD apt-get install -y \
   apt-transport-https \
   make \
   mc
-msg_ok "Installed Dependencies"
+msg_ok "Зависимости(необходимое ПО) установлены."
 
 msg_info "Adding RabbitMQ signing key"
 wget -qO- "https://keys.openpgp.org/vks/v1/by-fingerprint/0A9AF2115F4687BD29803A206B73A36E6026DFCA" | gpg --dearmor >/usr/share/keyrings/com.rabbitmq.team.gpg
@@ -44,11 +44,11 @@ deb-src [signed-by=/usr/share/keyrings/rabbitmq.9F4587F226208342.gpg] https://dl
 EOF
 msg_ok "RabbitMQ repository added"
 
-msg_info "Updating package list"
+msg_info "Обновляю package list"
 $STD apt-get update -y
 msg_ok "Package list updated"
 
-msg_info "Installing Erlang & RabbitMQ server"
+msg_info "Устанавливаю Erlang & RabbitMQ server"
 $STD apt-get install -y erlang-base \
   erlang-asn1 erlang-crypto erlang-eldap erlang-ftp erlang-inets \
   erlang-mnesia erlang-os-mon erlang-parsetools erlang-public-key \
@@ -57,7 +57,7 @@ $STD apt-get install -y erlang-base \
   rabbitmq-server
 msg_ok "RabbitMQ server installed"
 
-msg_info "Starting RabbitMQ service"
+msg_info "Запускаю RabbitMQ service"
 systemctl enable -q --now rabbitmq-server
 msg_ok "RabbitMQ service started"
 
@@ -78,4 +78,4 @@ customize
 msg_info "Cleaning up"
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
-msg_ok "Cleaned"
+msg_ok "Временные файлы установки - удалены!"

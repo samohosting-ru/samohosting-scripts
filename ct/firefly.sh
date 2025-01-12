@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/misc/build.func)
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: quantumryuu
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 # Source: https://firefly-iii.org/
 
 # App Default Values
@@ -31,7 +31,7 @@ check_container_storage
 check_container_resources
 
   if [[ ! -d /opt/firefly ]]; then
-    msg_error "No ${APP} Installation Found!"
+    msg_error "Отсутствует установленная версия ${APP}"
     exit
   fi
   RELEASE=$(curl -s https://api.github.com/repos/firefly-iii/firefly-iii/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4)}')
@@ -40,7 +40,7 @@ check_container_resources
     systemctl stop apache2
     msg_ok "Stopped Apache2"
 
-    msg_info "Updating ${APP} to v${RELEASE}"
+    msg_info "Обновляю ${APP} to v${RELEASE}"
     cp /opt/firefly/.env /opt/.env
     cp -r /opt/firefly/storage /opt/storage
     rm -rf /opt/firefly/*
@@ -61,16 +61,16 @@ check_container_resources
     echo "${RELEASE}" >"/opt/${APP}_version.txt"
     msg_ok "Updated ${APP} to v${RELEASE}"
 
-    msg_info "Starting Apache2"
+    msg_info "Запускаю Apache2"
     systemctl start apache2
-    msg_ok "Started Apache2"
+    msg_ok "Запустил Apache2"
 
     msg_info "Cleaning up"
     rm -rf /opt/FireflyIII-v${RELEASE}.tar.gz
-    msg_ok "Cleaned"
-    msg_ok "Updated Successfully"
+    msg_ok "Временные файлы установки - удалены!"
+    msg_ok "Приложение успешно обновлено!"
   else
-    msg_ok "No update required. ${APP} is already at v${RELEASE}."
+    msg_ok "Обновление не требуется. ${APP} уже последней версии ${RELEASE}."
   fi
   exit
 }
@@ -79,7 +79,7 @@ start
 build_container
 description
 
-msg_ok "Completed Successfully!\n"
-echo -e "${CREATING}${GN}${APP} setup has been successfully initialized!${CL}"
-echo -e "${INFO}${YW} Access it using the following URL:${CL}"
+msg_ok "Установка успешно завершена!\n"
+echo -e "${CREATING}${GN}${APP} Установка успешно завершена!${CL}"
+echo -e "${INFO}${YW} Сервис доступен по ссылке:${CL}"
 echo -e "${TAB}${GATEWAY}${BGN}http://${IP}${CL}"

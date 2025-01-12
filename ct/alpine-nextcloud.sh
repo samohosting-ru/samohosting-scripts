@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/misc/build.func)
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 
 # App Default Values
 APP="Alpine-Nextcloud"
@@ -25,14 +25,14 @@ catch_errors
 
 function update_script() {
   if [[ ! -d /usr/share/webapps/nextcloud ]]; then
-    msg_error "No ${APP} Installation Found!"
+    msg_error "Отсутствует установленная версия ${APP}"
     exit
   fi
   if ! apk -e info newt >/dev/null 2>&1; then
     apk add -q newt
   fi
   while true; do
-    CHOICE=$(whiptail --backtitle "Proxmox VE Helper Scripts" --title "SUPPORT" --radiolist --cancel-button Exit-Script "Spacebar = Select"  11 58 3 \
+    CHOICE=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --title "ПОДДЕРЖКА" --radiolist --cancel-button Exit-Script "Spacebar = Select"  11 58 3 \
       "1" "Nextcloud Login Credentials" ON \
       "2" "Renew Self-signed Certificate" OFF \
       3>&1 1>&2 2>&3)      
@@ -60,6 +60,6 @@ start
 build_container
 description
 
-msg_ok "Completed Successfully!\n"
+msg_ok "Установка успешно завершена!\n"
 echo -e "${APP} should be reachable by going to the following URL.
          ${BL}https://${IP}${CL} \n"

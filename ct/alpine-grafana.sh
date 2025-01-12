@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/misc/build.func)
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 
 # App Default Values
 APP="Alpine-Grafana"
@@ -30,7 +30,7 @@ function update_script() {
   LXCIP=$(ip a s dev eth0 | awk '/inet / {print $2}' | cut -d/ -f1)
   while true; do
     CHOICE=$(
-      whiptail --backtitle "Proxmox VE Helper Scripts" --title "SUPPORT" --menu "Select option" 11 58 3 \
+      whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --title "ПОДДЕРЖКА" --menu "Select option" 11 58 3 \
         "1" "Check for Grafana Updates" \
         "2" "Allow 0.0.0.0 for listening" \
         "3" "Allow only ${LXCIP} for listening" 3>&2 2>&1 1>&3
@@ -64,6 +64,6 @@ start
 build_container
 description
 
-msg_ok "Completed Successfully!\n"
+msg_ok "Установка успешно завершена!\n"
 echo -e "${APP} should be reachable by going to the following URL.
          ${BL}http://${IP}:3000${CL} \n"

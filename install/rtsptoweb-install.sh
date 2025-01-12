@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 
 source /dev/stdin <<< "$FUNCTIONS_FILE_PATH"
 color
@@ -13,21 +13,21 @@ setting_up_container
 network_check
 update_os
 
-msg_info "Installing Dependencies"
+msg_info "Устанавливаю зависимости(необходимое ПО).."
 $STD apt-get install -y curl
 $STD apt-get install -y sudo
 $STD apt-get install -y git
 $STD apt-get install -y mc
-msg_ok "Installed Dependencies"
+msg_ok "Зависимости(необходимое ПО) установлены."
 
-msg_info "Installing Golang"
+msg_info "Устанавливаю Golang"
 $STD wget https://golang.org/dl/go1.20.1.linux-amd64.tar.gz
 $STD tar -xzf go1.20.1.linux-amd64.tar.gz -C /usr/local
 $STD ln -s /usr/local/go/bin/go /usr/local/bin/go
 rm -rf go1.20.1.linux-amd64.tar.gz
 msg_ok "Installed Golang"
 
-msg_info "Installing RTSPtoWeb"
+msg_info "Устанавливаю RTSPtoWeb"
 $STD git clone https://github.com/deepch/RTSPtoWeb /opt/rtsptoweb
 cat <<EOF >>/opt/rtsptoweb/start
 #!/bin/bash
@@ -58,4 +58,4 @@ customize
 msg_info "Cleaning up"
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
-msg_ok "Cleaned"
+msg_ok "Временные файлы установки - удалены!"

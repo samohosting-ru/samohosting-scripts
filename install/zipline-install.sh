@@ -4,7 +4,7 @@
 # Author: tteck
 # Co-Author: MickLesk (Canbiz)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 # Source: https://github.com/diced/zipline
 
 source /dev/stdin <<< "$FUNCTIONS_FILE_PATH"
@@ -15,26 +15,26 @@ setting_up_container
 network_check
 update_os
 
-msg_info "Installing Dependencies"
+msg_info "Устанавливаю зависимости(необходимое ПО).."
 $STD apt-get install -y \
   postgresql \
   gpg \
   curl \
   sudo \
   mc
-msg_ok "Installed Dependencies"
+msg_ok "Зависимости(необходимое ПО) установлены."
 
-msg_info "Setting up Node.js Repository"
+msg_info "Настраиваю Node.js Репозиторий"
 mkdir -p /etc/apt/keyrings
 curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
 echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" >/etc/apt/sources.list.d/nodesource.list
-msg_ok "Set up Node.js Repository"
+msg_ok "Репозиторий Node.js настроен"
 
-msg_info "Installing Node.js"
+msg_info "Устанавливаю Node.js"
 $STD apt-get update
 $STD apt-get install -y nodejs
 $STD npm install -g yarn
-msg_ok "Installed Node.js"
+msg_ok "Node.js установлен"
 
 msg_info "Setting up PostgreSQL"
 DB_NAME=ziplinedb
@@ -53,7 +53,7 @@ echo -e "Zipline Database Name: $DB_NAME" >>~/zipline.creds
 echo -e "Zipline Secret: $SECRET_KEY" >>~/zipline.creds
 msg_ok "Set up PostgreSQL"
 
-msg_info "Installing Zipline (Patience)"
+msg_info "Устанавливаю Zipline (Patience)"
 cd /opt
 RELEASE=$(curl -s https://api.github.com/repos/diced/zipline/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
 wget -q "https://github.com/diced/zipline/archive/refs/tags/v${RELEASE}.zip"
@@ -93,4 +93,4 @@ customize
 msg_info "Cleaning up"
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
-msg_ok "Cleaned"
+msg_ok "Временные файлы установки - удалены!"

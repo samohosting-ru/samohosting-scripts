@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
 color
@@ -13,7 +13,7 @@ setting_up_container
 network_check
 update_os
 
-msg_info "Installing Dependencies"
+msg_info "Устанавливаю зависимости(необходимое ПО).."
 $STD apt-get update
 $STD apt-get -y install \
   sudo \
@@ -28,9 +28,9 @@ $STD apt-get -y install \
   logrotate \
   build-essential \
   git
-msg_ok "Installed Dependencies"
+msg_ok "Зависимости(необходимое ПО) установлены."
 
-msg_info "Installing Python Dependencies"
+msg_info "Устанавливаю Python Dependencies"
 $STD apt-get install -y \
   python3 \
   python3-dev \
@@ -46,21 +46,21 @@ msg_ok "Installed Python Dependencies"
 
 VERSION="$(awk -F'=' '/^VERSION_CODENAME=/{ print $NF }' /etc/os-release)"
 
-msg_info "Installing Openresty"
+msg_info "Устанавливаю Openresty"
 wget -qO - https://openresty.org/package/pubkey.gpg | gpg --dearmor -o /etc/apt/trusted.gpg.d/openresty-archive-keyring.gpg
 echo -e "deb http://openresty.org/package/debian bullseye openresty" >/etc/apt/sources.list.d/openresty.list
 $STD apt-get update
 $STD apt-get -y install openresty
 msg_ok "Installed Openresty"
 
-msg_info "Installing Node.js"
+msg_info "Устанавливаю Node.js"
 $STD bash <(curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh)
 source ~/.bashrc
 $STD nvm install 16.20.2
 ln -sf /root/.nvm/versions/node/v16.20.2/bin/node /usr/bin/node
-msg_ok "Installed Node.js"
+msg_ok "Node.js установлен"
 
-msg_info "Installing pnpm"
+msg_info "Устанавливаю pnpm"
 $STD npm install -g pnpm@8.15
 msg_ok "Installed pnpm"
 
@@ -192,17 +192,17 @@ msg_ok "Created Service"
 motd_ssh
 customize
 
-msg_info "Starting Services"
+msg_info "Запускаю Services"
 sed -i 's/user npm/user root/g; s/^pid/#pid/g' /usr/local/openresty/nginx/conf/nginx.conf
 sed -r -i 's/^([[:space:]]*)su npm npm/\1#su npm npm/g;' /etc/logrotate.d/nginx-proxy-manager
 sed -i 's/include-system-site-packages = false/include-system-site-packages = true/g' /opt/certbot/pyvenv.cfg
 systemctl enable -q --now openresty
 systemctl enable -q --now npm
-msg_ok "Started Services"
+msg_ok "Запустил Services"
 
 msg_info "Cleaning up"
 rm -rf ../nginx-proxy-manager-*
 systemctl restart openresty
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
-msg_ok "Cleaned"
+msg_ok "Временные файлы установки - удалены!"

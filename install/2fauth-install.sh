@@ -15,7 +15,7 @@ network_check
 update_os
 
 # Installing Dependencies with the 3 core dependencies (curl;sudo;mc)
-msg_info "Installing Dependencies"
+msg_info "Устанавливаю зависимости(необходимое ПО).."
 $STD apt-get install -y \
   curl \
   sudo \
@@ -24,7 +24,7 @@ $STD apt-get install -y \
   composer \
   php8.2-{bcmath,common,ctype,curl,fileinfo,fpm,gd,mbstring,mysql,xml,cli} \
   mariadb-server
-msg_ok "Installed Dependencies"
+msg_ok "Зависимости(необходимое ПО) установлены."
 
 # Template: MySQL Database
 msg_info "Setting up Database"
@@ -120,4 +120,4 @@ msg_info "Cleaning up"
 rm -f "/opt/v${RELEASE}.zip"
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
-msg_ok "Cleaned"
+msg_ok "Временные файлы установки - удалены!"

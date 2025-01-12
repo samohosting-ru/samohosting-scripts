@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/misc/build.func)
 # Copyright (c) 2021-2025 tteck
 # Author: MickLesk (Canbiz)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 # Source: https://github.com/alexta69/metube
 
 # App Default Values
@@ -29,14 +29,14 @@ function update_script() {
   check_container_storage
   check_container_resources
   if [[ ! -d /opt/metube ]]; then
-    msg_error "No ${APP} Installation Found!"
+    msg_error "Отсутствует установленная версия ${APP}"
     exit
   fi
   msg_info "Stopping ${APP} Service"
   systemctl stop metube
   msg_ok "Stopped ${APP} Service"
 
-  msg_info "Updating ${APP} to latest Git"
+  msg_info "Обновляю ${APP} to latest Git"
   cd /opt
   if [ -d metube_bak ]; then
     rm -rf metube_bak
@@ -56,10 +56,10 @@ function update_script() {
   fi
   msg_ok "Updated ${APP} to latest Git"
 
-  msg_info "Starting ${APP} Service"
+  msg_info "Запускаю ${APP} Service"
   systemctl start metube
   sleep 1
-  msg_ok "Started ${APP} Service"
+  msg_ok "Запустил ${APP} Service"
   msg_ok "Updated Successfully!\n"
   exit
 }
@@ -68,7 +68,7 @@ start
 build_container
 description
 
-msg_ok "Completed Successfully!\n"
-echo -e "${CREATING}${GN}${APP} setup has been successfully initialized!${CL}"
-echo -e "${INFO}${YW} Access it using the following URL:${CL}"
+msg_ok "Установка успешно завершена!\n"
+echo -e "${CREATING}${GN}${APP} Установка успешно завершена!${CL}"
+echo -e "${INFO}${YW} Сервис доступен по ссылке:${CL}"
 echo -e "${TAB}${GATEWAY}${BGN}http://${IP}:8081${CL}"

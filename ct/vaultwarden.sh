@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/misc/build.func)
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 # Source: https://www.vaultwarden.net/
 
 # App Default Values
@@ -29,7 +29,7 @@ function update_script() {
   check_container_storage
   check_container_resources
   if [[ ! -f /etc/systemd/system/vaultwarden.service ]]; then
-    msg_error "No ${APP} Installation Found!"
+    msg_error "Отсутствует установленная версия ${APP}"
     exit
   fi
 
@@ -40,7 +40,7 @@ function update_script() {
     grep "tag_name" |
     awk '{print substr($2, 2, length($2)-3) }')
 
-  UPD=$(whiptail --backtitle "Proxmox VE Helper Scripts" --title "SUPPORT" --radiolist --cancel-button Exit-Script "Spacebar = Select" 11 58 3 \
+  UPD=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --title "ПОДДЕРЖКА" --radiolist --cancel-button Exit-Script "Spacebar = Select" 11 58 3 \
     "1" "VaultWarden $VAULT" ON \
     "2" "Web-Vault $WVRELEASE" OFF \
     "3" "Set Admin Token" OFF \
@@ -51,7 +51,7 @@ function update_script() {
     systemctl stop vaultwarden.service
     msg_ok "Stopped Vaultwarden"
 
-    msg_info "Updating VaultWarden to $VAULT (Patience)"
+    msg_info "Обновляю VaultWarden to $VAULT (Patience)"
     cd ~ && rm -rf vaultwarden
     git clone https://github.com/dani-garcia/vaultwarden &>/dev/null
     cd vaultwarden
@@ -66,11 +66,11 @@ function update_script() {
 
     msg_info "Cleaning up"
     cd ~ && rm -rf vaultwarden
-    msg_ok "Cleaned"
+    msg_ok "Временные файлы установки - удалены!"
 
-    msg_info "Starting Vaultwarden"
+    msg_info "Запускаю Vaultwarden"
     systemctl start vaultwarden.service
-    msg_ok "Started Vaultwarden"
+    msg_ok "Запустил Vaultwarden"
 
     msg_ok "$VAULT Update Successful"
     exit
@@ -80,23 +80,23 @@ function update_script() {
     systemctl stop vaultwarden.service
     msg_ok "Stopped Vaultwarden"
 
-    msg_info "Updating Web-Vault to $WVRELEASE"
+    msg_info "Обновляю Web-Vault to $WVRELEASE"
     curl -fsSLO https://github.com/dani-garcia/bw_web_builds/releases/download/$WVRELEASE/bw_web_$WVRELEASE.tar.gz &>/dev/null
     tar -zxf bw_web_$WVRELEASE.tar.gz -C /opt/vaultwarden/ &>/dev/null
     msg_ok "Updated Web-Vault"
 
     msg_info "Cleaning up"
     rm bw_web_$WVRELEASE.tar.gz
-    msg_ok "Cleaned"
+    msg_ok "Временные файлы установки - удалены!"
 
-    msg_info "Starting Vaultwarden"
+    msg_info "Запускаю Vaultwarden"
     systemctl start vaultwarden.service
-    msg_ok "Started Vaultwarden"
+    msg_ok "Запустил Vaultwarden"
     msg_ok "$WVRELEASE Update Successful"
     exit
   fi
   if [ "$UPD" == "3" ]; then
-    if NEWTOKEN=$(whiptail --backtitle "Proxmox VE Helper Scripts" --passwordbox "Set the ADMIN_TOKEN" 10 58 3>&1 1>&2 2>&3); then
+    if NEWTOKEN=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --passwordbox "Set the ADMIN_TOKEN" 10 58 3>&1 1>&2 2>&3); then
       if [[ -z "$NEWTOKEN" ]]; then exit; fi
       if ! command -v argon2 >/dev/null 2>&1; then apt-get install -y argon2 &>/dev/null; fi
       TOKEN=$(echo -n ${NEWTOKEN} | argon2 "$(openssl rand -base64 32)" -t 2 -m 16 -p 4 -l 64 -e)
@@ -114,7 +114,7 @@ start
 build_container
 description
 
-msg_ok "Completed Successfully!\n"
-echo -e "${CREATING}${GN}${APP} setup has been successfully initialized!${CL}"
-echo -e "${INFO}${YW} Access it using the following URL:${CL}"
+msg_ok "Установка успешно завершена!\n"
+echo -e "${CREATING}${GN}${APP} Установка успешно завершена!${CL}"
+echo -e "${INFO}${YW} Сервис доступен по ссылке:${CL}"
 echo -e "${TAB}${GATEWAY}${BGN}http://${IP}:8000${CL}"

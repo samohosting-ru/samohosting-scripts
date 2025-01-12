@@ -2,7 +2,8 @@
 # Author: tteck (tteckster)
 # Co-Author: MickLesk
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# Translation: Samohosting.ru
+# https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 
 variables() {
   NSAPP=$(echo ${APP,,} | tr -d ' ') # This function sets the NSAPP variable by converting the value of the APP variable to lowercase and removing any spaces.
@@ -117,8 +118,8 @@ msg_error() {
 shell_check() {
   if [[ "$(basename "$SHELL")" != "bash" ]]; then
     clear
-    msg_error "Your default shell is currently not set to Bash. To use these scripts, please switch to the Bash shell."
-    echo -e "\nExiting..."
+    msg_error "Ваша консоль(shell) по умолчанию не переключена на Bash. Для использования данного скрипта - пожалуйста переключите консоль на Bash."
+    echo -e "\nВыхожу..."
     sleep 2
     exit
   fi
@@ -128,8 +129,8 @@ shell_check() {
 root_check() {
   if [[ "$(id -u)" -ne 0 || $(ps -o comm= -p $PPID) == "sudo" ]]; then
     clear
-    msg_error "Please run this script as root."
-    echo -e "\nExiting..."
+    msg_error "Пожалуйста запустите данный скрипт под пользователем root."
+    echo -e "\nВыхожу..."
     sleep 2
     exit
   fi
@@ -139,7 +140,7 @@ root_check() {
 pve_check() {
   if ! pveversion | grep -Eq "pve-manager/8.[1-3]"; then
     msg_error "${CROSS}${RD}This version of Proxmox Virtual Environment is not supported"
-    echo -e "Requires Proxmox Virtual Environment Version 8.1 or later."
+    echo -e "Требуется Proxmox Virtual Environment версии 8.1 и выше."
     echo -e "Exiting..."
     sleep 2
     exit
@@ -149,8 +150,8 @@ fi
 # This function checks the system architecture and exits if it's not "amd64".
 arch_check() {
   if [ "$(dpkg --print-architecture)" != "amd64" ]; then
-    echo -e "\n ${INFO}${YWB}This script will not work with PiMox! \n"
-    echo -e "\n ${YWB}Visit https://github.com/asylumexp/Proxmox for ARM64 support. \n"
+    echo -e "\n ${INFO}${YWB}Этот скрипт не работает на PiMox! \n"
+    echo -e "\n ${YWB}Для поддержки АРМ64 - читайте https://github.com/asylumexp/Proxmox  \n"
     echo -e "Exiting..."
     sleep 2
     exit
@@ -191,7 +192,7 @@ update_motd_ip() {
 header_info() {
   # Helper function: Install FIGlet and download fonts
   install_figlet() {
-    echo -e "${INFO}${BOLD}${DGN}Installing FIGlet...${CL}"
+    echo -e "${INFO}${BOLD}${DGN}Устанавливаю FIGlet(программа для вывода логотипа в консоль)...${CL}"
 
     temp_dir=$(mktemp -d)
     curl -sL https://github.com/community-scripts/ProxmoxVE/raw/refs/heads/main/misc/figlet.tar.xz -o "$temp_dir/figlet.tar.xz"
@@ -205,9 +206,9 @@ header_info() {
       mv figlet /usr/local/bin/
       mkdir -p /usr/local/share/figlet
       cp -r /tmp/figlet/fonts/*.flf /usr/local/share/figlet/
-      echo -e "${CM}${BOLD}${DGN}FIGlet successfully installed.${CL}"
+      echo -e "${CM}${BOLD}${DGN}FIGlet успешно установлен.${CL}"
     else
-      echo -e "${ERR}${BOLD}${RED}Failed to install FIGlet.${CL}"
+      echo -e "${ERR}${BOLD}${RED}Не удалось установить FIGlet.${CL}"
       return 1
     fi
     rm -rf "$temp_dir"
@@ -215,7 +216,7 @@ header_info() {
 
   # Check if figlet and the slant font are available
   if ! figlet -f slant "Test" &>/dev/null; then
-    echo -e "${INFO}${BOLD}${DGN}FIGlet or the slant font is missing. Installing...${CL}"
+    echo -e "${INFO}${BOLD}${DGN}Отсутствуют шрифты FIGlet or the slant font. Добавляю...${CL}"
 
     if [ -f /etc/debian_version ] || [ -f /etc/lsb-release ]; then
       # Debian/Ubuntu-based systems
@@ -230,13 +231,13 @@ header_info() {
       install_figlet
 
     else
-      echo -e "${ERR}${BOLD}${RED}Unsupported operating system.${CL}"
+      echo -e "${ERR}${BOLD}${RED}Текущая операционная система не поддерживается!.${CL}"
       return 1
     fi
 
     # Ensure the slant font is available
     if [ ! -f "/usr/share/figlet/slant.flf" ]; then
-      echo -e "${INFO}${BOLD}${DGN}Downloading slant font...${CL}"
+      echo -e "${INFO}${BOLD}${DGN}Скачиваю шрифт slant...${CL}"
       wget -qO /usr/share/figlet/slant.flf "http://www.figlet.org/fonts/slant.flf"
     fi
   fi
@@ -251,11 +252,11 @@ header_info() {
 # This function checks if the script is running through SSH and prompts the user to confirm if they want to proceed or exit.
 ssh_check() {
   if [ -n "${SSH_CLIENT:+x}" ]; then
-    if whiptail --backtitle "Proxmox VE Helper Scripts" --defaultno --title "SSH DETECTED" --yesno "It's advisable to utilize the Proxmox shell rather than SSH, as there may be potential complications with variable retrieval. Proceed using SSH?" 10 72; then
-      whiptail --backtitle "Proxmox VE Helper Scripts" --msgbox --title "Proceed using SSH" "You've chosen to proceed using SSH. If any issues arise, please run the script in the Proxmox shell before creating a repository issue." 10 72
+    if whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --defaultno --title "Обнаружено подключение по SSH" --yesno "Настоятельно рекомендуется использовать консоль(shell) Proxmox вместо SSH, т.к. могут возникнуть ошибки. Продолжить используя SSH?" 10 72; then
+      whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --msgbox --title "Установка при подключении по SSH" "Вы подтвердили продолжение установки с SSH подключением. Если у Вас возникнут ошибки - пожалуйста повторите установку в консоли(shell) Proxmox прежде, чем писать разработчикам о проблеме." 10 72
     else
       clear
-      echo "Exiting due to SSH usage. Please consider using the Proxmox shell."
+      echo "Выхожу в связи с использованием подключения по SSH. Пожалуйста рассмотрите возможность использовать для установки Proxmox shell."
       exit
     fi
   fi
@@ -283,7 +284,7 @@ base_settings() {
   MAC=""
   VLAN=""
   SSH="no"
-  TAGS="community-script;"
+  TAGS="samohosting;"
   
   # Override default settings with variables from ct script
   CT_TYPE=${var_unprivileged:-$CT_TYPE}
@@ -311,40 +312,40 @@ echo_default() {
   fi
 
   # Output the selected values with icons
-  echo -e "${OS}${BOLD}${DGN}Operating System: ${BGN}$var_os${CL}"
-  echo -e "${OSVERSION}${BOLD}${DGN}Version: ${BGN}$var_version${CL}"
-  echo -e "${CONTAINERTYPE}${BOLD}${DGN}Container Type: ${BGN}$CT_TYPE_DESC${CL}"
-  echo -e "${DISKSIZE}${BOLD}${DGN}Disk Size: ${BGN}${DISK_SIZE}GB${CL}"
-  echo -e "${CPUCORE}${BOLD}${DGN}CPU Cores: ${BGN}${CORE_COUNT}${CL}"
-  echo -e "${RAMSIZE}${BOLD}${DGN}RAM Size: ${BGN}${RAM_SIZE}MiB${CL}"
-  echo -e "${CONTAINERID}${BOLD}${DGN}Container ID: ${BGN}${CT_ID}${CL}"
+  echo -e "${OS}${BOLD}${DGN}Операционная система: ${BGN}$var_os${CL}"
+  echo -e "${OSVERSION}${BOLD}${DGN}Версия: ${BGN}$var_version${CL}"
+  echo -e "${CONTAINERTYPE}${BOLD}${DGN}Тип контейнера: ${BGN}$CT_TYPE_DESC${CL}"
+  echo -e "${DISKSIZE}${BOLD}${DGN}Размер диска: ${BGN}${DISK_SIZE}GB${CL}"
+  echo -e "${CPUCORE}${BOLD}${DGN}Ядер процессора: ${BGN}${CORE_COUNT}${CL}"
+  echo -e "${RAMSIZE}${BOLD}${DGN}Размер ОЗУ: ${BGN}${RAM_SIZE}MiB${CL}"
+  echo -e "${CONTAINERID}${BOLD}${DGN}ID контейнера: ${BGN}${CT_ID}${CL}"
   if [ "$VERB" == "yes" ]; then
-    echo -e "${SEARCH}${BOLD}${DGN}Verbose Mode: ${BGN}Enabled${CL}"
+    echo -e "${SEARCH}${BOLD}${DGN}Режим отладки: ${BGN}Enabled${CL}"
   fi
-  echo -e "${CREATING}${BOLD}${BL}Creating a ${APP} LXC using the above default settings${CL}"
+  echo -e "${CREATING}${BOLD}${BL}Создаю контейнер с приложением ${APP} используя вышеуказанные базовые настройки${CL}"
   echo -e "  "
 }
 
 # This function is called when the user decides to exit the script. It clears the screen and displays an exit message.
 exit_script() {
   clear
-  echo -e "\n${CROSS}${RD}User exited script${CL}\n"
+  echo -e "\n${CROSS}${RD}Выход из скрипта по инициативе пользователя${CL}\n"
   exit
 }
 
 # This function allows the user to configure advanced settings for the script.
 advanced_settings() {
-  whiptail --backtitle "Proxmox VE Helper Scripts" --msgbox --title "Here is an instructional tip:" "To make a selection, use the Spacebar." 8 58
-  whiptail --backtitle "Proxmox VE Helper Scripts" --msgbox --title "Default distribution for $APP" "${var_os} ${var_version} \n \nIf the default Linux distribution is not adhered to, script support will be discontinued. \n" 10 58
+  whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --msgbox --title "Подсказка по использованию:" "Чтобы сделать выбор - используйте ПРОБЕЛ." 8 58
+  whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --msgbox --title "Дистрибутив по умолчанию для приложения $APP" "${var_os} ${var_version} \n \nIf используеммый дистрибутив Linux отличается от рекомендованного , поддержка скрипта невозможна. \n" 10 58
   if [ "$var_os" != "alpine" ]; then
     var_os=""
     while [ -z "$var_os" ]; do
-      if var_os=$(whiptail --backtitle "Proxmox VE Helper Scripts" --title "DISTRIBUTION" --radiolist "Choose Distribution:" 10 58 2 \
+      if var_os=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --title "ДИСТРИБУТИВ" --radiolist "Выберите дистрибутив :" 10 58 2 \
         "debian" "" OFF \
         "ubuntu" "" OFF \
         3>&1 1>&2 2>&3); then
         if [ -n "$var_os" ]; then
-          echo -e "${OS}${BOLD}${DGN}Operating System: ${BGN}$var_os${CL}"
+          echo -e "${OS}${BOLD}${DGN}Операционная система: ${BGN}$var_os${CL}"
         fi
       else
         exit_script
@@ -355,12 +356,12 @@ advanced_settings() {
   if [ "$var_os" == "debian" ]; then
     var_version=""
     while [ -z "$var_version" ]; do
-      if var_version=$(whiptail --backtitle "Proxmox VE Helper Scripts" --title "DEBIAN VERSION" --radiolist "Choose Version" 10 58 2 \
+      if var_version=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --title "ВЕРСИЯ DEBIAN" --radiolist "Выберите версию" 10 58 2 \
         "11" "Bullseye" OFF \
         "12" "Bookworm" OFF \
         3>&1 1>&2 2>&3); then
         if [ -n "$var_version" ]; then
-          echo -e "${OSVERSION}${BOLD}${DGN}Version: ${BGN}$var_version${CL}"
+          echo -e "${OSVERSION}${BOLD}${DGN}Версия: ${BGN}$var_version${CL}"
         fi
       else
         exit_script
@@ -371,14 +372,14 @@ advanced_settings() {
   if [ "$var_os" == "ubuntu" ]; then
     var_version=""
     while [ -z "$var_version" ]; do
-      if var_version=$(whiptail --backtitle "Proxmox VE Helper Scripts" --title "UBUNTU VERSION" --radiolist "Choose Version" 10 58 4 \
+      if var_version=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --title "ВЕРСИЯ UBUNTU" --radiolist "Выберите версию" 10 58 4 \
         "20.04" "Focal" OFF \
         "22.04" "Jammy" OFF \
         "24.04" "Noble" OFF \
         "24.10" "Oracular" OFF \
       3>&1 1>&2 2>&3); then
         if [ -n "$var_version" ]; then
-          echo -e "${OSVERSION}${BOLD}${DGN}Version: ${BGN}$var_version${CL}"
+          echo -e "${OSVERSION}${BOLD}${DGN}Версия: ${BGN}$var_version${CL}"
         fi
       else
         exit_script
@@ -386,11 +387,11 @@ advanced_settings() {
     done
   fi
   # Setting Default Tag for Advanced Settings
-  TAGS="community-script;${var_tags:-}"
+  TAGS="samohosting;${var_tags:-}"
 
   CT_TYPE=""
   while [ -z "$CT_TYPE" ]; do
-    if CT_TYPE=$(whiptail --backtitle "Proxmox VE Helper Scripts" --title "CONTAINER TYPE" --radiolist "Choose Type" 10 58 2 \
+    if CT_TYPE=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --title "ТИП КОНТЕЙНЕРА" --radiolist "Выберите Тип" 10 58 2 \
       "1" "Unprivileged" OFF \
       "0" "Privileged" OFF \
       3>&1 1>&2 2>&3); then
@@ -399,7 +400,7 @@ advanced_settings() {
         if [ "$CT_TYPE" -eq 0 ]; then
           CT_TYPE_DESC="Privileged"
         fi
-        echo -e "${CONTAINERTYPE}${BOLD}${DGN}Container Type: ${BGN}$CT_TYPE_DESC${CL}"
+        echo -e "${CONTAINERTYPE}${BOLD}${DGN}Тип контейнера: ${BGN}$CT_TYPE_DESC${CL}"
       fi
     else
       exit_script
@@ -407,20 +408,20 @@ advanced_settings() {
   done
 
   while true; do
-    if PW1=$(whiptail --backtitle "Proxmox VE Helper Scripts" --passwordbox "\nSet Root Password (needed for root ssh access)" 9 58 --title "PASSWORD (leave blank for automatic login)" 3>&1 1>&2 2>&3); then
+    if PW1=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --passwordbox "\nЗадайте пароль для root (необходим для root ssh доступа)" 9 58 --title "ПАРОЛЬ (оставьте пустым для автологина)" 3>&1 1>&2 2>&3); then
       if [[ ! -z "$PW1" ]]; then
         if [[ "$PW1" == *" "* ]]; then
-          whiptail --msgbox "Password cannot contain spaces. Please try again." 8 58
+          whiptail --msgbox "Пароль не может содержать пробелы. Повторите попытку." 8 58
         elif [ ${#PW1} -lt 5 ]; then
-          whiptail --msgbox "Password must be at least 5 characters long. Please try again." 8 58
+          whiptail --msgbox "Минимальная длина пароля = 5 символов. Повторите попытку." 8 58
         else
-          if PW2=$(whiptail --backtitle "Proxmox VE Helper Scripts" --passwordbox "\nVerify Root Password" 9 58 --title "PASSWORD VERIFICATION" 3>&1 1>&2 2>&3); then
+          if PW2=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --passwordbox "\nПодтвердите паролья для root" 9 58 --title "ПОДТВЕРЖДЕНИЕ ПАРОЛЯ" 3>&1 1>&2 2>&3); then
             if [[ "$PW1" == "$PW2" ]]; then
               PW="-password $PW1"
-              echo -e "${VERIFYPW}${BOLD}${DGN}Root Password: ${BGN}********${CL}"
+              echo -e "${VERIFYPW}${BOLD}${DGN}ПАРОЛЬ ДЛЯ ROOT: ${BGN}********${CL}"
               break
             else
-              whiptail --msgbox "Passwords do not match. Please try again." 8 58
+              whiptail --msgbox "Пароли не совпадают. Повторите попытку." 8 58
             fi
           else
             exit_script
@@ -429,7 +430,7 @@ advanced_settings() {
       else
         PW1="Automatic Login"
         PW=""
-        echo -e "${VERIFYPW}${BOLD}${DGN}Root Password: ${BGN}$PW1${CL}"
+        echo -e "${VERIFYPW}${BOLD}${DGN}ПАРОЛЬ ДЛЯ ROOT: ${BGN}$PW1${CL}"
         break
       fi
     else
@@ -438,89 +439,89 @@ advanced_settings() {
   done
 
 
-  if CT_ID=$(whiptail --backtitle "Proxmox VE Helper Scripts" --inputbox "Set Container ID" 8 58 $NEXTID --title "CONTAINER ID" 3>&1 1>&2 2>&3); then
+  if CT_ID=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --inputbox "Укажите ID контейнера" 8 58 $NEXTID --title "ID КОНТЕЙНЕРА" 3>&1 1>&2 2>&3); then
     if [ -z "$CT_ID" ]; then
       CT_ID="$NEXTID"
-      echo -e "${CONTAINERID}${BOLD}${DGN}Container ID: ${BGN}$CT_ID${CL}"
+      echo -e "${CONTAINERID}${BOLD}${DGN}ID LXC контейнера: ${BGN}$CT_ID${CL}"
     else
-      echo -e "${CONTAINERID}${BOLD}${DGN}Container ID: ${BGN}$CT_ID${CL}"
+      echo -e "${CONTAINERID}${BOLD}${DGN}ID LXC контейнера: ${BGN}$CT_ID${CL}"
     fi
   else
     exit
   fi
 
-  if CT_NAME=$(whiptail --backtitle "Proxmox VE Helper Scripts" --inputbox "Set Hostname" 8 58 $NSAPP --title "HOSTNAME" 3>&1 1>&2 2>&3); then
+  if CT_NAME=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --inputbox "Укажите имя хоста(hostname)" 8 58 $NSAPP --title "ИМЯ ХОСТА(HOSTNAME)" 3>&1 1>&2 2>&3); then
     if [ -z "$CT_NAME" ]; then
       HN="$NSAPP"
     else
       HN=$(echo ${CT_NAME,,} | tr -d ' ')
     fi
-    echo -e "${HOSTNAME}${BOLD}${DGN}Hostname: ${BGN}$HN${CL}"
+    echo -e "${HOSTNAME}${BOLD}${DGN}Имя хоста(hostname): ${BGN}$HN${CL}"
   else
     exit_script
   fi
 
-  if DISK_SIZE=$(whiptail --backtitle "Proxmox VE Helper Scripts" --inputbox "Set Disk Size in GB" 8 58 $var_disk --title "DISK SIZE" 3>&1 1>&2 2>&3); then
+  if DISK_SIZE=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --inputbox "Укажите размер диска в GB" 8 58 $var_disk --title "РАЗМЕР ДИСКА" 3>&1 1>&2 2>&3); then
     if [ -z "$DISK_SIZE" ]; then
       DISK_SIZE="$var_disk"
-      echo -e "${DISKSIZE}${BOLD}${DGN}Disk Size: ${BGN}${DISK_SIZE}GB${CL}"
+      echo -e "${DISKSIZE}${BOLD}${DGN}Размер диска: ${BGN}${DISK_SIZE}GB${CL}"
     else
       if ! [[ $DISK_SIZE =~ $INTEGER ]]; then
-        echo -e "{INFO}${HOLD}${RD} DISK SIZE MUST BE AN INTEGER NUMBER!${CL}"
+        echo -e "{INFO}${HOLD}${RD} РАЗМЕР ДИСКА ДОЛЖЕН БЫТЬ УКАЗАН ЧИСЛОМ!${CL}"
         advanced_settings
       fi
-      echo -e "${DISKSIZE}${BOLD}${DGN}Disk Size: ${BGN}${DISK_SIZE}GB${CL}"
+      echo -e "${DISKSIZE}${BOLD}${DGN}Размер диска: ${BGN}${DISK_SIZE}GB${CL}"
     fi
   else
     exit_script
   fi
 
-  if CORE_COUNT=$(whiptail --backtitle "Proxmox VE Helper Scripts" --inputbox "Allocate CPU Cores" 8 58 $var_cpu --title "CORE COUNT" 3>&1 1>&2 2>&3); then
+  if CORE_COUNT=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --inputbox "Укажите кол-во процессорных ядер(CPU count)" 8 58 $var_cpu --title "КОЛИЧЕСТВО ПРОЦЕССОРНЫХ ЯДЕР(CPU COUNT)" 3>&1 1>&2 2>&3); then
     if [ -z "$CORE_COUNT" ]; then
       CORE_COUNT="$var_cpu"
-      echo -e "${CPUCORE}${BOLD}${DGN}CPU Cores: ${BGN}$CORE_COUNT${CL}"
+      echo -e "${CPUCORE}${BOLD}${DGN}Процессорных ядер: ${BGN}$CORE_COUNT${CL}"
     else
-      echo -e "${CPUCORE}${BOLD}${DGN}CPU Cores: ${BGN}$CORE_COUNT${CL}"
+      echo -e "${CPUCORE}${BOLD}${DGN}Процессорных ядер: ${BGN}$CORE_COUNT${CL}"
     fi
   else
     exit_script
   fi
 
-  if RAM_SIZE=$(whiptail --backtitle "Proxmox VE Helper Scripts" --inputbox "Allocate RAM in MiB" 8 58 $var_ram --title "RAM" 3>&1 1>&2 2>&3); then
+  if RAM_SIZE=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --inputbox "Укажите ОЗУ в MiB" 8 58 $var_ram --title "ОЗУ" 3>&1 1>&2 2>&3); then
     if [ -z "$RAM_SIZE" ]; then
       RAM_SIZE="$var_ram"
-      echo -e "${RAMSIZE}${BOLD}${DGN}RAM Size: ${BGN}${RAM_SIZE}MiB${CL}"
+      echo -e "${RAMSIZE}${BOLD}${DGN}Размер ОЗУ: ${BGN}${RAM_SIZE}MiB${CL}"
     else
-      echo -e "${RAMSIZE}${BOLD}${DGN}RAM Size: ${BGN}${RAM_SIZE}MiB${CL}"
+      echo -e "${RAMSIZE}${BOLD}${DGN}Размер ОЗУ: ${BGN}${RAM_SIZE}MiB${CL}"
     fi
   else
     exit_script
   fi
 
-  if BRG=$(whiptail --backtitle "Proxmox VE Helper Scripts" --inputbox "Set a Bridge" 8 58 vmbr0 --title "BRIDGE" 3>&1 1>&2 2>&3); then
+  if BRG=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --inputbox "Укажите сетевой мост(bridge)" 8 58 vmbr0 --title "СЕТЕВОЙ МОСТ(BRIDGE)" 3>&1 1>&2 2>&3); then
     if [ -z "$BRG" ]; then
       BRG="vmbr0"
-      echo -e "${BRIDGE}${BOLD}${DGN}Bridge: ${BGN}$BRG${CL}"
+      echo -e "${BRIDGE}${BOLD}${DGN}Сетевой мост(bridge): ${BGN}$BRG${CL}"
     else
-      echo -e "${BRIDGE}${BOLD}${DGN}Bridge: ${BGN}$BRG${CL}"
+      echo -e "${BRIDGE}${BOLD}${DGN}Сетевой мост(bridge): ${BGN}$BRG${CL}"
     fi
   else
     exit_script
   fi
 
   while true; do
-    NET=$(whiptail --backtitle "Proxmox VE Helper Scripts" --inputbox "Set a Static IPv4 CIDR Address (/24)" 8 58 dhcp --title "IP ADDRESS" 3>&1 1>&2 2>&3)
+    NET=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --inputbox "Укажите статичный IPv4 CIDR адрес (/24)" 8 58 dhcp --title "IP АДРЕС" 3>&1 1>&2 2>&3)
     exit_status=$?
     if [ $exit_status -eq 0 ]; then
       if [ "$NET" = "dhcp" ]; then
-        echo -e "${NETWORK}${BOLD}${DGN}IP Address: ${BGN}$NET${CL}"
+        echo -e "${NETWORK}${BOLD}${DGN}IP адрес: ${BGN}$NET${CL}"
         break
       else
         if [[ "$NET" =~ ^([0-9]{1,3}\.){3}[0-9]{1,3}/([0-9]|[1-2][0-9]|3[0-2])$ ]]; then
-          echo -e "${NETWORK}${BOLD}${DGN}IP Address: ${BGN}$NET${CL}"
+          echo -e "${NETWORK}${BOLD}${DGN}IP адрес: ${BGN}$NET${CL}"
           break
         else
-          whiptail --backtitle "Proxmox VE Helper Scripts" --msgbox "$NET is an invalid IPv4 CIDR address. Please enter a valid IPv4 CIDR address or 'dhcp'" 8 58
+          whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --msgbox "$NET is an invalid IPv4 CIDR address. Please enter a valid IPv4 CIDR address or 'dhcp'" 8 58
         fi
       fi
     else
@@ -530,42 +531,42 @@ advanced_settings() {
 
   if [ "$NET" != "dhcp" ]; then
     while true; do
-      GATE1=$(whiptail --backtitle "Proxmox VE Helper Scripts" --inputbox "Enter gateway IP address" 8 58 --title "Gateway IP" 3>&1 1>&2 2>&3)
+      GATE1=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --inputbox "Укажите IP адрес шлюза по умолчанию(gateway)" 8 58 --title "IP АДРЕС ШЛЮЗА(Gateway IP)" 3>&1 1>&2 2>&3)
       if [ -z "$GATE1" ]; then
-        whiptail --backtitle "Proxmox VE Helper Scripts" --msgbox "Gateway IP address cannot be empty" 8 58
+        whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --msgbox "Поле IP шлюза не может быть пустым" 8 58
       elif [[ ! "$GATE1" =~ ^([0-9]{1,3}\.){3}[0-9]{1,3}$ ]]; then
-        whiptail --backtitle "Proxmox VE Helper Scripts" --msgbox "Invalid IP address format" 8 58
+        whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --msgbox "Неверный формат IP адреса" 8 58
       else
         GATE=",gw=$GATE1"
-        echo -e "${GATEWAY}${BOLD}${DGN}Gateway IP Address: ${BGN}$GATE1${CL}"
+        echo -e "${GATEWAY}${BOLD}${DGN}IP Шлюза(Gateway IP): ${BGN}$GATE1${CL}"
         break
       fi
     done
   else
     GATE=""
-    echo -e "${GATEWAY}${BOLD}${DGN}Gateway IP Address: ${BGN}Default${CL}"
+    echo -e "${GATEWAY}${BOLD}${DGN}IP Шлюза(Gateway IP): ${BGN}Default${CL}"
   fi
 
   if [ "$var_os" == "alpine" ]; then
     APT_CACHER=""
     APT_CACHER_IP=""
   else
-    if APT_CACHER_IP=$(whiptail --backtitle "Proxmox VE Helper Scripts" --inputbox "Set APT-Cacher IP (leave blank for default)" 8 58 --title "APT-Cacher IP" 3>&1 1>&2 2>&3); then
+    if APT_CACHER_IP=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --inputbox "Укажите IP адрес кеширующий прокси-сервер(APT-Cacher) (оставьте пустым для использования параметров по умолчанию)" 8 58 --title "IP КЕШИРУЮЩЕГО ПРОКСИ-СЕРВЕРА(APT-Cacher)" 3>&1 1>&2 2>&3); then
       APT_CACHER="${APT_CACHER_IP:+yes}"
-      echo -e "${NETWORK}${BOLD}${DGN}APT-Cacher IP Address: ${BGN}${APT_CACHER_IP:-Default}${CL}"
+      echo -e "${NETWORK}${BOLD}${DGN}IP адрес кеширующий прокси-сервер(APT-Cacher): ${BGN}${APT_CACHER_IP:-Default}${CL}"
     else
       exit_script
     fi
   fi
 
-  if (whiptail --backtitle "Proxmox VE Helper Scripts" --defaultno --title "IPv6" --yesno "Disable IPv6?" 10 58); then
+  if (whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --defaultno --title "IPv6" --yesno "Отключить IPv6?" 10 58); then
     DISABLEIP6="yes"
   else
     DISABLEIP6="no"
   fi
-  echo -e "${DISABLEIPV6}${BOLD}${DGN}Disable IPv6: ${BGN}$DISABLEIP6${CL}"
+  echo -e "${DISABLEIPV6}${BOLD}${DGN}Отключить IPv6: ${BGN}$DISABLEIP6${CL}"
 
-  if MTU1=$(whiptail --backtitle "Proxmox VE Helper Scripts" --inputbox "Set Interface MTU Size (leave blank for default)" 8 58 --title "MTU SIZE" 3>&1 1>&2 2>&3); then
+  if MTU1=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --inputbox "Set Interface MTU Size (оставьте пустым для использования параметров по умолчанию)" 8 58 --title "MTU SIZE" 3>&1 1>&2 2>&3); then
     if [ -z $MTU1 ]; then
       MTU1="Default"
       MTU=""
@@ -577,7 +578,7 @@ advanced_settings() {
     exit_script
   fi
 
-  if SD=$(whiptail --backtitle "Proxmox VE Helper Scripts" --inputbox "Set a DNS Search Domain (leave blank for HOST)" 8 58 --title "DNS Search Domain" 3>&1 1>&2 2>&3); then
+  if SD=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --inputbox "Set a DNS Домен поиска(оставьте пустым для использования HOST)" 8 58 --title "DNS Домен поиска" 3>&1 1>&2 2>&3); then
     if [ -z $SD ]; then
       SX=Host
       SD=""
@@ -585,36 +586,36 @@ advanced_settings() {
       SX=$SD
       SD="-searchdomain=$SD"
     fi
-    echo -e "${SEARCH}${BOLD}${DGN}DNS Search Domain: ${BGN}$SX${CL}"
+    echo -e "${SEARCH}${BOLD}${DGN}DNS Домен поиска: ${BGN}$SX${CL}"
   else
     exit_script
   fi
 
-  if NX=$(whiptail --backtitle "Proxmox VE Helper Scripts" --inputbox "Set a DNS Server IP (leave blank for HOST)" 8 58 --title "DNS SERVER IP" 3>&1 1>&2 2>&3); then
+  if NX=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --inputbox "Укажите IP адрес DNS сервера (оставьте пустым для использования HOST)" 8 58 --title "IP АДРЕС DNS СЕРВЕРА" 3>&1 1>&2 2>&3); then
     if [ -z $NX ]; then
       NX=Host
       NS=""
     else
       NS="-nameserver=$NX"
     fi
-    echo -e "${NETWORK}${BOLD}${DGN}DNS Server IP Address: ${BGN}$NX${CL}"
+    echo -e "${NETWORK}${BOLD}${DGN}IP адрес DNS сервера: ${BGN}$NX${CL}"
   else
     exit_script
   fi
 
-  if MAC1=$(whiptail --backtitle "Proxmox VE Helper Scripts" --inputbox "Set a MAC Address(leave blank for default)" 8 58 --title "MAC ADDRESS" 3>&1 1>&2 2>&3); then
+  if MAC1=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --inputbox "Укажите MAC адрес(оставьте пустым для использования параметров по умолчанию)" 8 58 --title "MAC АДРЕС" 3>&1 1>&2 2>&3); then
     if [ -z $MAC1 ]; then
       MAC1="Default"
       MAC=""
     else
       MAC=",hwaddr=$MAC1"
-      echo -e "${MACADDRESS}${BOLD}${DGN}MAC Address: ${BGN}$MAC1${CL}"
+      echo -e "${MACADDRESS}${BOLD}${DGN}MAC адрес: ${BGN}$MAC1${CL}"
     fi
   else
     exit_script
   fi
 
-  if VLAN1=$(whiptail --backtitle "Proxmox VE Helper Scripts" --inputbox "Set a Vlan(leave blank for default)" 8 58 --title "VLAN" 3>&1 1>&2 2>&3); then
+  if VLAN1=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --inputbox "Укажите Vlan(оставьте пустым для использования параметров по умолчанию)" 8 58 --title "VLAN" 3>&1 1>&2 2>&3); then
     if [ -z $VLAN1 ]; then
       VLAN1="Default"
       VLAN=""
@@ -626,7 +627,7 @@ advanced_settings() {
     exit_script
   fi
 
-  if ADV_TAGS=$(whiptail --backtitle "Proxmox VE Helper Scripts" --inputbox "Set Custom Tags?[If you remove all, there will be no tags!]" 8 58 ${TAGS} --title "Advanced Tags" 3>&1 1>&2 2>&3); then
+  if ADV_TAGS=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --inputbox "Set Custom Tags?[If you remove all, there will be no tags!]" 8 58 ${TAGS} --title "Advanced Tags" 3>&1 1>&2 2>&3); then
     if [ -n "${ADV_TAGS}" ]; then
         ADV_TAGS=${ADV_TAGS:-""} 
         ADV_TAGS=$(echo "$ADV_TAGS" | tr -d '[:space:]')
@@ -638,30 +639,30 @@ advanced_settings() {
   fi
 
   if [[ "$PW" == -password* ]]; then
-    if (whiptail --backtitle "Proxmox VE Helper Scripts" --defaultno --title "SSH ACCESS" --yesno "Enable Root SSH Access?" 10 58); then
+    if (whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --defaultno --title "SSH ДОСТУП" --yesno "Разрешить доступ Root по SSH?" 10 58); then
       SSH="yes"
     else
       SSH="no"
     fi
-    echo -e "${ROOTSSH}${BOLD}${DGN}Root SSH Access: ${BGN}$SSH${CL}"
+    echo -e "${ROOTSSH}${BOLD}${DGN}Доступ Root по SSH: ${BGN}$SSH${CL}"
   else
     SSH="no"
-    echo -e "${ROOTSSH}${BOLD}${DGN}Root SSH Access: ${BGN}$SSH${CL}"
+    echo -e "${ROOTSSH}${BOLD}${DGN}Доступ Root по SSH: ${BGN}$SSH${CL}"
   fi
 
-  if (whiptail --backtitle "Proxmox VE Helper Scripts" --defaultno --title "VERBOSE MODE" --yesno "Enable Verbose Mode?" 10 58); then
+  if (whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --defaultno --title "РЕЖИМ ОТЛАДКИ" --yesno "Включить режим отладки?(видно каждый этап установки и больше деталей, полезно для поиска ошибок)" 10 58); then
     VERB="yes"
   else
     VERB="no"
   fi
   echo -e "${SEARCH}${BOLD}${DGN}Verbose Mode: ${BGN}$VERB${CL}"
 
-  if (whiptail --backtitle "Proxmox VE Helper Scripts" --title "ADVANCED SETTINGS COMPLETE" --yesno "Ready to create ${APP} LXC?" 10 58); then
-    echo -e "${CREATING}${BOLD}${RD}Creating a ${APP} LXC using the above advanced settings${CL}"
+  if (whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --title "РАСШИРЕННЫЕ НАСТРОЙКИ ЗАВЕРШЕНЫ" --yesno "Приступить к созданию ${APP} LXC?" 10 58); then
+    echo -e "${CREATING}${BOLD}${RD}Создаю ${APP} LXC используя вышеуказанные расширенные настройки${CL}"
   else
     clear
     header_info
-    echo -e "${ADVANCED}${BOLD}${RD}Using Advanced Settings on node $PVEHOST_NAME${CL}"
+    echo -e "${ADVANCED}${BOLD}${RD}Использую расширенные настройки для node $PVEHOST_NAME${CL}"
     advanced_settings
   fi
 }
@@ -680,22 +681,22 @@ install_script() {
   timezone=$(cat /etc/timezone)
   header_info
   while true; do
-    CHOICE=$(whiptail --backtitle "Proxmox VE Helper Scripts" --title "SETTINGS" --menu "Choose an option:" \
+    CHOICE=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --title "НАСТРОЙКИ" --menu "Выберите вариант установки:" \
       12 50 4 \
-      "1" "Default Settings" \
-      "2" "Default Settings (with verbose)" \
-      "3" "Advanced Settings" \
-      "4" "Exit" --nocancel --default-item "1" 3>&1 1>&2 2>&3)
+      "1" "Используя настройки по умолчанию" \
+      "2" "Используя настройки по умолчанию(режим отладки)" \
+      "3" "Использовать расширенные настройки" \
+      "4" "Выход" --nocancel --default-item "1" 3>&1 1>&2 2>&3)
 
     if [ $? -ne 0 ]; then
-      echo -e "${CROSS}${RD} Menu canceled. Exiting.${CL}"
+      echo -e "${CROSS}${RD} Действие(меню) отменено. Выхожу.${CL}"
       exit 0
     fi
 
     case $CHOICE in
       1)
         header_info
-        echo -e "${DEFAULT}${BOLD}${BL}Using Default Settings on node $PVEHOST_NAME${CL}"
+        echo -e "${DEFAULT}${BOLD}${BL}Использую базовые настройки для node $PVEHOST_NAME${CL}"
         VERB="no"
         base_settings "$VERB"  
         echo_default
@@ -703,7 +704,7 @@ install_script() {
         ;;
       2)
         header_info
-        echo -e "${DEFAULT}${BOLD}${BL}Using Default Settings on node $PVEHOST_NAME (${SEARCH}${BL}Verbose)${CL}"
+        echo -e "${DEFAULT}${BOLD}${BL}Использую базовые настройки для node $PVEHOST_NAME (${SEARCH}${BL}Verbose)${CL}"
         VERB="yes"
         base_settings "$VERB"  
         echo_default
@@ -711,16 +712,16 @@ install_script() {
         ;;
       3)
         header_info
-        echo -e "${ADVANCED}${BOLD}${RD}Using Advanced Settings on node $PVEHOST_NAME${CL}"
+        echo -e "${ADVANCED}${BOLD}${RD}Использую расширенные настройки для node $PVEHOST_NAME${CL}"
         advanced_settings
         break
         ;;
       4)
-        echo -e "${CROSS}${RD}Exiting.${CL}"
+        echo -e "${CROSS}${RD}Выхожу.${CL}"
         exit 0
         ;;
       *)
-        echo -e "${CROSS}${RD}Invalid option, please try again.${CL}"
+        echo -e "${CROSS}${RD}Неверная опция, повторите попытку.${CL}"
         ;;
     esac
   done
@@ -733,12 +734,12 @@ check_container_resources() {
 
   # Check whether the current RAM is less than the required RAM or the CPU cores are less than required
   if [[ "$current_ram" -lt "$var_ram" ]] || [[ "$current_cpu" -lt "$var_cpu" ]]; then
-    echo -e "\n${INFO}${HOLD} ${GN}Required: ${var_cpu} CPU, ${var_ram}MB RAM ${CL}| ${RD}Current: ${current_cpu} CPU, ${current_ram}MB RAM${CL}"
-    echo -e "${YWB}Please ensure that the ${APP} LXC is configured with at least ${var_cpu} vCPU and ${var_ram} MB RAM for the build process.${CL}\n"
-    read -r -p "${INFO}${HOLD} May cause data loss! ${INFO} Continue update with under-provisioned LXC? <yes/No>  " prompt  
+    echo -e "\n${INFO}${HOLD} ${GN}Требуется: ${var_cpu} CPU, ${var_ram}MB ОЗУ ${CL}| ${RD}Доступно сейчас: ${current_cpu} CPU, ${current_ram}MB ОЗУ${CL}"
+    echo -e "${YWB}Пожалуйста убедитесь, что ${APP} LXC сконфигурирован хотя бы с ${var_cpu} vCPU и ${var_ram} MB ОЗУ для процесса сборкиустановки.${CL}\n"
+    read -r -p "${INFO}${HOLD}Может привести к потери данных! ${INFO} Продолжить обнволение LXC с недостаточными ресурсами системы? <yes/No>  " prompt  
     # Check if the input is 'yes', otherwise exit with status 1
     if [[ ! ${prompt,,} =~ ^(yes)$ ]]; then
-      echo -e "${CROSS}${HOLD} ${YWB}Exiting based on user input.${CL}"
+      echo -e "${CROSS}${HOLD} ${YWB}Выхожу по инициативе пользователя.${CL}"
       exit 1
     fi
   else
@@ -753,11 +754,11 @@ check_container_storage() {
   usage=$(( 100 * used_size / total_size ))
   if (( usage > 80 )); then
     # Prompt the user for confirmation to continue
-    echo -e "${INFO}${HOLD} ${YWB}Warning: Storage is dangerously low (${usage}%).${CL}"
-    read -r -p "Continue anyway? <y/N>  " prompt  
+    echo -e "${INFO}${HOLD} ${YWB}ВНИМАНИЕ!: критически мало свободного места (${usage}%).${CL}"
+    read -r -p "Продолжить в любом случае? <y/N>  " prompt  
     # Check if the input is 'y' or 'yes', otherwise exit with status 1
     if [[ ! ${prompt,,} =~ ^(y|yes)$ ]]; then
-      echo -e "${CROSS}${HOLD}${YWB}Exiting based on user input.${CL}"
+      echo -e "${CROSS}${HOLD}${YWB}Выхожу по инициативе пользователя.${CL}"
       exit 1
     fi
   fi
@@ -765,7 +766,7 @@ check_container_storage() {
 
 start() {
   if command -v pveversion >/dev/null 2>&1; then
-    if ! (whiptail --backtitle "Proxmox VE Helper Scripts" --title "${APP} LXC" --yesno "This will create a New ${APP} LXC. Proceed?" 10 58); then
+    if ! (whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --title "${APP} LXC" --yesno "Будет создан новый LXC контейнер ${APP}?             (не закрывайте\уходите из консоли до конца установки)   Начать создание контейнера?" 10 58); then
       clear
       exit_script
       exit
@@ -775,7 +776,7 @@ start() {
   fi
 
   if ! command -v pveversion >/dev/null 2>&1; then
-    if ! (whiptail --backtitle "Proxmox VE Helper Scripts" --title "${APP} LXC UPDATE" --yesno "Support/Update functions for ${APP} LXC.  Proceed?" 10 58); then
+    if ! (whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --title "ОБНОВЛЕНИЕ КОНТЕЙНЕРА ${APP}" --yesno "Запустить обновлениефункцию поддержки для  ${APP} LXC.  Продолжить?" 10 58); then
       clear
       exit_script
       exit
@@ -799,9 +800,9 @@ build_container() {
   TEMP_DIR=$(mktemp -d)
   pushd $TEMP_DIR >/dev/null
   if [ "$var_os" == "alpine" ]; then
-    export FUNCTIONS_FILE_PATH="$(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/alpine-install.func)"
+    export FUNCTIONS_FILE_PATH="$(curl -s https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/misc/alpine-install.func)"
   else
-    export FUNCTIONS_FILE_PATH="$(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/install.func)"
+    export FUNCTIONS_FILE_PATH="$(curl -s https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/misc/install.func)"
   fi
   export CACHER="$APT_CACHER"
   export CACHER_IP="$APT_CACHER_IP"
@@ -831,7 +832,7 @@ build_container() {
     $PW
   "
   # This executes create_lxc.sh and creates the container and .conf file
-  bash -c "$(wget -qLO - https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/ct/create_lxc.sh)" || exit
+  bash -c "$(wget -qLO - https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/ct/create_lxc.sh)" || exit
 
   LXC_CONFIG=/etc/pve/lxc/${CTID}.conf
   if [ "$CT_TYPE" == "0" ]; then
@@ -882,9 +883,9 @@ EOF
   fi
 
   # This starts the container and executes <app>-install.sh
-  msg_info "Starting LXC Container"
+  msg_info "Запускаю LXC Container"
   pct start "$CTID"
-  msg_ok "Started LXC Container"
+  msg_ok "Запустил LXC Container"
   if [ "$var_os" == "alpine" ]; then
     sleep 3
         pct exec "$CTID" -- /bin/sh -c 'cat <<EOF >/etc/apk/repositories
@@ -893,7 +894,7 @@ http://dl-cdn.alpinelinux.org/alpine/latest-stable/community
 EOF'
     pct exec "$CTID" -- ash -c "apk add bash >/dev/null"
   fi
-  lxc-attach -n "$CTID" -- bash -c "$(wget -qLO - https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/install/$var_install.sh)" || exit
+  lxc-attach -n "$CTID" -- bash -c "$(wget -qLO - https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/install/$var_install.sh)" || exit
 
 }
 
@@ -904,29 +905,29 @@ description() {
   # Generate LXC Description
   DESCRIPTION=$(cat <<EOF
 <div align='center'>
-  <a href='https://Helper-Scripts.com' target='_blank' rel='noopener noreferrer'>
-    <img src='https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/images/logo-81x112.png' alt='Logo' style='width:81px;height:112px;'/>
+  <a href='https://www.samohosting.ru' target='_blank' rel='noopener noreferrer'>
+    <img src='https://raw.githubusercontent.com/LiaGen/samohosting/refs/heads/main/samohostinglogo6round.png' alt='Logo' style='width:81px;height:112px;'/>
   </a>
 
   <h2 style='font-size: 24px; margin: 20px 0;'>${APP} LXC</h2>
 
   <p style='margin: 16px 0;'>
-    <a href='https://ko-fi.com/community_scripts' target='_blank' rel='noopener noreferrer'>
+    <a href='https://boosty.to/liagen/donate' target='_blank' rel='noopener noreferrer'>
       <img src='https://img.shields.io/badge/&#x2615;-Buy us a coffee-blue' alt='spend Coffee' />
     </a>
   </p>
   
   <span style='margin: 0 10px;'>
-    <i class="fa fa-github fa-fw" style="color: #f5f5f5;"></i>
-    <a href='https://github.com/community-scripts/ProxmoxVE' target='_blank' rel='noopener noreferrer' style='text-decoration: none; color: #00617f;'>GitHub</a>
+    <i class="fa fa-telegram fa-fw" style="color: #f5f5f5;"></i>
+    <a href='https://t.me/samohosting' target='_blank' rel='noopener noreferrer' style='text-decoration: none; color: #0088cc;'>Telegram</a>
   </span>
   <span style='margin: 0 10px;'>
     <i class="fa fa-comments fa-fw" style="color: #f5f5f5;"></i>
-    <a href='https://github.com/community-scripts/ProxmoxVE/discussions' target='_blank' rel='noopener noreferrer' style='text-decoration: none; color: #00617f;'>Discussions</a>
+    <a href='https://t.me/samohosting_chats' target='_blank' rel='noopener noreferrer' style='text-decoration: none; color: #0088cc;'>ЧАТЫ</a>
   </span>
   <span style='margin: 0 10px;'>
-    <i class="fa fa-exclamation-circle fa-fw" style="color: #f5f5f5;"></i>
-    <a href='https://github.com/community-scripts/ProxmoxVE/issues' target='_blank' rel='noopener noreferrer' style='text-decoration: none; color: #00617f;'>Issues</a>
+    <i class="fa fa-youtube-play fa-fw" style="color: #f5f5f5;"></i>
+    <a href='https://www.youtube.com/@samohosting' target='_blank' rel='noopener noreferrer' style='text-decoration: none; color: #FF0000;'>YouTube</a>
   </span>
 </div>
 EOF

@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 
 source /dev/stdin <<< "$FUNCTIONS_FILE_PATH"
 color
@@ -13,14 +13,14 @@ setting_up_container
 network_check
 update_os
 
-msg_info "Installing Dependencies"
+msg_info "Устанавливаю зависимости(необходимое ПО).."
 $STD apt-get install -y \
   mc \
   curl \
   sudo 
-msg_ok "Installed Dependencies"
+msg_ok "Зависимости(необходимое ПО) установлены."
 
-msg_info "Installing ASP.NET Core Runtime"
+msg_info "Устанавливаю ASP.NET Core Runtime"
 wget -q https://packages.microsoft.com/config/debian/12/packages-microsoft-prod.deb
 $STD dpkg -i packages-microsoft-prod.deb
 rm packages-microsoft-prod.deb
@@ -28,7 +28,7 @@ $STD apt-get update
 $STD apt-get install -y dotnet-sdk-9.0
 msg_ok "Installed ASP.NET Core Runtime"
 
-msg_info "Installing rdtclient"
+msg_info "Устанавливаю rdtclient"
 wget -q https://github.com/rogerfar/rdt-client/releases/latest/download/RealDebridClient.zip
 unzip -qq RealDebridClient.zip -d /opt/rdtc
 rm RealDebridClient.zip
@@ -60,4 +60,4 @@ customize
 msg_info "Cleaning up"
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
-msg_ok "Cleaned"
+msg_ok "Временные файлы установки - удалены!"

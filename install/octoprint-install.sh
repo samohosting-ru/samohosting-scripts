@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 
 source /dev/stdin <<< "$FUNCTIONS_FILE_PATH"
 color
@@ -13,16 +13,16 @@ setting_up_container
 network_check
 update_os
 
-msg_info "Installing Dependencies"
+msg_info "Устанавливаю зависимости(необходимое ПО).."
 $STD apt-get install -y curl
 $STD apt-get install -y sudo
 $STD apt-get install -y mc
 $STD apt-get install -y git
 $STD apt-get install -y libyaml-dev
 $STD apt-get install -y build-essential
-msg_ok "Installed Dependencies"
+msg_ok "Зависимости(необходимое ПО) установлены."
 
-msg_info "Updating Python3"
+msg_info "Обновляю Python3"
 $STD apt-get install -y \
   python3 \
   python3-dev \
@@ -40,7 +40,7 @@ chown -R octoprint:octoprint /opt
 echo "octoprint ALL=NOPASSWD: $(command -v systemctl) restart octoprint, $(command -v reboot), $(command -v poweroff)" > /etc/sudoers.d/octoprint
 msg_ok "Created user octoprint"
 
-msg_info "Installing OctoPrint"
+msg_info "Устанавливаю OctoPrint"
 $STD sudo -u octoprint bash << EOF
 mkdir /opt/octoprint
 cd /opt/octoprint
@@ -78,4 +78,4 @@ customize
 msg_info "Cleaning up"
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
-msg_ok "Cleaned"
+msg_ok "Временные файлы установки - удалены!"

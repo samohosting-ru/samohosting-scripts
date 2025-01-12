@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 tteck
 # Author: MickLesk
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 
 function header_info {
   clear
@@ -24,7 +24,7 @@ GN=$(echo "\033[1;92m")
 CL=$(echo "\033[m")
 
 header_info
-echo "Loading..."
+echo "Загрузка..."
 NODE=$(hostname)
 
 function update_container() {

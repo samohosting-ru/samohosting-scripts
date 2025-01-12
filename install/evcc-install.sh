@@ -4,7 +4,7 @@
 # Author: tteck
 # Co-Author: MickLesk (Canbiz)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 # Source: https://github.com/evcc-io/evcc
 
 source /dev/stdin <<< "$FUNCTIONS_FILE_PATH"
@@ -15,14 +15,14 @@ setting_up_container
 network_check
 update_os
 
-msg_info "Installing Dependencies"
+msg_info "Устанавливаю зависимости(необходимое ПО).."
 $STD apt-get install -y \
   curl \
   sudo \
   mc \
   lsb-release \
   gpg 
-msg_ok "Installed Dependencies"
+msg_ok "Зависимости(необходимое ПО) установлены."
 
 msg_info "Setting up evcc Repository"
 curl -fsSL https://dl.evcc.io/public/evcc/stable/gpg.EAD5D0E07B0EC0FD.key | gpg --dearmor -o /etc/apt/keyrings/evcc-stable.gpg 
@@ -30,7 +30,7 @@ echo "deb [signed-by=/etc/apt/keyrings/evcc-stable.gpg] https://dl.evcc.io/publi
 $STD apt update
 msg_ok "evcc Repository setup sucessfully"
 
-msg_info "Installing evcc"
+msg_info "Устанавливаю evcc"
 $STD apt install -y evcc
 systemctl enable -q --now evcc.service
 msg_ok "Installed evcc"
@@ -41,4 +41,4 @@ customize
 msg_info "Cleaning up"
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
-msg_ok "Cleaned"
+msg_ok "Временные файлы установки - удалены!"

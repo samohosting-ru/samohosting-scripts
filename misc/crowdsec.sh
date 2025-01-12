@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 
 YW=$(echo "\033[33m")
 BL=$(echo "\033[36m")
@@ -73,13 +73,13 @@ apt-get install -y gnupg &>/dev/null
 curl -s https://packagecloud.io/install/repositories/crowdsec/crowdsec/script.deb.sh | bash &>/dev/null
 msg_ok "Setup ${APP} Repository"
 
-msg_info "Installing ${APP}"
+msg_info "Устанавливаю ${APP}"
 apt-get update &>/dev/null
 apt-get install -y crowdsec &>/dev/null
 msg_ok "Installed ${APP} on $hostname"
 
-msg_info "Installing ${APP} Common Bouncer"
+msg_info "Устанавливаю ${APP} Common Bouncer"
 apt-get install -y crowdsec-firewall-bouncer-iptables &>/dev/null
 msg_ok "Installed ${APP} Common Bouncer"
 
-msg_ok "Completed Successfully!\n"
+msg_ok "Установка успешно завершена!\n"

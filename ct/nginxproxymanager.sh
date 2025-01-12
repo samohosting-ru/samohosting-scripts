@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/misc/build.func)
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 # Source: https://nginxproxymanager.com/
 
 # App Default Values
@@ -29,11 +29,11 @@ function update_script() {
   check_container_storage
   check_container_resources
   if [[ ! -f /lib/systemd/system/npm.service ]]; then
-    msg_error "No ${APP} Installation Found!"
+    msg_error "Отсутствует установленная версия ${APP}"
     exit
   fi
   if ! command -v pnpm &> /dev/null; then  
-    msg_info "Installing pnpm"
+    msg_info "Устанавливаю pnpm"
     #export NODE_OPTIONS=--openssl-legacy-provider
     npm install -g pnpm@8.15 &>/dev/null
     msg_ok "Installed pnpm"
@@ -139,19 +139,19 @@ EOF
   pnpm install &>/dev/null
   msg_ok "Initialized Backend"
 
-  msg_info "Starting Services"
+  msg_info "Запускаю Services"
   sed -i 's/user npm/user root/g; s/^pid/#pid/g' /usr/local/openresty/nginx/conf/nginx.conf
   sed -i 's/su npm npm/su root root/g' /etc/logrotate.d/nginx-proxy-manager
   sed -i 's/include-system-site-packages = false/include-system-site-packages = true/g' /opt/certbot/pyvenv.cfg
   systemctl enable -q --now openresty
   systemctl enable -q --now npm
-  msg_ok "Started Services"
+  msg_ok "Запустил Services"
 
   msg_info "Cleaning up"
   rm -rf ~/nginx-proxy-manager-*
-  msg_ok "Cleaned"
+  msg_ok "Временные файлы установки - удалены!"
 
-  msg_ok "Updated Successfully"
+  msg_ok "Приложение успешно обновлено!"
   exit
 }
 
@@ -159,7 +159,7 @@ start
 build_container
 description
 
-msg_ok "Completed Successfully!\n"
-echo -e "${CREATING}${GN}${APP} setup has been successfully initialized!${CL}"
-echo -e "${INFO}${YW} Access it using the following URL:${CL}"
+msg_ok "Установка успешно завершена!\n"
+echo -e "${CREATING}${GN}${APP} Установка успешно завершена!${CL}"
+echo -e "${INFO}${YW} Сервис доступен по ссылке:${CL}"
 echo -e "${TAB}${GATEWAY}${BGN}http://${IP}:81${CL}"

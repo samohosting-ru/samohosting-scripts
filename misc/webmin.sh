@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 
 function header_info {
   clear
@@ -38,9 +38,9 @@ msg_ok() {
 
 header_info
 
-whiptail --backtitle "Proxmox VE Helper Scripts" --title "Webmin Installer" --yesno "This Will Install Webmin on this LXC Container. Proceed?" 10 58 || exit
+whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --title "Webmin Installer" --yesno "This Will Install Webmin on this LXC Container. Proceed?" 10 58 || exit
 
-msg_info "Installing Prerequisites"
+msg_info "Устанавливаю Prerequisites"
 apt update &>/dev/null
 apt-get -y install libnet-ssleay-perl libauthen-pam-perl libio-pty-perl unzip shared-mime-info &>/dev/null
 msg_ok "Installed Prerequisites"
@@ -51,7 +51,7 @@ msg_info "Downloading Webmin"
 wget -q https://github.com/webmin/webmin/releases/download/$LATEST/webmin_${LATEST}_all.deb
 msg_ok "Downloaded Webmin"
 
-msg_info "Installing Webmin"
+msg_info "Устанавливаю Webmin"
 dpkg -i webmin_${LATEST}_all.deb &>/dev/null
 /usr/share/webmin/changepass.pl /etc/webmin root root &>/dev/null
 rm -rf /root/webmin_${LATEST}_all.deb

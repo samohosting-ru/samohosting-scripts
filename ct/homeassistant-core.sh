@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/misc/build.func)
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 # Source: https://www.home-assistant.io/
 
 # App Default Values
@@ -29,18 +29,18 @@ function update_script() {
   check_container_storage
   check_container_resources
   if [[ ! -d /srv/homeassistant ]]; then
-    msg_error "No ${APP} Installation Found!"
+    msg_error "Отсутствует установленная версия ${APP}"
     exit
   fi
   PY=$(ls /srv/homeassistant/lib/)
   IP=$(hostname -I | awk '{print $1}')
-  UPD=$(whiptail --backtitle "Proxmox VE Helper Scripts" --title "UPDATE" --radiolist --cancel-button Exit-Script "Spacebar = Select" 11 58 4 \
+  UPD=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --title "UPDATE" --radiolist --cancel-button Exit-Script "Spacebar = Select" 11 58 4 \
     "1" "Update Core" ON \
     "2" "Install HACS" OFF \
     "3" "Install FileBrowser" OFF \
     3>&1 1>&2 2>&3)
   if [ "$UPD" == "1" ]; then
-    if (whiptail --backtitle "Proxmox VE Helper Scripts" --defaultno --title "SELECT BRANCH" --yesno "Use Beta Branch?" 10 58); then
+    if (whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --defaultno --title "SELECT BRANCH" --yesno "Use Beta Branch?" 10 58); then
       clear
       header_info
       echo -e "${GN}Updating to Beta Version${CL}"
@@ -59,21 +59,21 @@ function update_script() {
     systemctl stop homeassistant
     msg_ok "Stopped Home Assistant"
 
-    msg_info "Updating Home Assistant"
+    msg_info "Обновляю Home Assistant"
     source /srv/homeassistant/bin/activate
     uv pip install ${BR}--upgrade homeassistant &>/dev/null
     msg_ok "Updated Home Assistant"
 
-    msg_info "Starting Home Assistant"
+    msg_info "Запускаю Home Assistant"
     systemctl start homeassistant
     sleep 2
-    msg_ok "Started Home Assistant"
+    msg_ok "Запустил Home Assistant"
     msg_ok "Update Successful"
     echo -e "\n  Go to http://${IP}:8123 \n"
     exit
   fi
   if [ "$UPD" == "2" ]; then
-    msg_info "Installing Home Assistant Community Store (HACS)"
+    msg_info "Устанавливаю Home Assistant Community Store (HACS)"
     apt update &>/dev/null
     apt install unzip &>/dev/null
     cd .homeassistant
@@ -85,7 +85,7 @@ function update_script() {
   if [ "$UPD" == "3" ]; then
     set +Eeuo pipefail
     read -r -p "Would you like to use No Authentication? <y/N> " prompt
-    msg_info "Installing FileBrowser"
+    msg_info "Устанавливаю FileBrowser"
     RELEASE=$(curl -fsSL https://api.github.com/repos/filebrowser/filebrowser/releases/latest | grep -o '"tag_name": ".*"' | sed 's/"//g' | sed 's/tag_name: //g')
     curl -fsSL https://github.com/filebrowser/filebrowser/releases/download/$RELEASE/linux-amd64-filebrowser.tar.gz | tar -xzv -C /usr/local/bin &>/dev/null
 
@@ -116,7 +116,7 @@ WantedBy=default.target" >$service_path
     systemctl enable --now -q filebrowser.service
     msg_ok "Created Service"
 
-    msg_ok "Completed Successfully!\n"
+    msg_ok "Установка успешно завершена!\n"
     echo -e "FileBrowser should be reachable by going to the following URL.
          ${BL}http://$IP:8080${CL}   admin|helper-scripts.com\n"
     exit
@@ -127,7 +127,7 @@ start
 build_container
 description
 
-msg_ok "Completed Successfully!\n"
-echo -e "${CREATING}${GN}${APP} setup has been successfully initialized!${CL}"
-echo -e "${INFO}${YW} Access it using the following URL:${CL}"
+msg_ok "Установка успешно завершена!\n"
+echo -e "${CREATING}${GN}${APP} Установка успешно завершена!${CL}"
+echo -e "${INFO}${YW} Сервис доступен по ссылке:${CL}"
 echo -e "${TAB}${GATEWAY}${BGN}http://${IP}:8123${CL}"

@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/misc/build.func)
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: Dominik Siebel (dsiebel)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 # Source: https://silverbullet.md
 
 # App default values
@@ -27,14 +27,14 @@ function update_script() {
   header_info
   check_container_storage
   check_container_resources
-  if [[ ! -d /opt/silverbullet ]]; then msg_error "No ${APP} Installation Found!"; exit; fi
+  if [[ ! -d /opt/silverbullet ]]; then msg_error "Отсутствует установленная версия ${APP}"; exit; fi
   RELEASE=$(curl -s https://api.github.com/repos/silverbulletmd/silverbullet/releases/latest | grep "tag_name" | awk '{print substr($2, 2, length($2)-3) }')
   if [[ ! -f "/opt/${APP}_version.txt" || "${RELEASE}" != "$(cat /opt/${APP}_version.txt)" ]]; then
-    msg_info "Stopping ${APP}"
+    msg_info "Останавливаю работу приложения ${APP}"
     systemctl stop silverbullet
-    msg_ok "Stopped ${APP}"
+    msg_ok "Приложение ${APP} остановлено"
 
-    msg_info "Updating ${APP} to v${RELEASE}"
+    msg_info "Обновляю ${APP} to v${RELEASE}"
     wget -q https://github.com/silverbulletmd/silverbullet/releases/download/${RELEASE}/silverbullet-server-linux-x86_64.zip
     unzip -q silverbullet-server-linux-x86_64.zip
     mv silverbullet /opt/silverbullet/bin/
@@ -42,9 +42,9 @@ function update_script() {
     echo "${RELEASE}" >/opt/silverbullet/${APP}_version.txt
     msg_ok "Updated ${APP} to v${RELEASE}"
 
-    msg_info "Starting ${APP}"
+    msg_info "Запускаю ${APP}"
     systemctl start silverbullet
-    msg_ok "Started ${APP}"
+    msg_ok "Запустил ${APP}"
   else
     msg_ok "No update required. ${APP} is already at v${RELEASE}"
   fi
@@ -55,7 +55,7 @@ start
 build_container
 description
 
-msg_ok "Completed Successfully!\n"
-echo -e "${CREATING}${GN}${APP} setup has been successfully initialized!${CL}"
-echo -e "${INFO}${YW} Access it using the following URL:${CL}"
+msg_ok "Установка успешно завершена!\n"
+echo -e "${CREATING}${GN}${APP} Установка успешно завершена!${CL}"
+echo -e "${INFO}${YW} Сервис доступен по ссылке:${CL}"
 echo -e "${TAB}${GATEWAY}${BGN}http://${IP}:3000${CL}"

@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: kristocopani
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
 color
@@ -13,7 +13,7 @@ setting_up_container
 network_check
 update_os
 
-msg_info "Installing Dependencies"
+msg_info "Устанавливаю зависимости(необходимое ПО).."
 $STD apt-get install -y \
     curl \
     mc \
@@ -21,10 +21,10 @@ $STD apt-get install -y \
     default-jdk \
     git \
     git-lfs
-msg_ok "Installed Dependencies"
+msg_ok "Зависимости(необходимое ПО) установлены."
 
 
-msg_info "Installing OneDev"
+msg_info "Устанавливаю OneDev"
 cd /opt
 wget -q https://code.onedev.io/onedev/server/~site/onedev-latest.tar.gz
 tar -xzf onedev-latest.tar.gz
@@ -42,4 +42,4 @@ msg_info "Cleaning up"
 rm -rf /opt/onedev-latest.tar.gz
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
-msg_ok "Cleaned"
+msg_ok "Временные файлы установки - удалены!"

@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/misc/build.func)
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 # Source: https://github.com/juanfont/headscale
 
 # App Default Values
@@ -29,28 +29,28 @@ function update_script() {
   check_container_storage
   check_container_resources
   if [[ ! -d /etc/headscale ]]; then
-    msg_error "No ${APP} Installation Found!"
+    msg_error "Отсутствует установленная версия ${APP}"
     exit
   fi
   RELEASE=$(curl -s https://api.github.com/repos/juanfont/headscale/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
   if [[ "${RELEASE}" != "$(cat /opt/${APP}_version.txt)" ]] || [[ ! -f /opt/${APP}_version.txt ]]; then
-    msg_info "Stopping ${APP}"
+    msg_info "Останавливаю работу приложения ${APP}"
     systemctl stop headscale
-    msg_ok "Stopped ${APP}"
+    msg_ok "Приложение ${APP} остановлено"
 
-    msg_info "Updating $APP to v${RELEASE}"
+    msg_info "Обновляю $APP to v${RELEASE}"
     wget -q https://github.com/juanfont/headscale/releases/download/v${RELEASE}/headscale_${RELEASE}_linux_amd64.deb
     dpkg -i headscale_${RELEASE}_linux_amd64.deb
     rm headscale_${RELEASE}_linux_amd64.deb
     echo "${RELEASE}" >/opt/${APP}_version.txt
     msg_ok "Updated $APP to ${RELEASE}"
 
-    msg_info "Starting ${APP}"
+    msg_info "Запускаю ${APP}"
     systemctl start headscale
-    msg_ok "Started ${APP}"
-    msg_ok "Updated Successfully"
+    msg_ok "Запустил ${APP}"
+    msg_ok "Приложение успешно обновлено!"
   else
-    msg_ok "No update required. ${APP} is already at ${RELEASE}"
+    msg_ok "Обновление не требуется. ${APP} уже последней версии ${RELEASE}"
   fi
   exit
 }
@@ -59,5 +59,5 @@ start
 build_container
 description
 
-msg_ok "Completed Successfully!\n"
-echo -e "${CREATING}${GN}${APP} setup has been successfully initialized!${CL}"
+msg_ok "Установка успешно завершена!\n"
+echo -e "${CREATING}${GN}${APP} Установка успешно завершена!${CL}"

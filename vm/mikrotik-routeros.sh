@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 
 function header_info {
   cat <<"EOF"
@@ -17,7 +17,7 @@ EOF
 }
 clear
 header_info
-echo -e "Loading..."
+echov -e "Загрузка..."
 GEN_MAC=$(echo '00 60 2f'$(od -An -N3 -t xC /dev/urandom) | sed -e 's/ /:/g' | tr '[:lower:]' '[:upper:]')
 NEXTID=$(pvesh get /cluster/nextid)
 YW=$(echo "\033[33m")
@@ -64,12 +64,12 @@ TEMP_DIR=$(mktemp -d)
 pushd $TEMP_DIR >/dev/null
 if ! pveversion | grep -Eq "pve-manager/8.[1-3]"; then
   msg_error "This version of Proxmox Virtual Environment is not supported"
-  echo -e "Requires Proxmox Virtual Environment Version 8.1 or later."
+  echo -e "Требуется Proxmox Virtual Environment версии 8.1 и выше."
   echo -e "Exiting..."
   sleep 2
   exit
 fi
-if (whiptail --backtitle "Proxmox VE Helper Scripts" --title "Mikrotik RouterOS CHR VM" --yesno "This will create a New Mikrotik RouterOS CHR VM. Proceed?" 10 58); then
+if (whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --title "Mikrotik RouterOS CHR VM" --yesno "This will create a New Mikrotik RouterOS CHR VM. Proceed?" 10 58); then
   echo "User selected Yes"
 else
   clear
@@ -107,14 +107,14 @@ function default_settings() {
   echo -e "${BL}Creating a Mikrotik RouterOS CHR VM using the above default settings${CL}"
 }
 function advanced_settings() {
-  VMID=$(whiptail --backtitle "Proxmox VE Helper Scripts" --inputbox "Set Virtual Machine ID" 8 58 $NEXTID --title "VIRTUAL MACHINE ID" 3>&1 1>&2 2>&3)
+  VMID=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --inputbox "Set Virtual Machine ID" 8 58 $NEXTID --title "VIRTUAL MACHINE ID" 3>&1 1>&2 2>&3)
   exitstatus=$?
   if [ $exitstatus = 0 ]; then
     echo -e "${DGN}Using Virtual Machine ID: ${BGN}$VMID${CL}"
   else
     exit
   fi
-  VM_NAME=$(whiptail --backtitle "Proxmox VE Helper Scripts" --inputbox "Set Hostname" 8 58 mikrotik-routeros-chr --title "HOSTNAME" 3>&1 1>&2 2>&3)
+  VM_NAME=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --inputbox "Укажите имя хоста(hostname)" 8 58 mikrotik-routeros-chr --title "ИМЯ ХОСТА(HOSTNAME)" 3>&1 1>&2 2>&3)
   exitstatus=$?
   if [ $exitstatus = 0 ]; then
     HN=$(echo ${VM_NAME,,} | tr -d ' ')
@@ -122,28 +122,28 @@ function advanced_settings() {
   else
     exit
   fi
-  CORE_COUNT=$(whiptail --backtitle "Proxmox VE Helper Scripts" --inputbox "Allocate CPU Cores" 8 58 2 --title "CORE COUNT" 3>&1 1>&2 2>&3)
+  CORE_COUNT=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --inputbox "Укажите кол-во процессорных ядер(CPU count)" 8 58 2 --title "КОЛИЧЕСТВО ПРОЦЕССОРНЫХ ЯДЕР(CPU COUNT)" 3>&1 1>&2 2>&3)
   exitstatus=$?
   if [ $exitstatus = 0 ]; then
     echo -e "${DGN}Allocated Cores: ${BGN}$CORE_COUNT${CL}"
   else
     exit
   fi
-  RAM_SIZE=$(whiptail --backtitle "Proxmox VE Helper Scripts" --inputbox "Allocate RAM in MiB" 8 58 512 --title "RAM" 3>&1 1>&2 2>&3)
+  RAM_SIZE=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --inputbox "Укажите ОЗУ в MiB" 8 58 512 --title "ОЗУ" 3>&1 1>&2 2>&3)
   exitstatus=$?
   if [ $exitstatus = 0 ]; then
     echo -e "${DGN}Allocated RAM: ${BGN}$RAM_SIZE${CL}"
   else
     exit
   fi
-  BRG=$(whiptail --backtitle "Proxmox VE Helper Scripts" --inputbox "Set a Bridge" 8 58 vmbr0 --title "BRIDGE" 3>&1 1>&2 2>&3)
+  BRG=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --inputbox "Укажите сетевой мост(bridge)" 8 58 vmbr0 --title "СЕТЕВОЙ МОСТ(BRIDGE)" 3>&1 1>&2 2>&3)
   exitstatus=$?
   if [ $exitstatus = 0 ]; then
     echo -e "${DGN}Using Bridge: ${BGN}$BRG${CL}"
   else
     exit
   fi
-  MAC1=$(whiptail --backtitle "Proxmox VE Helper Scripts" --inputbox "Set a MAC Address" 8 58 $GEN_MAC --title "MAC ADDRESS" 3>&1 1>&2 2>&3)
+  MAC1=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --inputbox "Set a MAC Address" 8 58 $GEN_MAC --title "MAC АДРЕС" 3>&1 1>&2 2>&3)
   exitstatus=$?
   if [ $exitstatus = 0 ]; then
     MAC="$MAC1"
@@ -151,7 +151,7 @@ function advanced_settings() {
   else
     exit
   fi
-  VLAN1=$(whiptail --backtitle "Proxmox VE Helper Scripts" --inputbox "Set a Vlan(leave blank for default)" 8 58 --title "VLAN" 3>&1 1>&2 2>&3)
+  VLAN1=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --inputbox "Укажите Vlan(оставьте пустым для использования параметров по умолчанию)" 8 58 --title "VLAN" 3>&1 1>&2 2>&3)
   exitstatus=$?
   if [ $exitstatus = 0 ]; then
     if [ -z $VLAN1 ]; then
@@ -162,7 +162,7 @@ function advanced_settings() {
       echo -e "${DGN}Using Vlan: ${BGN}$VLAN1${CL}"
     fi
   fi
-  MTU1=$(whiptail --backtitle "Proxmox VE Helper Scripts" --inputbox "Set Interface MTU Size (leave blank for default)" 8 58 --title "MTU SIZE" --cancel-button Exit-Script 3>&1 1>&2 2>&3)
+  MTU1=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --inputbox "Set Interface MTU Size (оставьте пустым для использования параметров по умолчанию)" 8 58 --title "MTU SIZE" --cancel-button Exit-Script 3>&1 1>&2 2>&3)
   exitstatus=$?
   if [ $exitstatus = 0 ]; then
     if [ -z $MTU1 ]; then
@@ -173,14 +173,14 @@ function advanced_settings() {
       echo -e "${DGN}Using Interface MTU Size: ${BGN}$MTU1${CL}"
     fi
   fi
-  if (whiptail --backtitle "Proxmox VE Helper Scripts" --title "START VIRTUAL MACHINE" --yesno "Start Mikrotik RouterOS CHR VM when completed?" 10 58); then
+  if (whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --title "START VIRTUAL MACHINE" --yesno "Start Mikrotik RouterOS CHR VM when completed?" 10 58); then
     echo -e "${DGN}Start Mikrotik RouterOS CHR VM when completed: ${BGN}yes${CL}"
     START_VM="yes"
   else
     echo -e "${DGN}Start Mikrotik RouterOS CHR VM when completed: ${BGN}no${CL}"
     START_VM="no"
   fi
-  if (whiptail --backtitle "Proxmox VE Helper Scripts" --title "ADVANCED SETTINGS COMPLETE" --yesno "Ready to create Mikrotik RouterOS VM?" 10 58); then
+  if (whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --title "РАСШИРЕННЫЕ НАСТРОЙКИ ЗАВЕРШЕНЫ" --yesno "Ready to create Mikrotik RouterOS VM?" 10 58); then
     echo -e "${RD}Creating Mikrotik RouterOS CHR VM using the above advanced settings${CL}"
   else
     clear
@@ -190,7 +190,7 @@ function advanced_settings() {
   fi
 }
 function start_script() {
-  if (whiptail --backtitle "Proxmox VE Helper Scripts" --title "SETTINGS" --yesno "Use Default Settings?" --no-button Advanced 10 58); then
+  if (whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --title "НАСТРОЙКИ" --yesno "Use Default Settings?" --no-button Advanced 10 58); then
     clear
     header_info
     echo -e "${BL}Using Default Settings${CL}"
@@ -203,7 +203,7 @@ function start_script() {
   fi
 }
 start_script
-msg_info "Validating Storage"
+msg_info "Проверяю Хранилище"
 while read -r line; do
   TAG=$(echo $line | awk '{print $1}')
   TYPE=$(echo $line | awk '{printf "%-10s", $2}')
@@ -224,7 +224,7 @@ elif [ $((${#STORAGE_MENU[@]} / 3)) -eq 1 ]; then
   STORAGE=${STORAGE_MENU[0]}
 else
   while [ -z "${STORAGE:+x}" ]; do
-    STORAGE=$(whiptail --backtitle "Proxmox VE Helper Scripts" --title "Storage Pools" --radiolist \
+    STORAGE=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --title "ХРАНИЛИЩЕ ДЛЯ ДАННЫХ" --radiolist \
       "Which storage pool you would like to use for the Mikrotik RouterOS CHR VM?\n\n" \
       16 $(($MSG_MAX_LENGTH + 23)) 6 \
       "${STORAGE_MENU[@]}" 3>&1 1>&2 2>&3) || exit
@@ -275,7 +275,7 @@ qm importdisk $VMID ${FILE%.*} $STORAGE ${DISK_IMPORT:-} 1>&/dev/null
 qm set $VMID \
   -scsi0 "$DISK_REF" \
   -boot order=scsi0 \
-  -description "<div align='center'><a href='https://Helper-Scripts.com'><img src='https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/images/logo-81x112.png'/></a>
+  -description "<div align='center'><a href='https://www.samohosting.ru'><img src='https://raw.githubusercontent.com/LiaGen/samohosting/refs/heads/main/samohostinglogo6round.png'/></a>
 
   # Mikrotik RouterOS CHR
 
@@ -283,8 +283,8 @@ qm set $VMID \
   </div>" >/dev/null
 msg_ok "Mikrotik RouterOS CHR VM ${CL}${BL}(${HN})"
 if [ "$START_VM" == "yes" ]; then
-  msg_info "Starting Mikrotik RouterOS CHR VM"
+  msg_info "Запускаю Mikrotik RouterOS CHR VM"
   qm start $VMID
-  msg_ok "Started Mikrotik RouterOS CHR VM"
+  msg_ok "Запустил Mikrotik RouterOS CHR VM"
 fi
-msg_ok "Completed Successfully!\n"
+msg_ok "Установка успешно завершена!\n"

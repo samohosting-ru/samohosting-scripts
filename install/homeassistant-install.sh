@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
 color
@@ -13,13 +13,13 @@ setting_up_container
 network_check
 update_os
 
-msg_info "Installing Dependencies"
+msg_info "Устанавливаю зависимости(необходимое ПО).."
 $STD apt-get install -y curl
 $STD apt-get install -y sudo
 $STD apt-get install -y mc
-msg_ok "Installed Dependencies"
+msg_ok "Зависимости(необходимое ПО) установлены."
 
-msg_info "Updating Python3"
+msg_info "Обновляю Python3"
 $STD apt-get install -y \
   python3 \
   python3-dev \
@@ -28,7 +28,7 @@ $STD apt-get install -y \
 rm -rf /usr/lib/python3.*/EXTERNALLY-MANAGED
 msg_ok "Updated Python3"
 
-msg_info "Installing runlike"
+msg_info "Устанавливаю runlike"
 $STD pip install runlike
 msg_ok "Installed runlike"
 
@@ -40,7 +40,7 @@ DOCKER_LATEST_VERSION=$(get_latest_release "moby/moby")
 CORE_LATEST_VERSION=$(get_latest_release "home-assistant/core")
 PORTAINER_LATEST_VERSION=$(get_latest_release "portainer/portainer")
 
-msg_info "Installing Docker $DOCKER_LATEST_VERSION"
+msg_info "Устанавливаю Docker $DOCKER_LATEST_VERSION"
 DOCKER_CONFIG_PATH='/etc/docker/daemon.json'
 mkdir -p $(dirname $DOCKER_CONFIG_PATH)
 echo -e '{\n  "log-driver": "journald"\n}' >/etc/docker/daemon.json
@@ -51,7 +51,7 @@ msg_info "Pulling Portainer $PORTAINER_LATEST_VERSION Image"
 $STD docker pull portainer/portainer-ce:latest
 msg_ok "Pulled Portainer $PORTAINER_LATEST_VERSION Image"
 
-msg_info "Installing Portainer $PORTAINER_LATEST_VERSION"
+msg_info "Устанавливаю Portainer $PORTAINER_LATEST_VERSION"
 $STD docker volume create portainer_data
 $STD docker run -d \
   -p 8000:8000 \
@@ -67,7 +67,7 @@ msg_info "Pulling Home Assistant $CORE_LATEST_VERSION Image"
 $STD docker pull ghcr.io/home-assistant/home-assistant:stable
 msg_ok "Pulled Home Assistant $CORE_LATEST_VERSION Image"
 
-msg_info "Installing Home Assistant $CORE_LATEST_VERSION"
+msg_info "Устанавливаю Home Assistant $CORE_LATEST_VERSION"
 $STD docker volume create hass_config
 $STD docker run -d \
   --name homeassistant \
@@ -88,4 +88,4 @@ customize
 msg_info "Cleaning up"
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
-msg_ok "Cleaned"
+msg_ok "Временные файлы установки - удалены!"

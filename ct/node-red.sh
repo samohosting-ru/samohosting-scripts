@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/misc/build.func)
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 # Source: https://nodered.org/
 
 # App Default Values
@@ -29,37 +29,37 @@ function update_script() {
   check_container_storage
   check_container_resources
   if [[ ! -d /root/.node-red ]]; then
-    msg_error "No ${APP} Installation Found!"
+    msg_error "Отсутствует установленная версия ${APP}"
     exit
   fi
-  UPD=$(whiptail --backtitle "Proxmox VE Helper Scripts" --title "SUPPORT" --radiolist --cancel-button Exit-Script "Spacebar = Select" 11 58 2 \
+  UPD=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --title "ПОДДЕРЖКА" --radiolist --cancel-button Exit-Script "Spacebar = Select" 11 58 2 \
     "1" "Update ${APP}" ON \
     "2" "Install Themes" OFF \
     3>&1 1>&2 2>&3)
   if [ "$UPD" == "1" ]; then
     if [[ "$(node -v | cut -d 'v' -f 2)" == "18."* ]]; then
       if ! command -v npm >/dev/null 2>&1; then
-        msg_info "Installing NPM"
+        msg_info "Устанавливаю NPM"
         apt-get install -y npm >/dev/null 2>&1
         msg_ok "Installed NPM"
       fi
     fi
-    msg_info "Stopping ${APP}"
+    msg_info "Останавливаю работу приложения ${APP}"
     systemctl stop nodered
-    msg_ok "Stopped ${APP}"
+    msg_ok "Приложение ${APP} остановлено"
 
-    msg_info "Updating ${APP}"
+    msg_info "Обновляю ${APP}"
     npm install -g --unsafe-perm node-red &>/dev/null
     msg_ok "Updated ${APP}"
 
-    msg_info "Starting ${APP}"
+    msg_info "Запускаю ${APP}"
     systemctl start nodered
-    msg_ok "Started ${APP}"
+    msg_ok "Запустил ${APP}"
     msg_ok "Update Successful"
     exit
   fi
   if [ "$UPD" == "2" ]; then
-    THEME=$(whiptail --backtitle "Proxmox VE Helper Scripts" --title "NODE-RED THEMES" --radiolist --cancel-button Exit-Script "Choose Theme" 15 58 6 \
+    THEME=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --title "NODE-RED THEMES" --radiolist --cancel-button Exit-Script "Choose Theme" 15 58 6 \
       "aurora" "" OFF \
       "cobalt2" "" OFF \
       "dark" "" OFF \
@@ -86,7 +86,7 @@ function update_script() {
       "zenburn" "" OFF \
       3>&1 1>&2 2>&3)
     header_info
-    msg_info "Installing ${THEME} Theme"
+    msg_info "Устанавливаю ${THEME} Theme"
     cd /root/.node-red
     sed -i 's|// theme: ".*",|theme: "",|g' /root/.node-red/settings.js
     npm install @node-red-contrib-themes/theme-collection &>/dev/null
@@ -101,7 +101,7 @@ start
 build_container
 description
 
-msg_ok "Completed Successfully!\n"
-echo -e "${CREATING}${GN}${APP} setup has been successfully initialized!${CL}"
-echo -e "${INFO}${YW} Access it using the following URL:${CL}"
+msg_ok "Установка успешно завершена!\n"
+echo -e "${CREATING}${GN}${APP} Установка успешно завершена!${CL}"
+echo -e "${INFO}${YW} Сервис доступен по ссылке:${CL}"
 echo -e "${TAB}${GATEWAY}${BGN}http://${IP}:1880${CL}"

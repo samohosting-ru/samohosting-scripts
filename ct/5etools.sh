@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/misc/build.func)
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: TheRealVira
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 # Source: https://5e.tools/
 
 # App Default Values
@@ -31,20 +31,20 @@ function update_script() {
 
     # Check if installation is present | -f for file, -d for folder
     if [[ ! -d "/opt/${APP}" ]]; then
-        msg_error "No ${APP} Installation Found!"
+        msg_error "Отсутствует установленная версия ${APP}"
         exit
     fi
 
     RELEASE=$(curl -s https://api.github.com/repos/5etools-mirror-3/5etools-src/releases/latest | grep "tag_name" | awk '{print substr($2, 2, length($2)-3) }')
     if [[ "${RELEASE}" != "$(cat /opt/${APP}_version.txt)" ]] || [[ ! -f "/opt/${APP}_version.txt" ]]; then
         # Crawling the new version and checking whether an update is required
-        msg_info "Updating System"
+        msg_info "Обновляю System"
         apt-get update &>/dev/null
         apt-get -y upgrade &>/dev/null
-        msg_ok "Updated System"
+        msg_ok "Система обновлена"
 
         # Execute Update
-        msg_info "Updating base 5etools"
+        msg_info "Обновляю base 5etools"
         cd /opt
         wget -q "https://github.com/5etools-mirror-3/5etools-src/archive/refs/tags/${RELEASE}.zip"
         unzip -q "${RELEASE}.zip"
@@ -61,25 +61,25 @@ function update_script() {
         chmod -R 755 "/opt/${APP}"
         msg_ok "Updated base 5etools"
         # Cleaning up
-        msg_info "Cleaning Up"
+        msg_info "Провожу уборку. Удаляю временные файлы установки"
         rm -rf /opt/${RELEASE}.zip
         $STD apt-get -y autoremove
         $STD apt-get -y autoclean
-        msg_ok "Cleanup Completed"
+        msg_ok "Временные файлы установки - удалены!"
     else
-        msg_ok "No update required. Base ${APP} is already at ${RELEASE}"
+        msg_ok "Обновление не требуется. База приложение ${APP} уже последней версии ${RELEASE}"
     fi
 
     IMG_RELEASE=$(curl -s https://api.github.com/repos/5etools-mirror-2/5etools-img/releases/latest | grep "tag_name" | awk '{print substr($2, 2, length($2)-3) }')
     if [[ "${IMG_RELEASE}" != "$(cat /opt/${APP}_IMG_version.txt)" ]] || [[ ! -f "/opt/${APP}_IMG_version.txt" ]]; then
         # Crawling the new version and checking whether an update is required
-        msg_info "Updating System"
+        msg_info "Обновляю System"
         apt-get update &>/dev/null
         apt-get -y upgrade &>/dev/null
-        msg_ok "Updated System"
+        msg_ok "Система обновлена"
 
         # Execute Update
-        msg_info "Updating 5etools images"
+        msg_info "Обновляю 5etools images"
         curl -sSL "https://github.com/5etools-mirror-2/5etools-img/archive/refs/tags/${IMG_RELEASE}.zip" > "${IMG_RELEASE}.zip"
         unzip -q "${IMG_RELEASE}.zip"
         rm -rf "/opt/${APP}/img"
@@ -88,17 +88,17 @@ function update_script() {
         chown -R www-data: "/opt/${APP}"
         chmod -R 755 "/opt/${APP}"
 
-        msg_ok "Updating 5etools images"
+        msg_ok "Обновляю  5etools images"
 
         # Cleaning up
-        msg_info "Cleaning Up"
+        msg_info "Провожу уборку. Удаляю временные файлы установки"
         rm -rf /opt/${RELEASE}.zip
         rm -rf ${IMG_RELEASE}.zip
         $STD apt-get -y autoremove
         $STD apt-get -y autoclean
-        msg_ok "Cleanup Completed"
+        msg_ok "Временные файлы установки - удалены!"
     else
-        msg_ok "No update required. ${APP} images are already at ${IMG_RELEASE}"
+        msg_ok "Обновление не требуется. ${APP} уже последней версии ${IMG_RELEASE}"
     fi
 
 }
@@ -107,7 +107,7 @@ start
 build_container
 description
 
-msg_ok "Completed Successfully!\n"
-echo -e "${CREATING}${GN}${APP} setup has been successfully initialized!${CL}"
-echo -e "${INFO}${YW} Access it using the following URL:${CL}"
+msg_ok "Установка успешно завершена!\n"
+echo -e "${CREATING}${GN}${APP} Установка успешно завершена!${CL}"
+echo -e "${INFO}${YW} Сервис доступен по ссылке:${CL}"
 echo -e "${TAB}${GATEWAY}${BGN}http://${IP}${CL}"

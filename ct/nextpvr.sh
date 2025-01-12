@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/misc/build.func)
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: MickLesk (Canbiz)
 # License: MIT
@@ -30,32 +30,32 @@ function update_script() {
     check_container_storage
     check_container_resources
     if [[ ! -d /opt/nextpvr ]]; then
-        msg_error "No ${APP} Installation Found!"
+        msg_error "Отсутствует установленная версия ${APP}"
         exit
     fi
-    msg_info "Stopping ${APP}"
+    msg_info "Останавливаю работу приложения ${APP}"
     systemctl stop nextpvr-server
-    msg_ok "Stopped ${APP}"
+    msg_ok "Приложение ${APP} остановлено"
 
-    msg_info "Updating LXC packages"
+    msg_info "Обновляю LXC packages"
     apt-get update &>/dev/null
     apt-get -y upgrade &>/dev/null
     msg_ok "Updated LXC packages"
 
-    msg_info "Updating ${APP}"
+    msg_info "Обновляю ${APP}"
     cd /opt
     wget -q https://nextpvr.com/nextpvr-helper.deb
     dpkg -i nextpvr-helper.deb &>/dev/null
     msg_ok "Updated ${APP}"
 
-    msg_info "Starting ${APP}"
+    msg_info "Запускаю ${APP}"
     systemctl start nextpvr-server
-    msg_ok "Started ${APP}"
+    msg_ok "Запустил ${APP}"
 
-    msg_info "Cleaning Up"
+    msg_info "Провожу уборку. Удаляю временные файлы установки"
     rm -rf /opt/nextpvr-helper.deb
-    msg_ok "Cleaned"
-    msg_ok "Updated Successfully"
+    msg_ok "Временные файлы установки - удалены!"
+    msg_ok "Приложение успешно обновлено!"
     exit
 }
 
@@ -63,7 +63,7 @@ start
 build_container
 description
 
-msg_ok "Completed Successfully!\n"
-echo -e "${CREATING}${GN}${APP} setup has been successfully initialized!${CL}"
-echo -e "${INFO}${YW} Access it using the following URL:${CL}"
+msg_ok "Установка успешно завершена!\n"
+echo -e "${CREATING}${GN}${APP} Установка успешно завершена!${CL}"
+echo -e "${INFO}${YW} Сервис доступен по ссылке:${CL}"
 echo -e "${TAB}${GATEWAY}${BGN}http://${IP}:8866${CL}"

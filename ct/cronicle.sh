@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/misc/build.func)
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 # Source: https://cronicle.net/
 
 # App Default Values
@@ -28,14 +28,14 @@ function update_script() {
   header_info
   check_container_storage
   check_container_resources
-  UPD=$(whiptail --backtitle "Proxmox VE Helper Scripts" --title "SUPPORT" --radiolist --cancel-button Exit-Script "Spacebar = Select" 11 58 2 \
+  UPD=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --title "ПОДДЕРЖКА" --radiolist --cancel-button Exit-Script "Spacebar = Select" 11 58 2 \
     "1" "Update ${APP}" ON \
     "2" "Install ${APP} Worker" OFF \
     3>&1 1>&2 2>&3)
 
   if [ "$UPD" == "1" ]; then
     if [[ ! -d /opt/cronicle ]]; then
-      msg_error "No ${APP} Installation Found!"
+      msg_error "Отсутствует установленная версия ${APP}"
       exit
     fi
     if [[ "$(node -v | cut -d 'v' -f 2)" == "18."* ]]; then
@@ -45,7 +45,7 @@ function update_script() {
         echo "Installed NPM..."
       fi
     fi
-    msg_info "Updating ${APP}"
+    msg_info "Обновляю ${APP}"
     /opt/cronicle/bin/control.sh upgrade &>/dev/null
     msg_ok "Updated ${APP}"
     exit
@@ -60,7 +60,7 @@ function update_script() {
     fi
     LATEST=$(curl -sL https://api.github.com/repos/jhuckaby/Cronicle/releases/latest | grep '"tag_name":' | cut -d'"' -f4)
     IP=$(hostname -I | awk '{print $1}')
-    msg_info "Installing Dependencies"
+    msg_info "Устанавливаю зависимости(необходимое ПО).."
 
     apt-get install -y git &>/dev/null
     apt-get install -y make &>/dev/null
@@ -68,20 +68,20 @@ function update_script() {
     apt-get install -y gcc &>/dev/null
     apt-get install -y ca-certificates &>/dev/null
     apt-get install -y gnupg &>/dev/null
-    msg_ok "Installed Dependencies"
+    msg_ok "Зависимости(необходимое ПО) установлены."
 
-    msg_info "Setting up Node.js Repository"
+    msg_info "Настраиваю Node.js Репозиторий"
     mkdir -p /etc/apt/keyrings
     curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
     echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" >/etc/apt/sources.list.d/nodesource.list
-    msg_ok "Set up Node.js Repository"
+    msg_ok "Репозиторий Node.js настроен"
 
-    msg_info "Installing Node.js"
+    msg_info "Устанавливаю Node.js"
     apt-get update &>/dev/null
     apt-get install -y nodejs &>/dev/null
-    msg_ok "Installed Node.js"
+    msg_ok "Node.js установлен"
 
-    msg_info "Installing Cronicle Worker"
+    msg_info "Устанавливаю Cronicle Worker"
     mkdir -p /opt/cronicle
     cd /opt/cronicle
     tar zxvf <(curl -fsSL https://github.com/jhuckaby/Cronicle/archive/${LATEST}.tar.gz) --strip-components 1 &>/dev/null
@@ -102,7 +102,7 @@ start
 build_container
 description
 
-msg_ok "Completed Successfully!\n"
-echo -e "${CREATING}${GN}${APP} setup has been successfully initialized!${CL}"
-echo -e "${INFO}${YW} Access it using the following URL:${CL}"
+msg_ok "Установка успешно завершена!\n"
+echo -e "${CREATING}${GN}${APP} Установка успешно завершена!${CL}"
+echo -e "${INFO}${YW} Сервис доступен по ссылке:${CL}"
 echo -e "${TAB}${GATEWAY}${BGN}http://${IP}:3012${CL}"

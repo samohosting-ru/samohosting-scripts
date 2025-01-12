@@ -4,7 +4,7 @@
 # Author: tteck
 # Co-Author: MickLesk (Canbiz)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 # Source: https://github.com/Donkie/Spoolman
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
@@ -15,7 +15,7 @@ setting_up_container
 network_check
 update_os
 
-msg_info "Installing Dependencies"
+msg_info "Устанавливаю зависимости(необходимое ПО).."
 $STD apt-get install -y \
   build-essential \
   curl \
@@ -25,9 +25,9 @@ $STD apt-get install -y \
   gpg \
   ca-certificates \
   mc
-msg_ok "Installed Dependencies"
+msg_ok "Зависимости(необходимое ПО) установлены."
 
-msg_info "Installing Python3"
+msg_info "Устанавливаю Python3"
 $STD apt-get install -y \
   python3-dev \
   python3-setuptools \
@@ -35,7 +35,7 @@ $STD apt-get install -y \
   python3-pip
 msg_ok "Installed Python3"
 
-msg_info "Installing Spoolman"
+msg_info "Устанавливаю Spoolman"
 RELEASE=$(wget -q https://github.com/Donkie/Spoolman/releases/latest -O - | grep "title>Release" | cut -d " " -f 4)
 cd /opt
 wget -q https://github.com/Donkie/Spoolman/releases/download/$RELEASE/spoolman.zip
@@ -71,4 +71,4 @@ customize
 msg_info "Cleaning up"
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
-msg_ok "Cleaned"
+msg_ok "Временные файлы установки - удалены!"

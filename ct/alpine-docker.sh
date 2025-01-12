@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/misc/build.func)
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 
 # App Default Values
 APP="Alpine-Docker"
@@ -29,7 +29,7 @@ function update_script() {
   fi
   while true; do
     CHOICE=$(
-      whiptail --backtitle "Proxmox VE Helper Scripts" --title "SUPPORT" --menu "Select option" 11 58 1 \
+      whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --title "ПОДДЕРЖКА" --menu "Select option" 11 58 1 \
         "1" "Check for Docker Updates" 3>&2 2>&1 1>&3
     )
     exit_status=$?
@@ -51,4 +51,4 @@ start
 build_container
 description
 
-msg_ok "Completed Successfully!\n"
+msg_ok "Установка успешно завершена!\n"

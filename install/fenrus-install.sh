@@ -4,7 +4,7 @@
 # Author: tteck (tteckster)
 # Co-Author: Scorpoon
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 # Source: https://github.com/revenz/Fenrus
 
 
@@ -17,14 +17,14 @@ setting_up_container
 network_check
 update_os
 
-msg_info "Installing Dependencies"
+msg_info "Устанавливаю зависимости(необходимое ПО).."
 $STD apt-get install -y sudo
 $STD apt-get install -y mc
 $STD apt-get install -y curl
 $STD apt-get install -y git
-msg_ok "Installed Dependencies"
+msg_ok "Зависимости(необходимое ПО) установлены."
 
-msg_info "Installing ASP.NET Core 7 SDK"
+msg_info "Устанавливаю ASP.NET Core 7 SDK"
 var_os=$(grep "^ID=" /etc/os-release | cut -d'=' -f2 | tr -d '"')
 var_version=$(grep "^VERSION_ID=" /etc/os-release | cut -d'=' -f2 | tr -d '"')
 if [ "${var_os}" = "debian" ]; then
@@ -36,7 +36,7 @@ $STD apt-get update
 $STD apt-get install -y dotnet-sdk-7.0
 msg_ok "Installed ASP.NET Core 7 SDK"
 
-msg_info "Installing ${APPLICATION}"
+msg_info "Устанавливаю ${APPLICATION}"
 git clone -q https://github.com/revenz/Fenrus.git /opt/${APPLICATION}
 cd /opt/${APPLICATION}
 $STD dotnet publish -c Release -o "/opt/${APPLICATION}/" Fenrus.csproj
@@ -65,4 +65,4 @@ customize
 msg_info "Cleaning up"
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
-msg_ok "Cleaned"
+msg_ok "Временные файлы установки - удалены!"

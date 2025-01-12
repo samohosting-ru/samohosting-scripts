@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 
 source /dev/stdin <<< "$FUNCTIONS_FILE_PATH"
 color
@@ -13,14 +13,14 @@ setting_up_container
 network_check
 update_os
 
-msg_info "Installing Dependencies"
+msg_info "Устанавливаю зависимости(необходимое ПО).."
 $STD apt-get install -y \
   curl \
   sudo \
   mc
-msg_ok "Installed Dependencies"
+msg_ok "Зависимости(необходимое ПО) установлены."
 
-msg_info "Installing Zabbix"
+msg_info "Устанавливаю Zabbix"
 cd /tmp
 wget -q https://repo.zabbix.com/zabbix/7.2/release/debian/pool/main/z/zabbix-release/zabbix-release_latest+debian12_all.deb
 $STD dpkg -i /tmp/zabbix-release_latest+debian12_all.deb
@@ -51,10 +51,10 @@ echo -e "zabbix Database Password: \e[32m$DB_PASS\e[0m" >>~/zabbix.creds
 echo -e "zabbix Database Name: \e[32m$DB_NAME\e[0m" >>~/zabbix.creds
 msg_ok "Set up PostgreSQL"
 
-msg_info "Starting Services"
+msg_info "Запускаю Services"
 systemctl restart zabbix-server zabbix-agent2 apache2
 systemctl enable -q --now zabbix-server zabbix-agent2 apache2
-msg_ok "Started Services"
+msg_ok "Запустил Services"
 
 motd_ssh
 customize
@@ -63,4 +63,4 @@ msg_info "Cleaning up"
 rm -rf /tmp/zabbix-release_latest+debian12_all.deb
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
-msg_ok "Cleaned"
+msg_ok "Временные файлы установки - удалены!"

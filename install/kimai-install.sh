@@ -13,7 +13,7 @@ setting_up_container
 network_check
 update_os
 
-msg_info "Installing Dependencies"
+msg_info "Устанавливаю зависимости(необходимое ПО).."
 $STD apt-get install -y \
   apt-transport-https \
   sudo \
@@ -26,7 +26,7 @@ $STD apt-get install -y \
   mariadb-server \
   libapache2-mod-php \
   php8.2-{mbstring,gd,intl,pdo,mysql,tokenizer,zip,xml} 
-msg_ok "Installed Dependencies"
+msg_ok "Зависимости(необходимое ПО) установлены."
 
 msg_info "Setting up database"
 DB_NAME=kimai_db
@@ -44,7 +44,7 @@ mysql -u root -e "GRANT ALL ON $DB_NAME.* TO '$DB_USER'@'localhost'; FLUSH PRIVI
 } >> ~/kimai.creds
 msg_ok "Set up database"
 
-msg_info "Installing Kimai (Patience)"
+msg_info "Устанавливаю Kimai (Patience)"
 RELEASE=$(curl -s https://api.github.com/repos/kimai/kimai/releases/latest | grep "tag_name" | awk '{print substr($2, 2, length($2)-3) }')
 wget -q "https://github.com/kimai/kimai/archive/refs/tags/${RELEASE}.zip"
 unzip -q ${RELEASE}.zip
@@ -104,4 +104,4 @@ msg_info "Cleaning up"
 rm -rf ${RELEASE}.zip
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
-msg_ok "Cleaned"
+msg_ok "Временные файлы установки - удалены!"

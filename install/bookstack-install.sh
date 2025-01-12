@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: MickLesk (Canbiz)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 
 source /dev/stdin <<< "$FUNCTIONS_FILE_PATH"
 color
@@ -13,7 +13,7 @@ setting_up_container
 network_check
 update_os
 
-msg_info "Installing Dependencies (Patience)"
+msg_info "Устанавливаю Dependencies (Patience)"
 $STD apt-get install -y \
   unzip \
   mariadb-server \
@@ -25,7 +25,7 @@ $STD apt-get install -y \
   libapache2-mod-php \
   make \
   mc
-msg_ok "Installed Dependencies"
+msg_ok "Зависимости(необходимое ПО) установлены."
 
 msg_info "Setting up Database"
 DB_NAME=bookstack
@@ -117,4 +117,4 @@ msg_info "Cleaning up"
 rm -rf /opt/v${RELEASE}.zip
 $STD apt-get autoremove
 $STD apt-get autoclean
-msg_ok "Cleaned"
+msg_ok "Временные файлы установки - удалены!"

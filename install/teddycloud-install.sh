@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: Dominik Siebel (dsiebel)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 
 source /dev/stdin <<< "$FUNCTIONS_FILE_PATH"
 color
@@ -13,7 +13,7 @@ setting_up_container
 network_check
 update_os
 
-msg_info "Installing Dependencies"
+msg_info "Устанавливаю зависимости(необходимое ПО).."
 $STD apt-get install -y \
   curl \
   sudo \
@@ -22,9 +22,9 @@ $STD apt-get install -y \
   ffmpeg \
   curl \
   ca-certificates
-msg_ok "Installed Dependencies"
+msg_ok "Зависимости(необходимое ПО) установлены."
 
-msg_info "Installing TeddyCloud"
+msg_info "Устанавливаю TeddyCloud"
 RELEASE="$(curl -s https://api.github.com/repos/toniebox-reverse-engineering/teddycloud/releases/latest | grep "tag_name" | awk '{print substr($2, 2, length($2)-3) }')"
 VERSION="${RELEASE#tc_v}"
 wget -q "https://github.com/toniebox-reverse-engineering/teddycloud/releases/download/${RELEASE}/teddycloud.amd64.release_v${VERSION}.zip"
@@ -59,4 +59,4 @@ msg_info "Cleaning up"
 $STD apt-get --yes autoremove
 $STD apt-get --yes autoclean
 rm -rf "teddycloud.amd64.release_v${VERSION}.zip"
-msg_ok "Cleaned"
+msg_ok "Временные файлы установки - удалены!"

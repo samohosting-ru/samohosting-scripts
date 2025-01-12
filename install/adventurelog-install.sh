@@ -4,7 +4,7 @@
 # Author: tteck
 # Co-Author: MickLesk (Canbiz)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 # Source: https://github.com/seanmorley15/AdventureLog
 
 source /dev/stdin <<< "$FUNCTIONS_FILE_PATH"
@@ -15,7 +15,7 @@ setting_up_container
 network_check
 update_os
 
-msg_info "Installing Dependencies"
+msg_info "Устанавливаю зависимости(необходимое ПО).."
 $STD apt-get install -y \
   gpg \
   curl \
@@ -26,24 +26,24 @@ $STD apt-get install -y \
   git \
   python3-venv \
   python3-pip
-msg_ok "Installed Dependencies"
+msg_ok "Зависимости(необходимое ПО) установлены."
 
-msg_info "Setting up Node.js Repository"
+msg_info "Настраиваю Node.js Репозиторий"
 mkdir -p /etc/apt/keyrings
 curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
 echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" >/etc/apt/sources.list.d/nodesource.list
-msg_ok "Set up Node.js Repository"
+msg_ok "Репозиторий Node.js настроен"
 
-msg_info "Setting up PostgreSQL Repository"
+msg_info "Настраиваю PostgreSQLРепозиторий"
 curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor -o /etc/apt/trusted.gpg.d/postgresql.gpg
 echo "deb https://apt.postgresql.org/pub/repos/apt bookworm-pgdg main" >/etc/apt/sources.list.d/pgdg.list
-msg_ok "Set up PostgreSQL Repository"
+msg_ok "Репозиторий PostgreSQL настроен"
 
-msg_info "Installing Node.js"
+msg_info "Устанавливаю Node.js"
 $STD apt-get update
 $STD apt-get install -y nodejs
 $STD npm install -g pnpm
-msg_ok "Installed Node.js"
+msg_ok "Node.js установлен"
 
 msg_info "Install/Set up PostgreSQL Database"
 $STD apt-get install -y postgresql-16 postgresql-16-postgis
@@ -66,7 +66,7 @@ $STD sudo -u postgres psql -c "ALTER ROLE $DB_USER SET timezone TO 'UTC';"
 } >> ~/adventurelog.creds
 msg_ok "Set up PostgreSQL"
 
-msg_info "Installing AdventureLog (Patience)"
+msg_info "Устанавливаю AdventureLog (Patience)"
 DJANGO_ADMIN_USER="djangoadmin"
 DJANGO_ADMIN_PASS="$(openssl rand -base64 18 | tr -dc 'a-zA-Z0-9' | cut -c1-13)"
 LOCAL_IP="$(hostname -I | awk '{print $1}')"
@@ -172,4 +172,4 @@ msg_info "Cleaning up"
 rm -rf /opt/v${RELEASE}.zip
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
-msg_ok "Cleaned"
+msg_ok "Временные файлы установки - удалены!"

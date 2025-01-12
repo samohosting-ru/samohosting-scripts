@@ -4,7 +4,7 @@
 # Author: tteck (tteckster)
 # Co-Author: MickLesk (Canbiz)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 # Source: https://github.com/pymedusa/Medusa
 
 source /dev/stdin <<< "$FUNCTIONS_FILE_PATH"
@@ -15,7 +15,7 @@ setting_up_container
 network_check
 update_os
 
-msg_info "Installing Dependencies"
+msg_info "Устанавливаю зависимости(необходимое ПО).."
 $STD apt-get install -y \
   gpg \
   curl \
@@ -29,9 +29,9 @@ EOF
 $STD apt-get update
 $STD apt-get install -y unrar
 rm /etc/apt/sources.list.d/non-free.list
-msg_ok "Installed Dependencies"
+msg_ok "Зависимости(необходимое ПО) установлены."
 
-msg_info "Installing Medusa"
+msg_info "Устанавливаю Medusa"
 $STD git clone https://github.com/pymedusa/Medusa.git /opt/medusa
 msg_ok "Installed Medusa"
 
@@ -60,4 +60,4 @@ customize
 msg_info "Cleaning up"
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
-msg_ok "Cleaned"
+msg_ok "Временные файлы установки - удалены!"

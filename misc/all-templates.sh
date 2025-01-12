@@ -2,7 +2,7 @@
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 
 function header_info {
   clear
@@ -56,9 +56,9 @@ if systemctl is-active -q ping-instances.service; then
   systemctl stop ping-instances.service
 fi
 header_info
-echo "Loading..."
+echo "Загрузка..."
 pveam update >/dev/null 2>&1
-whiptail --backtitle "Proxmox VE Helper Scripts" --title "All Templates" --yesno "This will allow for the creation of one of the many Template LXC Containers. Proceed?" 10 68 || exit
+whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --title "Все шаблоны" --Хотите ли Вы создать LXC контейнер использую один из наших многих шаблонов? Продолжить? 10 68 || exit
 TEMPLATE_MENU=()
 MSG_MAX_LENGTH=0
 while read -r TAG ITEM; do
@@ -66,9 +66,9 @@ while read -r TAG ITEM; do
   ((${#ITEM} + OFFSET > MSG_MAX_LENGTH)) && MSG_MAX_LENGTH=${#ITEM}+OFFSET
   TEMPLATE_MENU+=("$ITEM" "$TAG " "OFF")
 done < <(pveam available)
-TEMPLATE=$(whiptail --backtitle "Proxmox VE Helper Scripts" --title "All Template LXCs" --radiolist "\nSelect a Template LXC to create:\n" 16 $((MSG_MAX_LENGTH + 58)) 10 "${TEMPLATE_MENU[@]}" 3>&1 1>&2 2>&3 | tr -d '"') || exit
+TEMPLATE=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --title "All Template LXCs" --radiolist "\Выберите шаблон для создания LXC контейнера:\n" 16 $((MSG_MAX_LENGTH + 58)) 10 "${TEMPLATE_MENU[@]}" 3>&1 1>&2 2>&3 | tr -d '"') || exit
 [ -z "$TEMPLATE" ] && {
-  whiptail --backtitle "Proxmox VE Helper Scripts" --title "No Template LXC Selected" --msgbox "It appears that no Template LXC container was selected" 10 68
+  whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --title "Не выбрано ни одного шаблона LXC Конейнера" --msgbox "Кажется Вы не выбрали ни одного шаблона для создания" 10 68
   msg "Done"
   exit
 }
@@ -125,17 +125,17 @@ function select_storage() {
 
   # Select storage location
   if [ $((${#MENU[@]} / 3)) -eq 0 ]; then
-    warn "'$CONTENT_LABEL' needs to be selected for at least one storage location."
-    die "Unable to detect valid storage location."
+    warn "'$CONTENT_LABEL' необходимо выбрать хотябы одно хранилище из списка."
+    die "Не удалось найти валидное хранилище."
   elif [ $((${#MENU[@]} / 3)) -eq 1 ]; then
     printf ${MENU[0]}
   else
     local STORAGE
     while [ -z "${STORAGE:+x}" ]; do
-      STORAGE=$(whiptail --backtitle "Proxmox VE Helper Scripts" --title "Storage Pools" --radiolist \
+      STORAGE=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --title "ХРАНИЛИЩЕ ДЛЯ ДАННЫХ" --radiolist \
         "Which storage pool you would like to use for the ${CONTENT_LABEL,,}?\n\n" \
         16 $(($MSG_MAX_LENGTH + 23)) 6 \
-        "${MENU[@]}" 3>&1 1>&2 2>&3) || die "Menu aborted."
+        "${MENU[@]}" 3>&1 1>&2 2>&3) || die "Меню выбора было закрыто."
     done
     printf $STORAGE
   fi
@@ -143,30 +143,30 @@ function select_storage() {
 header_info
 # Get template storage
 TEMPLATE_STORAGE=$(select_storage template) || exit
-info "Using '$TEMPLATE_STORAGE' for template storage."
+info "Использую '$TEMPLATE_STORAGE' для хранения шаблона."
 
 # Get container storage
 CONTAINER_STORAGE=$(select_storage container) || exit
-info "Using '$CONTAINER_STORAGE' for container storage."
+info "Использую '$CONTAINER_STORAGE' для хранения данных."
 
 # Download template
-msg "Downloading LXC template (Patience)..."
-pveam download $TEMPLATE_STORAGE $TEMPLATE >/dev/null || die "A problem occured while downloading the LXC template."
+msg "Скачиваю шаблон LXC (это может занять некоторое время)..."
+pveam download $TEMPLATE_STORAGE $TEMPLATE >/dev/null || die "При загрузке шаблона LXC возникла проблема."
 
 # Create variable for 'pct' options
 PCT_OPTIONS=(${PCT_OPTIONS[@]:-${DEFAULT_PCT_OPTIONS[@]}})
 [[ " ${PCT_OPTIONS[@]} " =~ " -rootfs " ]] || PCT_OPTIONS+=(-rootfs $CONTAINER_STORAGE:${PCT_DISK_SIZE:-8})
 
 # Create LXC
-msg "Creating LXC container..."
+msg "Создаю LXC контейнер..."
 pct create $CTID ${TEMPLATE_STORAGE}:vztmpl/${TEMPLATE} ${PCT_OPTIONS[@]} >/dev/null ||
-  die "A problem occured while trying to create container."
+  die "При попытке создать контейнер возникла проблема."
 
 # Save password
 echo "$NAME password: ${PASS}" >>~/$NAME.creds # file is located in the Proxmox root directory
 
 # Start container
-msg "Starting LXC Container..."
+msg "Запускаю LXC контейнер..."
 pct start "$CTID"
 sleep 5
 
@@ -180,14 +180,14 @@ while [[ $attempt -le $max_attempts ]]; do
   if [[ -n $IP ]]; then
     break
   else
-    warn "Attempt $attempt: IP address not found. Pausing for 5 seconds..."
+    warn "Попытка $attempt: IP адрес не найден. Делаю паузу на 5 секунд..."
     sleep 5
     ((attempt++))
   fi
 done
 
 if [[ -z $IP ]]; then
-  warn "Maximum number of attempts reached. IP address not found."
+  warn "Достигнуто максимальное кол-во попыток. IP адрес не найден."
   IP="NOT FOUND"
 fi
 
@@ -200,9 +200,9 @@ fi
 # Success message
 header_info
 echo
-info "LXC container '$CTID' was successfully created, and its IP address is ${IP}."
+info "LXC контейнер '$CTID' успешно создан, ему присвоен IP адрес: ${IP}."
 echo
-info "Proceed to the LXC console to complete the setup."
+info "Для завершения настройки - перейдите в консоль созданного LXC контейнера."
 echo
 info "login: root"
 info "password: $PASS"

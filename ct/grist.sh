@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/misc/build.func)
 # Source: https://github.com/gristlabs/grist-core
 
 # App Default Values
@@ -27,7 +27,7 @@ function update_script() {
   check_container_resources
 
   if [[ ! -d /opt/grist ]]; then
-    msg_error "No ${APP} Installation Found!"
+    msg_error "Отсутствует установленная версия ${APP}"
     exit
   fi
 
@@ -38,7 +38,7 @@ function update_script() {
     systemctl stop grist
     msg_ok "Stopped ${APP} Service"
 
-    msg_info "Updating ${APP} to v${RELEASE}"
+    msg_info "Обновляю ${APP} to v${RELEASE}"
     cd /opt
     rm -rf grist_bak
     mv grist grist_bak
@@ -53,17 +53,17 @@ function update_script() {
     echo "${RELEASE}" >/opt/${APP}_version.txt
     msg_ok "Updated ${APP} to v${RELEASE}"
 
-    msg_info "Starting ${APP} Service"
+    msg_info "Запускаю ${APP} Service"
     systemctl start grist
-    msg_ok "Started ${APP} Service"
+    msg_ok "Запустил ${APP} Service"
 
     msg_info "Cleaning up"
     rm -rf /opt/v$RELEASE.zip
-    msg_ok "Cleaned"
+    msg_ok "Временные файлы установки - удалены!"
 
     msg_ok "Updated Successfully!\n"
   else
-    msg_ok "No update required. ${APP} is already at ${RELEASE}"
+    msg_ok "Обновление не требуется. ${APP} уже последней версии ${RELEASE}"
   fi
   exit
 }
@@ -72,7 +72,7 @@ start
 build_container
 description
 
-msg_ok "Completed Successfully!\n"
-echo -e "${CREATING}${GN}${APP} setup has been successfully initialized!${CL}"
-echo -e "${INFO}${YW} Access it using the following URL:${CL}"
+msg_ok "Установка успешно завершена!\n"
+echo -e "${CREATING}${GN}${APP} Установка успешно завершена!${CL}"
+echo -e "${INFO}${YW} Сервис доступен по ссылке:${CL}"
 echo -e "${TAB}${GATEWAY}${BGN}Grist: http://${IP}:8484${CL}"

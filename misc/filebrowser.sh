@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 
 function header_info {
     clear
@@ -64,7 +64,7 @@ function msg_ok() {
 }
 
 read -r -p "Would you like to use No Authentication? <y/N> " prompt
-msg_info "Installing ${APP}"
+msg_info "Устанавливаю ${APP}"
 apt-get install -y curl &>/dev/null
 RELEASE=$(curl -fsSL https://api.github.com/repos/filebrowser/filebrowser/releases/latest | grep -o '"tag_name": ".*"' | sed 's/"//g' | sed 's/tag_name: //g')
 curl -fsSL https://github.com/filebrowser/filebrowser/releases/download/$RELEASE/linux-amd64-filebrowser.tar.gz | tar -xzv -C /usr/local/bin &>/dev/null
@@ -99,6 +99,6 @@ EOF
 systemctl enable -q --now filebrowser.service
 msg_ok "Created Service"
 
-msg_ok "Completed Successfully!\n"
+msg_ok "Установка успешно завершена!\n"
 echo -e "${APP} should be reachable by going to the following URL.
          ${BL}http://$IP:8080${CL} \n"

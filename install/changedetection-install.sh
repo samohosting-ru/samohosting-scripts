@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 
 source /dev/stdin <<< "$FUNCTIONS_FILE_PATH"
 color
@@ -13,7 +13,7 @@ setting_up_container
 network_check
 update_os
 
-msg_info "Installing Dependencies (Patience)"
+msg_info "Устанавливаю Dependencies (Patience)"
 $STD apt-get install -y \
   curl \
   sudo \
@@ -45,9 +45,9 @@ $STD apt-get install -y \
   xvfb \
   ca-certificates \
   gnupg
-msg_ok "Installed Dependencies"
+msg_ok "Зависимости(необходимое ПО) установлены."
 
-msg_info "Updating Python3"
+msg_info "Обновляю Python3"
 $STD apt-get install -y \
   python3 \
   python3-dev \
@@ -55,23 +55,23 @@ $STD apt-get install -y \
 rm -rf /usr/lib/python3.*/EXTERNALLY-MANAGED
 msg_ok "Updated Python3"
 
-msg_info "Setting up Node.js Repository"
+msg_info "Настраиваю Node.js Репозиторий"
 mkdir -p /etc/apt/keyrings
 curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
 echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" >/etc/apt/sources.list.d/nodesource.list
-msg_ok "Set up Node.js Repository"
+msg_ok "Репозиторий Node.js настроен"
 
-msg_info "Installing Node.js"
+msg_info "Устанавливаю Node.js"
 $STD apt-get update
 $STD apt-get install -y nodejs
-msg_ok "Installed Node.js"
+msg_ok "Node.js установлен"
 
-msg_info "Installing Change Detection"
+msg_info "Устанавливаю Change Detection"
 mkdir /opt/changedetection
 $STD pip3 install changedetection.io
 msg_ok "Installed Change Detection"
 
-msg_info "Installing Browserless & Playwright"
+msg_info "Устанавливаю Browserless & Playwright"
 mkdir /opt/browserless
 $STD python3 -m pip install playwright
 $STD git clone https://github.com/browserless/chrome /opt/browserless
@@ -82,7 +82,7 @@ $STD npm run build:function --prefix /opt/browserless
 $STD npm prune production --prefix /opt/browserless
 msg_ok "Installed Browserless & Playwright"
 
-msg_info "Installing Font Packages"
+msg_info "Устанавливаю Font Packages"
 $STD apt-get install -y \
   fontconfig \
   libfontconfig1 \
@@ -98,7 +98,7 @@ $STD apt-get install -y \
   fonts-wqy-zenhei
 msg_ok "Installed Font Packages"
 
-msg_info "Installing X11 Packages"
+msg_info "Устанавливаю X11 Packages"
 $STD apt-get install -y \
   libx11-6 \
   libx11-xcb1 \
@@ -154,4 +154,4 @@ customize
 msg_info "Cleaning up"
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
-msg_ok "Cleaned"
+msg_ok "Временные файлы установки - удалены!"

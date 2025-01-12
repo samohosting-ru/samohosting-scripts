@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/misc/build.func)
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 # Source: https://www.zabbix.com/
 
 # App Default Values
@@ -29,14 +29,14 @@ function update_script() {
     check_container_storage
     check_container_resources
     if [[ ! -f /etc/zabbix/zabbix_server.conf ]]; then
-        msg_error "No ${APP} Installation Found!"
+        msg_error "Отсутствует установленная версия ${APP}"
         exit
     fi
     msg_info "Stopping ${APP} Services"
     systemctl stop zabbix-server zabbix-agent2
     msg_ok "Stopped ${APP} Services"
 
-    msg_info "Updating $APP LXC"
+    msg_info "Обновляю $APP LXC"
     mkdir -p /opt/zabbix-backup/
     cp /etc/zabbix/zabbix_server.conf /opt/zabbix-backup/
     cp /etc/apache2/conf-enabled/zabbix.conf /opt/zabbix-backup/
@@ -49,15 +49,15 @@ function update_script() {
     apt-get update &>/dev/null
     apt-get install --only-upgrade zabbix-server-pgsql zabbix-frontend-php zabbix-agent2 zabbix-agent2-plugin-* &>/dev/null
 
-    msg_info "Starting ${APP} Services"
+    msg_info "Запускаю ${APP} Services"
     systemctl start zabbix-server zabbix-agent2
     systemctl restart apache2
-    msg_ok "Started ${APP} Services"
+    msg_ok "Запустил ${APP} Services"
 
-    msg_info "Cleaning Up"
+    msg_info "Провожу уборку. Удаляю временные файлы установки"
     rm -rf /tmp/zabbix-release_latest+debian12_all.deb
-    msg_ok "Cleaned"
-    msg_ok "Updated Successfully"
+    msg_ok "Временные файлы установки - удалены!"
+    msg_ok "Приложение успешно обновлено!"
     exit
 }
 
@@ -65,7 +65,7 @@ start
 build_container
 description
 
-msg_ok "Completed Successfully!\n"
-echo -e "${CREATING}${GN}${APP} setup has been successfully initialized!${CL}"
-echo -e "${INFO}${YW} Access it using the following URL:${CL}"
+msg_ok "Установка успешно завершена!\n"
+echo -e "${CREATING}${GN}${APP} Установка успешно завершена!${CL}"
+echo -e "${INFO}${YW} Сервис доступен по ссылке:${CL}"
 echo -e "${TAB}${GATEWAY}${BGN}http://${IP}/zabbix${CL}"

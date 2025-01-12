@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 
 function header_info {
     clear
@@ -72,7 +72,7 @@ install() {
   else
   STD="silent"
   fi
-  msg_info "Installing $APP"
+  msg_info "Устанавливаю $APP"
   rm -rf /usr/lib/python3.*/EXTERNALLY-MANAGED
   $STD bash -c "$(wget -qLO - https://raw.githubusercontent.com/nicolargo/glancesautoinstall/master/install.sh)"
   cat <<EOF >/etc/systemd/system/glances.service
@@ -102,13 +102,13 @@ uninstall() {
   bash -c "$(wget -qLO - https://raw.githubusercontent.com/nicolargo/glancesautoinstall/master/uninstall.sh)"
   rm -rf /etc/systemd/system/glances.service
   msg_ok "Uninstalled $APP"
-  msg_ok "Completed Successfully!\n"
+  msg_ok "Установка успешно завершена!\n"
 }
 
 OPTIONS=(Install "Install $APP" \
          Uninstall "Uninstall $APP")
 
-CHOICE=$(whiptail --backtitle "Proxmox VE Helper Scripts" --title "$APP" --menu "Select an option:" 10 58 2 \
+CHOICE=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --title "$APP" --menu "Select an option:" 10 58 2 \
           "${OPTIONS[@]}" 3>&1 1>&2 2>&3)
 
 case $CHOICE in

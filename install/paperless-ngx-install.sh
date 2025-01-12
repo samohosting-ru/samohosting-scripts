@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
 color
@@ -13,7 +13,7 @@ setting_up_container
 network_check
 update_os
 
-msg_info "Installing Dependencies (Patience)"
+msg_info "Устанавливаю Dependencies (Patience)"
 $STD apt-get install -y --no-install-recommends \
   redis \
   postgresql \
@@ -38,9 +38,9 @@ $STD apt-get install -y --no-install-recommends \
   libleptonica-dev \
   sudo \
   mc
-msg_ok "Installed Dependencies"
+msg_ok "Зависимости(необходимое ПО) установлены."
 
-msg_info "Installing Python3 Dependencies (Patience)"
+msg_info "Устанавливаю Python3 Dependencies (Patience)"
 $STD apt-get install -y --no-install-recommends \
   python3 \
   python3-pip \
@@ -49,7 +49,7 @@ $STD apt-get install -y --no-install-recommends \
   python3-wheel
 msg_ok "Installed Python3 Dependencies"
 
-msg_info "Installing OCR Dependencies (Patience)"
+msg_info "Устанавливаю OCR Dependencies (Patience)"
 $STD apt-get install -y --no-install-recommends \
   unpaper \
   icc-profiles-free \
@@ -70,7 +70,7 @@ $STD make
 $STD sudo make install
 msg_ok "Installed OCR Dependencies"
 
-msg_info "Installing JBIG2"
+msg_info "Устанавливаю JBIG2"
 $STD git clone https://github.com/ie13/jbig2enc /opt/jbig2enc
 cd /opt/jbig2enc
 $STD bash ./autogen.sh
@@ -80,7 +80,7 @@ $STD make install
 rm -rf /opt/jbig2enc
 msg_ok "Installed JBIG2"
 
-msg_info "Installing Paperless-ngx (Patience)"
+msg_info "Устанавливаю Paperless-ngx (Patience)"
 Paperlessngx=$(wget -q https://github.com/paperless-ngx/paperless-ngx/releases/latest -O - | grep "title>Release" | cut -d " " -f 5)
 cd /opt
 $STD wget https://github.com/paperless-ngx/paperless-ngx/releases/download/$Paperlessngx/paperless-ngx-$Paperlessngx.tar.xz
@@ -100,7 +100,7 @@ sed -i -e "s|#PAPERLESS_STATICDIR=../static|PAPERLESS_STATICDIR=/opt/paperless/s
 echo "${Paperlessngx}" >/opt/${APPLICATION}_version.txt
 msg_ok "Installed Paperless-ngx"
 
-msg_info "Installing Natural Language Toolkit (Patience)"
+msg_info "Устанавливаю Natural Language Toolkit (Patience)"
 $STD python3 -m nltk.downloader -d /usr/share/nltk_data all
 msg_ok "Installed Natural Language Toolkit"
 
@@ -130,7 +130,7 @@ msg_ok "Set up PostgreSQL database"
 
 read -r -p "Would you like to add Adminer? <y/N> " prompt
 if [[ "${prompt,,}" =~ ^(y|yes)$ ]]; then
-  msg_info "Installing Adminer"
+  msg_info "Устанавливаю Adminer"
   $STD apt install -y adminer
   $STD a2enconf adminer
   systemctl reload apache2
@@ -231,4 +231,4 @@ rm -rf /opt/paperless/docker
 rm -rf /tmp/ghostscript*
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
-msg_ok "Cleaned"
+msg_ok "Временные файлы установки - удалены!"

@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/misc/build.func)
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 # Source: https://www.home-assistant.io/
 
 # App Default Values
@@ -29,10 +29,10 @@ function update_script() {
   check_container_storage
   check_container_resources
   if [[ ! -d /var/lib/docker/volumes/hass_config/_data ]]; then
-    msg_error "No ${APP} Installation Found!"
+    msg_error "Отсутствует установленная версия ${APP}"
     exit
   fi
-  UPD=$(whiptail --backtitle "Proxmox VE Helper Scripts" --title "UPDATE" --radiolist --cancel-button Exit-Script "Spacebar = Select" 11 58 4 \
+  UPD=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --title "UPDATE" --radiolist --cancel-button Exit-Script "Spacebar = Select" 11 58 4 \
     "1" "Update ALL Containers" ON \
     "2" "Remove ALL Unused Images" OFF \
     "3" "Install HACS" OFF \
@@ -40,7 +40,7 @@ function update_script() {
     3>&1 1>&2 2>&3)
 
   if [ "$UPD" == "1" ]; then
-    msg_info "Updating All Containers"
+    msg_info "Обновляю All Containers"
     CONTAINER_LIST="${1:-$(docker ps -q)}"
     for container in ${CONTAINER_LIST}; do
       CONTAINER_IMAGE="$(docker inspect --format "{{.Config.Image}}" --type container ${container})"
@@ -64,7 +64,7 @@ function update_script() {
     exit
   fi
   if [ "$UPD" == "3" ]; then
-    msg_info "Installing Home Assistant Community Store (HACS)"
+    msg_info "Устанавливаю Home Assistant Community Store (HACS)"
     apt update &>/dev/null
     apt install unzip &>/dev/null
     cd /var/lib/docker/volumes/hass_config/_data
@@ -75,7 +75,7 @@ function update_script() {
   fi
   if [ "$UPD" == "4" ]; then
     IP=$(hostname -I | awk '{print $1}')
-    msg_info "Installing FileBrowser"
+    msg_info "Устанавливаю FileBrowser"
     RELEASE=$(curl -fsSL https://api.github.com/repos/filebrowser/filebrowser/releases/latest | grep -o '"tag_name": ".*"' | sed 's/"//g' | sed 's/tag_name: //g')
     curl -fsSL https://github.com/filebrowser/filebrowser/releases/download/v2.23.0/linux-amd64-filebrowser.tar.gz | tar -xzv -C /usr/local/bin &>/dev/null
     filebrowser config init -a '0.0.0.0' &>/dev/null
@@ -98,7 +98,7 @@ WantedBy=default.target" >$service_path
     systemctl enable --now filebrowser.service &>/dev/null
     msg_ok "Created Service"
 
-    msg_ok "Completed Successfully!\n"
+    msg_ok "Установка успешно завершена!\n"
     echo -e "FileBrowser should be reachable by going to the following URL.
          ${BL}http://$IP:8080${CL}   admin|helper-scripts.com\n"
     exit
@@ -109,8 +109,8 @@ start
 build_container
 description
 
-msg_ok "Completed Successfully!\n"
-echo -e "${CREATING}${GN}${APP} setup has been successfully initialized!${CL}"
-echo -e "${INFO}${YW} Access it using the following URL:${CL}"
+msg_ok "Установка успешно завершена!\n"
+echo -e "${CREATING}${GN}${APP} Установка успешно завершена!${CL}"
+echo -e "${INFO}${YW} Сервис доступен по ссылке:${CL}"
 echo -e "${TAB}${GATEWAY}${BGN}HA: http://${IP}:8123${CL}"
 echo -e "${TAB}${GATEWAY}${BGN}Portainer: http://${IP}:9443${CL}"

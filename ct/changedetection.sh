@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/misc/build.func)
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 # Source: https://changedetection.io/
 
 # App Default Values
@@ -30,27 +30,27 @@ function update_script() {
   check_container_resources
 
   if [[ ! -f /etc/systemd/system/changedetection.service ]]; then
-    msg_error "No ${APP} Installation Found!"
+    msg_error "Отсутствует установленная версия ${APP}"
     exit
   fi
 
   if ! dpkg -s libjpeg-dev >/dev/null 2>&1; then
-    msg_info "Installing Dependencies"
+    msg_info "Устанавливаю зависимости(необходимое ПО).."
     apt-get update
     apt-get install -y libjpeg-dev
     msg_ok "Updated Dependencies"
   fi
 
-  msg_info "Updating ${APP}"
+  msg_info "Обновляю ${APP}"
   pip3 install changedetection.io --upgrade &>/dev/null
   msg_ok "Updated ${APP}"
 
-  msg_info "Updating Playwright"
+  msg_info "Обновляю Playwright"
   pip3 install playwright --upgrade &>/dev/null
   msg_ok "Updated Playwright"
 
   if [[ -f /etc/systemd/system/browserless.service ]]; then
-    msg_info "Updating Browserless (Patience)"
+    msg_info "Обновляю Browserless (Patience)"
     git -C /opt/browserless/ fetch --all &>/dev/null
     git -C /opt/browserless/ reset --hard origin/main &>/dev/null
     npm update --prefix /opt/browserless &>/dev/null
@@ -68,7 +68,7 @@ function update_script() {
   fi
 
   systemctl restart changedetection
-  msg_ok "Updated Successfully"
+  msg_ok "Приложение успешно обновлено!"
   exit
 }
 
@@ -76,7 +76,7 @@ start
 build_container
 description
 
-msg_ok "Completed Successfully!\n"
-echo -e "${CREATING}${GN}${APP} setup has been successfully initialized!${CL}"
-echo -e "${INFO}${YW} Access it using the following URL:${CL}"
+msg_ok "Установка успешно завершена!\n"
+echo -e "${CREATING}${GN}${APP} Установка успешно завершена!${CL}"
+echo -e "${INFO}${YW} Сервис доступен по ссылке:${CL}"
 echo -e "${TAB}${GATEWAY}${BGN}http://${IP}:5000${CL}"

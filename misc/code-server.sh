@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 
 function header_info {
     cat <<"EOF"
@@ -67,17 +67,17 @@ function msg_ok() {
     echo -e "${BFR} ${CM} ${GN}${msg}${CL}"
 }
 
-msg_info "Installing Dependencies"
+msg_info "Устанавливаю зависимости(необходимое ПО).."
 apt-get update &>/dev/null
 apt-get install -y curl &>/dev/null
 apt-get install -y git &>/dev/null
-msg_ok "Installed Dependencies"
+msg_ok "Зависимости(необходимое ПО) установлены."
 
 VERSION=$(curl -s https://api.github.com/repos/coder/code-server/releases/latest |
     grep "tag_name" |
     awk '{print substr($2, 3, length($2)-4) }')
 
-msg_info "Installing Code-Server v${VERSION}"
+msg_info "Устанавливаю Code-Server v${VERSION}"
 curl -fOL https://github.com/coder/code-server/releases/download/v$VERSION/code-server_${VERSION}_amd64.deb &>/dev/null
 dpkg -i code-server_${VERSION}_amd64.deb &>/dev/null
 rm -rf code-server_${VERSION}_amd64.deb

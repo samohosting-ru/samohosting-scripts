@@ -14,7 +14,7 @@ setting_up_container
 network_check
 update_os
 
-msg_info "Installing Dependencies"
+msg_info "Устанавливаю зависимости(необходимое ПО).."
 $STD apt-get install -y \
   curl \
   mc \
@@ -23,18 +23,18 @@ $STD apt-get install -y \
   gpg \
   ca-certificates \
   apache2
-msg_ok "Installed Dependencies"
+msg_ok "Зависимости(необходимое ПО) установлены."
 
-msg_info "Setting up Node.js Repository"
+msg_info "Настраиваю Node.js Репозиторий"
 mkdir -p /etc/apt/keyrings
 curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
 echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" >/etc/apt/sources.list.d/nodesource.list
-msg_ok "Set up Node.js Repository"
+msg_ok "Репозиторий Node.js настроен"
 
-msg_info "Installing Node.js"
+msg_info "Устанавливаю Node.js"
 $STD apt-get update
 $STD apt-get install -y nodejs
-msg_ok "Installed Node.js"
+msg_ok "Node.js установлен"
 
 # Setup App
 msg_info "Set up 5etools Base"
@@ -77,7 +77,7 @@ rm -rf /opt/${IMG_RELEASE}.zip
 rm -rf /opt/${RELEASE}.zip
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
-msg_ok "Cleaned"
+msg_ok "Временные файлы установки - удалены!"
 
 motd_ssh
 customize

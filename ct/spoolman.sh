@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/misc/build.func)
 # Copyright (c) 2021-2025 tteck
 # Author: MickLesk (Canbiz)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 # Source: https://github.com/Donkie/Spoolman
 
 # App Default Values
@@ -29,7 +29,7 @@ function update_script() {
   check_container_storage
   check_container_resources
   if [[ ! -d /opt/spoolman ]]; then
-    msg_error "No ${APP} Installation Found!"
+    msg_error "Отсутствует установленная версия ${APP}"
     exit
   fi
   RELEASE=$(wget -q https://github.com/Donkie/Spoolman/releases/latest -O - | grep "title>Release" | cut -d " " -f 4)
@@ -39,7 +39,7 @@ function update_script() {
     systemctl stop spoolman
     msg_ok "Stopped ${APP} Service"
 
-    msg_info "Updating ${APP} to ${RELEASE}"
+    msg_info "Обновляю ${APP} до ${RELEASE}"
     cd /opt
     rm -rf spoolman_bak
     mv spoolman spoolman_bak
@@ -49,19 +49,19 @@ function update_script() {
     pip3 install -r requirements.txt >/dev/null 2>&1
     wget -q https://raw.githubusercontent.com/Donkie/Spoolman/master/.env.example -O .env
     echo "${RELEASE}" >/opt/${APP}_version.txt
-    msg_ok "Updated ${APP} to ${RELEASE}"
+    msg_ok "Приложение ${APP} обновлено до версии ${RELEASE}"
 
-    msg_info "Starting ${APP} Service"
+    msg_info "Запускаю ${APP} Service"
     systemctl start spoolman
-    msg_ok "Started ${APP} Service"
+    msg_ok "Запустил ${APP} Service"
 
     msg_info "Cleaning up"
     rm -rf /opt/spoolman.zip
-    msg_ok "Cleaned"
+    msg_ok "Временные файлы установки - удалены!"
 
     msg_ok "Updated Successfully!\n"
   else
-    msg_ok "No update required. ${APP} is already at ${RELEASE}"
+    msg_ok "Обновление не требуется. ${APP} уже последней версии ${RELEASE}"
   fi
   exit
 }
@@ -70,7 +70,7 @@ start
 build_container
 description
 
-msg_ok "Completed Successfully!\n"
-echo -e "${CREATING}${GN}${APP} setup has been successfully initialized!${CL}"
-echo -e "${INFO}${YW} Access it using the following URL:${CL}"
+msg_ok "Установка успешно завершена!\n"
+echo -e "${CREATING}${GN}${APP} Установка успешно завершена!${CL}"
+echo -e "${INFO}${YW} Сервис доступен по ссылке:${CL}"
 echo -e "${TAB}${GATEWAY}${BGN}http://${IP}:7912${CL}"

@@ -3,7 +3,7 @@
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 source /dev/stdin <<< "$FUNCTIONS_FILE_PATH"
 
 color
@@ -13,7 +13,7 @@ setting_up_container
 network_check
 update_os
 
-msg_info "Installing Dependencies"
+msg_info "Устанавливаю зависимости(необходимое ПО).."
 $STD apk add newt
 $STD apk add curl
 $STD apk add openssl
@@ -21,9 +21,9 @@ $STD apk add openssh
 $STD apk add nano
 $STD apk add mc
 $STD apk add nginx
-msg_ok "Installed Dependencies"
+msg_ok "Зависимости(необходимое ПО) установлены."
 
-msg_info "Installing PHP/Redis"
+msg_info "Устанавливаю PHP/Redis"
 $STD apk add php83-opcache
 $STD apk add php83-redis
 $STD apk add php83-apcu
@@ -39,7 +39,7 @@ $STD apk add php83-bz2
 $STD apk add redis
 msg_ok "Installed PHP/Redis"
 
-msg_info "Installing MySQL Database"
+msg_info "Устанавливаю MySQL Database"
 DB_NAME=nextcloud
 DB_USER=nextcloud
 DB_PASS="$(openssl rand -base64 18 | cut -c1-13)"
@@ -57,7 +57,7 @@ mysql -uroot -p"$ADMIN_PASS" -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhos
 $STD apk del mariadb-client
 msg_ok "Installed MySQL Database"
 
-msg_info "Installing Nextcloud"
+msg_info "Устанавливаю Nextcloud"
 ADMIN_USER=ncAdmin
 echo "" >>~/nextcloud.creds
 echo -e "Nextcloud Admin Username: \e[32m$ADMIN_USER\e[0m" >>~/nextcloud.creds
@@ -143,7 +143,7 @@ sed -i -e 's|upload_max_file_size = 2M|upload_max_file_size = 16G|' /etc/php83/p
 sed -i -E '/^php_admin_(flag|value)\[opcache/s/^/;/' /etc/php83/php-fpm.d/nextcloud.conf
 msg_ok "Installed Nextcloud"
 
-msg_info "Adding Additional Nextcloud Packages"
+msg_info "добавляю дополнительные пакеты Некстклауд"
 $STD apk add nextcloud-occ
 $STD apk add nextcloud-default-apps
 $STD apk add nextcloud-activity
@@ -164,9 +164,9 @@ $STD apk add nextcloud-support
 $STD apk add nextcloud-systemtags
 $STD apk add nextcloud-user_status
 $STD apk add nextcloud-weather_status
-msg_ok "Added Additional Nextcloud Packages"
+msg_ok "дополнительные пакеты Некстклауд добавлены"
 
-msg_info "Starting Services"
+msg_info "Запускаю Services"
 $STD rc-service redis start
 $STD rc-update add redis default
 $STD rc-service php-fpm83 start
@@ -177,9 +177,9 @@ $STD rc-service nginx start
 $STD rc-service nextcloud start
 $STD rc-update add nginx default
 $STD rc-update add nextcloud default
-msg_ok "Started Services"
+msg_ok "Запустил Services"
 
-msg_info "Start Nextcloud Setup-Wizard"
+msg_info "Запускаю мастер-установки Некстклауд"
 echo -e "export VISUAL=nano\nexport EDITOR=nano" >>/etc/profile
 cd /usr/share/webapps/nextcloud
 $STD su nextcloud -s /bin/sh -c "php83 occ maintenance:install \

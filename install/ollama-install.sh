@@ -4,7 +4,7 @@
 # Author: tteck
 # Co-Author: havardthom
 # License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 
 source /dev/stdin <<< "$FUNCTIONS_FILE_PATH"
 color
@@ -14,7 +14,7 @@ setting_up_container
 network_check
 update_os
 
-msg_info "Installing Dependencies"
+msg_info "Устанавливаю зависимости(необходимое ПО).."
 $STD apt-get install -y curl
 $STD apt-get install -y sudo
 $STD apt-get install -y mc
@@ -23,9 +23,9 @@ $STD apt-get install -y git
 $STD apt-get install -y build-essential
 $STD apt-get install -y pkg-config
 $STD apt-get install -y cmake
-msg_ok "Installed Dependencies"
+msg_ok "Зависимости(необходимое ПО) установлены."
 
-msg_info "Installing Golang"
+msg_info "Устанавливаю Golang"
 $STD wget https://golang.org/dl/go1.23.2.linux-amd64.tar.gz
 $STD tar -xzf go1.23.2.linux-amd64.tar.gz -C /usr/local
 $STD ln -s /usr/local/go/bin/go /usr/local/bin/go
@@ -52,11 +52,11 @@ if [[ "$CTTYPE" == "0" ]]; then
 fi
 msg_ok "Set Up Hardware Acceleration"
 
-msg_info "Installing Intel® oneAPI Base Toolkit (Patience)"
+msg_info "Устанавливаю Intel® oneAPI Base Toolkit (Patience)"
 $STD apt-get install -y --no-install-recommends intel-basekit-2024.1
 msg_ok "Installed Intel® oneAPI Base Toolkit"
 
-msg_info "Installing Ollama (Patience)"
+msg_info "Устанавливаю Ollama (Patience)"
 $STD git clone https://github.com/ollama/ollama.git /opt/ollama
 cd /opt/ollama
 $STD go generate ./...
@@ -93,4 +93,4 @@ customize
 msg_info "Cleaning up"
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
-msg_ok "Cleaned"
+msg_ok "Временные файлы установки - удалены!"

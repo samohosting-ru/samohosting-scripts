@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/misc/build.func)
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 # Source: https://github.com/bastienwirtz/homer
 
 # App Default Values
@@ -29,12 +29,12 @@ function update_script() {
     check_container_storage
     check_container_resources
     if [[ ! -d /opt/homer ]]; then
-        msg_error "No ${APP} Installation Found!"
+        msg_error "Отсутствует установленная версия ${APP}"
         exit
     fi
-    msg_info "Stopping ${APP}"
+    msg_info "Останавливаю работу приложения ${APP}"
     systemctl stop homer
-    msg_ok "Stopped ${APP}"
+    msg_ok "Приложение ${APP} остановлено"
 
     msg_info "Backing up assets directory"
     cd ~
@@ -42,26 +42,26 @@ function update_script() {
     cp -R /opt/homer/assets/. assets-backup
     msg_ok "Backed up assets directory"
 
-    msg_info "Updating ${APP}"
+    msg_info "Обновляю ${APP}"
     rm -rf /opt/homer/*
     cd /opt/homer
     wget -q https://github.com/bastienwirtz/homer/releases/latest/download/homer.zip
     unzip homer.zip &>/dev/null
     msg_ok "Updated ${APP}"
 
-    msg_info "Restoring assets directory"
+    msg_info "Происходит восстановление каталогов"
     cd ~
     cp -Rf assets-backup/. /opt/homer/assets/
-    msg_ok "Restored assets directory"
+    msg_ok "Каталоги восстановлены"
 
-    msg_info "Cleaning"
+    msg_info "Провожу уборку. Удаляю временные файлы установки"
     rm -rf assets-backup /opt/homer/homer.zip
-    msg_ok "Cleaned"
+    msg_ok "Временные файлы установки - удалены!"
 
-    msg_info "Starting ${APP}"
+    msg_info "Запускаю ${APP}"
     systemctl start homer
-    msg_ok "Started ${APP}"
-    msg_ok "Updated Successfully"
+    msg_ok "Запустил ${APP}"
+    msg_ok "Приложение успешно обновлено!"
     exit
 }
 
@@ -69,7 +69,7 @@ start
 build_container
 description
 
-msg_ok "Completed Successfully!\n"
-echo -e "${CREATING}${GN}${APP} setup has been successfully initialized!${CL}"
-echo -e "${INFO}${YW} Access it using the following URL:${CL}"
+msg_ok "Установка успешно завершена!\n"
+echo -e "${CREATING}${GN}${APP} Установка успешно завершена!${CL}"
+echo -e "${INFO}${YW} Сервис доступен по ссылке:${CL}"
 echo -e "${TAB}${GATEWAY}${BGN}http://${IP}:8010${CL}"

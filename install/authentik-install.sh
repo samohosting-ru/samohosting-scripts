@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: remz1337
-# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
 color
@@ -12,7 +12,7 @@ setting_up_container
 network_check
 update_os
 
-msg_info "Installing Dependencies (Patience)"
+msg_info "Устанавливаю Dependencies (Patience)"
 $STD apt-get install -y \
   curl \
   sudo \
@@ -36,16 +36,16 @@ $STD apt-get install -y \
   libmaxminddb0 \
   python3-pip \
   git
-msg_ok "Installed Dependencies"
+msg_ok "Зависимости(необходимое ПО) установлены."
 
-msg_info "Installing yq"
+msg_info "Устанавливаю yq"
 cd /tmp
 YQ_LATEST="$(wget -qO- "https://api.github.com/repos/mikefarah/yq/releases/latest" | grep -Po '"tag_name": "\K.*?(?=")')"
 wget -q "https://github.com/mikefarah/yq/releases/download/${YQ_LATEST}/yq_linux_amd64" -qO /usr/bin/yq
 chmod +x /usr/bin/yq
 msg_ok "Installed yq"
 
-msg_info "Installing GeoIP"
+msg_info "Устанавливаю GeoIP"
 cd /tmp
 GEOIP_RELEASE=$(curl -s https://api.github.com/repos/maxmind/geoipupdate/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
 wget -qO geoipupdate.deb https://github.com/maxmind/geoipupdate/releases/download/v${GEOIP_RELEASE}/geoipupdate_${GEOIP_RELEASE}_linux_amd64.deb
@@ -69,18 +69,18 @@ cd ~
 $STD update-alternatives --install /usr/bin/python3 python3 /usr/local/bin/python3.12 1
 msg_ok "Setup Python 3"
 
-msg_info "Setting up Node.js Repository"
+msg_info "Настраиваю Node.js Репозиторий"
 mkdir -p /etc/apt/keyrings
 curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
 echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_22.x nodistro main" >/etc/apt/sources.list.d/nodesource.list
-msg_ok "Set up Node.js Repository"
+msg_ok "Репозиторий Node.js настроен"
 
-msg_info "Installing Node.js"
+msg_info "Устанавливаю Node.js"
 $STD apt-get update
 $STD apt-get install -y nodejs
-msg_ok "Installed Node.js"
+msg_ok "Node.js установлен"
 
-msg_info "Installing Golang"
+msg_info "Устанавливаю Golang"
 cd /tmp
 set +o pipefail
 GO_RELEASE=$(curl -s https://go.dev/dl/ | grep -o -m 1 "go.*\linux-amd64.tar.gz")
@@ -90,12 +90,12 @@ ln -s /usr/local/go/bin/go /usr/bin/go
 set -o pipefail
 msg_ok "Installed Golang"
 
-msg_info "Installing Redis"
+msg_info "Устанавливаю Redis"
 $STD apt-get install -y redis-server
 systemctl enable -q --now redis-server
 msg_ok "Installed Redis"
 
-msg_info "Installing PostgreSQL"
+msg_info "Устанавливаю PostgreSQL"
 $STD apt-get install -y postgresql postgresql-contrib
 DB_NAME="authentik"
 DB_USER="authentik"
@@ -107,7 +107,7 @@ $STD sudo -u postgres psql -c "ALTER DATABASE $DB_NAME OWNER TO $DB_USER;"
 $STD sudo -u postgres psql -c "ALTER USER $DB_USER WITH SUPERUSER;"
 msg_ok "Installed PostgreSQL"
 
-msg_info "Installing authentik"
+msg_info "Устанавливаю authentik"
 RELEASE=$(curl -s https://api.github.com/repos/goauthentik/authentik/releases/latest | grep "tarball_url" | awk '{print substr($2, 2, length($2)-3)}')
 mkdir -p /opt/authentik
 wget -qO authentik.tar.gz "${RELEASE}"
@@ -192,4 +192,4 @@ rm -rf authentik.tar.gz
 $STD apt-get -y remove yq
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
-msg_ok "Cleaned"
+msg_ok "Временные файлы установки - удалены!"
