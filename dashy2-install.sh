@@ -41,6 +41,9 @@ $STD npm run build
 echo "${RELEASE}" >/opt/${APPLICATION}_version.txt
 msg_ok "Installed Dashy ${RELEASE}"
 
+msg_info "Dashboard Configuration"
+wget -qO/opt/dashy/user-data/conf.yml https://raw.githubusercontent.com/LiaGen/samohosting/refs/heads/main/files_from_videos/conf.yml
+msg_ok "Dashboard configured!"
 msg_info "Creating Service"
 cat <<EOF >/etc/systemd/system/dashy.service
 [Unit]
