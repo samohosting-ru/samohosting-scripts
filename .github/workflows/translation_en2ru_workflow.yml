@@ -21,7 +21,7 @@ jobs:
       run: |
         git pull
         git switch ru_dev
-        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|backtitle "Proxmox VE Helper Scripts"|backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1"|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|backtitle "Proxmox VE Helper Scripts"|backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.2"|g' {} +
         find ./ -type f \(  -name "build.func" \) -exec sed -i 's|# License: MIT|# License: MIT\n# Translation: Samohosting.ru|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func|https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/misc/build.func|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE|https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE|g' {} +
