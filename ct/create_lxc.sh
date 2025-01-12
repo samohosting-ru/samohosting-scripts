@@ -136,7 +136,7 @@ function select_storage() {
     local STORAGE
     while [ -z "${STORAGE:+x}" ]; do
       STORAGE=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --title "ХРАНИЛИЩЕ ДЛЯ ДАННЫХ" --radiolist \
-      "Which storage pool you would like to use for the ${CONTENT_LABEL,,}?\nTo make a selection, use the Spacebar.\n" \
+      "Which storage pool you would like to use for the ${CONTENT_LABEL,,}?\nTo make a selection, use the ПРОБЕЛ.\n" \
       16 $(($MSG_MAX_LENGTH + 23)) 6 \
       "${MENU[@]}" 3>&1 1>&2 2>&3) || exit "Menu aborted."
       if [ $? -ne 0 ]; then
