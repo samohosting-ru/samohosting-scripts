@@ -58,7 +58,7 @@ fi
 header_info
 echo "Загрузка..."
 pveam update >/dev/null 2>&1
-whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --title "Все шаблоны" --Хотите ли Вы создать LXC контейнер использую один из наших многих шаблонов? Продолжить? 10 68 || exit
+whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --title "Все шаблоны" --yesno "Хотите ли Вы создать LXC контейнер использую один из наших многих шаблонов? Продолжить?" 10 68 || exit
 TEMPLATE_MENU=()
 MSG_MAX_LENGTH=0
 while read -r TAG ITEM; do
