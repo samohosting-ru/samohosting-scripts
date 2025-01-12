@@ -93,8 +93,7 @@ jobs:
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_ok "Using ${BL}$TEMPLATE_STORAGE${CL} ${GN}for Template Storage."|msg_ok "Использую ${BL}$TEMPLATE_STORAGE${CL} ${GN} для хранилища Шаблона."|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|You need to set 'CTID' variable.|Требуется задать переменную 'CTID'.|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|You need to set 'PCT_OSTYPE' variable.|Требуется задать переменную 'PCT_OSTYPE'.|g' {} +
-        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|backtitle "Proxmox VE Helper Scripts"|backtitle "Proxmox VE Helper Scripts : Samohosting Edition v0.1.\\n Кодовая база: tteck и community-scripts ORG. Перевод и модификации: samohosting.ru"|g' {} +
-        # find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|backtitle "Proxmox VE Helper Scripts"|backtitle "Proxmox VE Helper Scripts : Samohosting Edition"|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|backtitle "Proxmox VE Helper Scripts"|backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.1"|g' {} +
         
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|title "SUPPORT"|title "ПОДДЕРЖКА"|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|"Check for Alpine Updates"|"Проверка обновлений Alpine"|g' {} +
@@ -232,7 +231,8 @@ jobs:
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|echo -e "${INFO}${HOLD} ${YWB}Warning: Storage is dangerously low (${usage}%).${CL}"|echo -e "${INFO}${HOLD} ${YWB}ВНИМАНИЕ!: критически мало свободного места (${usage}%).${CL}"|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|read -r -p "Continue anyway? <y/N>  " prompt|read -r -p "Продолжить в любом случае? <y/N>  " prompt|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|echo -e "${CROSS}${HOLD}${YWB}Exiting based on user input.${CL}"|echo -e "${CROSS}${HOLD}${YWB}Выхожу по инициативе пользователя.${CL}"|g' {} +
-        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|yesno "This will create a New ${APP} LXC. Proceed?"|yesno "Создать новый контейнер ${APP}? Не закрывайте это окно до конца установки, начинаем?"|g' {} +
+        # find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|yesno "This will create a New ${APP} LXC. Proceed?"|yesno "Создать новый контейнер ${APP}?                      (не закрывайте это окно до конца установки)             Начать создание контейнера?"|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|yesno "This will create a New ${APP} LXC. Proceed?"|yesno "Будет создан новый LXC контейнер ${APP}?             (не закрывайте\уходите из консоли до конца установки)   Начать создание контейнера?"|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|title "${APP} LXC UPDATE"|title "ОБНОВЛЕНИЕ КОНТЕЙНЕРА ${APP}"|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|yesno "Support/Update functions for ${APP} LXC.  Proceed?"|yesno "Запустить обновление\функцию поддержки для  ${APP} LXC.  Продолжить?"|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|title "Storage Pools"|title "ХРАНИЛИЩЕ ДЛЯ ДАННЫХ"|g' {} +
