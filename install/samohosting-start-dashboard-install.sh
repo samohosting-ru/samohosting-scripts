@@ -32,7 +32,7 @@ $STD apt-get install -y nodejs
 msg_ok "Node.js установлен"
 
 RELEASE=$(curl -s https://api.github.com/repos/Lissy93/dashy/releases/latest | grep "tag_name" | awk '{print substr($2, 2, length($2)-3) }')
-msg_info "Устанавливаю Samohosting-Dashy-Start-Dashboard ${RELEASE} (Patience)"
+msg_info "Устанавливаю Dashy ${RELEASE} (Patience)"
 mkdir -p /opt/dashy
 wget -qO- https://github.com/Lissy93/dashy/archive/refs/tags/${RELEASE}.tar.gz | tar -xz -C /opt/dashy --strip-components=1
 cd /opt/dashy
