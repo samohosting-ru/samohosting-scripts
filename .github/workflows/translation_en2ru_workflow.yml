@@ -67,8 +67,8 @@ jobs:
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_info "Updating System"|msg_info "Обновляю систему"|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_info "Validating Storage"|msg_info "Проверяю Хранилище"|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_ok "Backed up conf.yml"|msg_ok "Забекапировал Ваш conf.yml"|g' {} +
-        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_ok "Cleaned"|msg_ok "Все убрал, руки помыл. А не мытым трубочистам - стыд и срам(c)"|g' {} +
-        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_ok "Cleanup Completed"|msg_ok "Все убрал, руки помыл. А не мытым трубочистам - стыд и срам(c)"|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_ok "Cleaned"|msg_ok "Временные файлы установки - удалены!."|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_ok "Cleanup Completed"|msg_ok "Временные файлы установки - удалены!."|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_ok "Completed Successfully!\\n"|msg_ok "Установка успешно завершена!\\n"|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_ok "Downloaded LXC Template"|msg_ok "Скачиваю LXC шаблон"|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_ok "LXC Container ${BL}$CTID${CL} ${GN}was successfully created."|msg_ok "LXC контейнер ${BL}$CTID${CL} ${GN}был успешно создан."|g' {} +
