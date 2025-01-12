@@ -93,7 +93,9 @@ jobs:
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_ok "Using ${BL}$TEMPLATE_STORAGE${CL} ${GN}for Template Storage."|msg_ok "Использую ${BL}$TEMPLATE_STORAGE${CL} ${GN} для хранилища Шаблона."|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|You need to set 'CTID' variable.|Требуется задать переменную 'CTID'.|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|You need to set 'PCT_OSTYPE' variable.|Требуется задать переменную 'PCT_OSTYPE'.|g' {} +
-        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|backtitle "Proxmox VE Helper Scripts"|backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.1. Кодовая база - tteck & community-scripts ORG. Перевод и модификации - samohosting.ru"|g' {} +
+        # find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|backtitle "Proxmox VE Helper Scripts"|backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.1. Кодовая база - tteck & community-scripts ORG. Перевод и модификации - samohosting.ru"|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|backtitle "Proxmox VE Helper Scripts"|backtitle "Proxmox VE Helper Scripts : Samohosting Edition"|g' {} +
+        
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|title "SUPPORT"|title "ПОДДЕРЖКА"|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|"Check for Alpine Updates"|"Проверка обновлений Alpine"|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_error "There is currently no update path available."|msg_error "Обновления отсутствуют."|g' {} +
@@ -137,7 +139,7 @@ jobs:
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|echo -e "${SEARCH}${BOLD}${DGN}Verbose Mode: ${BGN}Enabled${CL}"|echo -e "${SEARCH}${BOLD}${DGN}Режим отладки: ${BGN}Enabled${CL}"|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|echo -e "${CREATING}${BOLD}${BL}Creating a ${APP} LXC using the above default settings${CL}"|echo -e "${CREATING}${BOLD}${BL}Создаю контейнер с приложением ${APP} используя вышеуказанные базовые настройки${CL}"|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|echo -e "\\n${CROSS}${RD}User exited script${CL}\\n"|echo -e "\\n${CROSS}${RD}Выход из скрипта по инициативе пользователя${CL}\\n"|g' {} +
-        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|title "Here is an instructional tip:"|title "Подсказка по использованию:"|g' {} +
+        # find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|title "Here is an instructional tip:"|title "Подсказка по использованию:"|g' {} +
         # find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|"To make a selection, use the Spacebar."|"Чтобы сделать выбор - используйте ПРОБЕЛ."|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|title "Default distribution for $APP" "${var_os} ${var_version} \\n \\nIf the default Linux distribution is not adhered to, script support will be discontinued.|title "Дистрибутив по умолчанию для приложения $APP" "${var_os} ${var_version} \\n \\nIf используеммый дистрибутив Linux отличается от рекомендованного , поддержка скрипта невозможна.|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|title "DISTRIBUTION"|title "ДИСТРИБУТИВ"|g' {} +
