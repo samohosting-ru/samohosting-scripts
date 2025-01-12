@@ -3,10 +3,10 @@ source <(curl -s https://raw.githubusercontent.com/samohosting-ru/samohosting-sc
 # Copyright (c) 2021-2025 tteck
 # Author: tteck (tteckster)
 # License: MIT | https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE
-# Source: https://dashy.to/ + https://www.samohosting.ru/
+# Source: https://dashy.to/
 
 # App Default Values
-APP="samohosting-dashy-start-dashboard"
+APP="Dashy"
 var_tags="dashboard"
 var_cpu="2"
 var_ram="2048"
@@ -67,9 +67,9 @@ function update_script() {
     rm -rf conf.yml /opt/dashy/public/conf.yml
     msg_ok "Временные файлы установки - удалены!"
 
-    msg_info "Запускаю samohosting-dashy-start-dashboard"
+    msg_info "Запускаю Dashy"
     systemctl start dashy
-    msg_ok "Запустил samohosting-dashy-start-dashboard"
+    msg_ok "Запустил Dashy"
     msg_ok "Приложение успешно обновлено!"
   else
     msg_ok "Обновление не требуется. ${APP} уже последней версии ${RELEASE}"
