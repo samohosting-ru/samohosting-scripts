@@ -6,7 +6,7 @@ source <(curl -s https://raw.githubusercontent.com/samohosting-ru/samohosting-sc
 # Source: https://dashy.to/ + https://www.samohosting.ru/
 
 # App Default Values
-APP="Samohosting-Dashy-Start-Dashboard"
+APP="samohosting-dashy-start-dashboard"
 var_tags="dashboard"
 var_cpu="2"
 var_ram="2048"
@@ -67,9 +67,9 @@ function update_script() {
     rm -rf conf.yml /opt/dashy/public/conf.yml
     msg_ok "Временные файлы установки - удалены!"
 
-    msg_info "Запускаю Dashy"
+    msg_info "Запускаю samohosting-dashy-start-dashboard"
     systemctl start dashy
-    msg_ok "Запустил Dashy"
+    msg_ok "Запустил samohosting-dashy-start-dashboard"
     msg_ok "Приложение успешно обновлено!"
   else
     msg_ok "Обновление не требуется. ${APP} уже последней версии ${RELEASE}"
