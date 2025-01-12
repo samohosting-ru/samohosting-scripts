@@ -21,7 +21,7 @@ jobs:
       run: |
         git pull
         git switch ru_dev
-        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|backtitle "Proxmox VE Helper Scripts"|backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6"|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|backtitle "Proxmox VE Helper Scripts"|backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1"|g' {} +
         find ./ -type f \(  -name "build.func" \) -exec sed -i 's|# License: MIT|# License: MIT\n# Translation: Samohosting.ru|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func|https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/misc/build.func|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE|https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE|g' {} +
@@ -32,7 +32,7 @@ jobs:
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|href='"'"'https://Helper-Scripts.com'"'"'|href='"'"'https://www.samohosting.ru'"'"'|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|src='"'"'https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/images/logo-81x112.png'"'"'|src='"'"'https://raw.githubusercontent.com/LiaGen/samohosting/refs/heads/main/samohostinglogo6round.png'"'"'|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|href='"'"'https://ko-fi.com/community_scripts'"'"'|href='"'"'https://boosty.to/liagen/donate'"'"'|g' {} +
-        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|src='"'"'https://img.shields.io/badge/&#x2615;-Buy us a coffee-blue'"'"' alt='"'"'spend Coffee'"'"'|src='"'"'https://img.shields.io/badge/&#x2615;-Buy us a coffee-orange'"'"' alt='"'"'support project'"'"'|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|src=-Buy us a coffee-blue'"'"' alt='"'"'spend Coffee'"'"'|-Buy us a coffee-orange'"'"' alt='"'"'support project'"'"'|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|<i class="fa fa-github fa-fw" style="color:|<i class="fa fa-telegram fa-fw" style="color:|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|href='"'"'https://github.com/community-scripts/ProxmoxVE'"'"' target='"'"'_blank'"'"' rel='"'"'noopener noreferrer'"'"' style='"'"'text-decoration: none; color: #00617f;'"'"'>GitHub|href='"'"'https://t.me/samohosting'"'"' target='"'"'_blank'"'"' rel='"'"'noopener noreferrer'"'"' style='"'"'text-decoration: none; color: #0088cc;'"'"'>Telegram|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|href='"'"'https://github.com/community-scripts/ProxmoxVE/discussions'"'"' target='"'"'_blank'"'"' rel='"'"'noopener noreferrer'"'"' style='"'"'text-decoration: none; color: #00617f;'"'"'>Discussions|href='"'"'https://t.me/samohosting_chats'"'"' target='"'"'_blank'"'"' rel='"'"'noopener noreferrer'"'"' style='"'"'text-decoration: none; color: #0088cc;'"'"'>ЧАТЫ|g' {} +
@@ -98,7 +98,7 @@ jobs:
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|"Check for Alpine Updates"|"Проверка обновлений Alpine"|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_error "There is currently no update path available."|msg_error "Обновления отсутствуют."|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_info "Installing Dependencies"|msg_info "Устанавливаю зависимости(необходимое ПО).."|g' {} +
-        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_ok "Installed Dependencies"|msg_ok "Зависимости(необходимое ПО) установлено."|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_ok "Installed Dependencies"|msg_ok "Зависимости(необходимое ПО) установлены."|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_info "Setting up Node.js Repository"|msg_info "Настраиваю Node.js Репозиторий"|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_ok "Set up Node.js Repository"|msg_ok "Репозиторий Node.js настроен"|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_info "Setting up PostgreSQL Repository"|msg_info "Настраиваю PostgreSQLРепозиторий"|g' {} +
@@ -271,8 +271,8 @@ jobs:
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_ok "DNS Resolved github.com to|msg_ok "DNS сервером зарезервирован github.com:|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_ok "Updated Container OS"|msg_ok "Обновлена операционная система контейнера."|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|LXC Container\${CL}"|LXC контейнер\${CL}"|g' {} +
-        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|Provided by: \${GN}community-scripts ORG \${YW}\| Project: \${GN}ProxmoxVE \${YW}\| GitHub: \${GN}https://github.com/community-scripts/ProxmoxVE\${CL}\\n"|Кодовая база подготовлена: \${GN}community-scripts ORG \${YW}\| Project: \${GN}ProxmoxVE \${YW}\| GitHub: \${GN}https://github.com/community-scripts/ProxmoxVE\${CL}\\n\${YW}\      Перевод и модификации:\${GN}samohosting.ru\\n"|g' {} +
-        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|Provided by: \${GN}community-scripts ORG \${YW}\| GitHub: \${GN}https://github.com/community-scripts/ProxmoxVE\${CL}\\n"|Кодовая база подготовлена: \${GN}community-scripts ORG \${YW}\| GitHub: \${GN}https://github.com/community-scripts/ProxmoxVE\${CL}\\n\${YW}\      Перевод и модификации: \${GN}samohosting.ru\\n"|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|Provided by: \${GN}community-scripts ORG \${YW}\| Project: \${GN}ProxmoxVE \${YW}\| GitHub: \${GN}https://github.com/community-scripts/ProxmoxVE\${CL}\\n"|Кодовая база подготовлена: \${GN}community-scripts ORG \${YW}\| Project: \${GN}ProxmoxVE \${YW}\| GitHub: \${GN}https://github.com/community-scripts/ProxmoxVE\${CL}\\n\${YW}\        Перевод и модификации:\${GN}samohosting.ru\\n"|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|Provided by: \${GN}community-scripts ORG \${YW}\| GitHub: \${GN}https://github.com/community-scripts/ProxmoxVE\${CL}\\n"|Кодовая база подготовлена: \${GN}community-scripts ORG \${YW}\| GitHub: \${GN}https://github.com/community-scripts/ProxmoxVE\${CL}\\n\${YW}\        Перевод и модификации: \${GN}samohosting.ru\\n"|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_info "Customizing Container"|msg_info "Кастомизирую контейнер.."|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_ok "Customized Container"|msg_ok "Контейнер кастомезирован."|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|local error_message="\${RD}[ERROR]\${CL} in line \${RD}\$line_number\${CL}: exit code \${RD}\$exit_code\${CL}: while executing command \${YW}\$command\${CL}"|local error_message="\${RD}[ERROR]\${CL} в строке \${RD}\$line_number\${CL}: exit code \${RD}\$exit_code\${CL}: в ходе выполенения команды \${YW}\$command\${CL}"|g' {} +
@@ -281,7 +281,7 @@ jobs:
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_ok "IPv4 Internet Connected";|msg_ok "IPv4 интернет соеденение установлено.";|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_error "IPv4 Internet Not Connected";|msg_error "IPv4 интернет соеденение НЕ установлено.";|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_ok "IPv6 Internet Connected";|msg_ok "IPv6 интернет соеденение установлено.";|g' {} +
-        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_error "IPv6 Internet Not Connected";|msg_error "IPv4 интернет соеденение НЕ установлено.";|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_error "IPv6 Internet Not Connected";|msg_error "IPv6 интернет соеденение НЕ установлено.";|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|Container OS"|операционная система контейнера"|g' {} +
 
         
