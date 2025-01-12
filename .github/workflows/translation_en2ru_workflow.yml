@@ -21,7 +21,7 @@ jobs:
       run: |
         git pull
         git switch ru_dev
-        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|backtitle "Proxmox VE Helper Scripts"|backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.2"|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|backtitle "Proxmox VE Helper Scripts"|backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.3"|g' {} +
         find ./ -type f \(  -name "build.func" \) -exec sed -i 's|# License: MIT|# License: MIT\n# Translation: Samohosting.ru|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func|https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/misc/build.func|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE|https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/LICENSE|g' {} +
@@ -41,7 +41,7 @@ jobs:
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|Copyright (c) 2021-2025 tteck  \| community-scripts ORG|Copyright (c) 2021-2025 tteck  \| community-scripts ORG \| samohosting.ru|g' {} +
 
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|"${CREATING}${GN}${APP} setup has been successfully initialized!${CL}"|"${CREATING}${GN}${APP} Установка успешно завершена!${CL}"|g' {} +
-        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|"${INFO}${YW} Access it using the following URL:${CL}"|"${INFO}${YW} Сервис доступен по ссылке URL:${CL}"|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|"${INFO}${YW} Access it using the following URL:${CL}"|"${INFO}${YW} Сервис доступен по ссылке:${CL}"|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|echo -e "${CROSS}${RD} Menu aborted by user.${CL}"|echo -e "${CROSS}${RD} Меню отменено пользователем.${CL}"|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|echo -e "ID '$CTID' is already in use."|echo -e "ID '$CTID' уже занят другим контейнером."|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|exit "A problem occured while trying to create container."|exit "Возникла проблема при попытке создать контейнер!"|g' {} +
@@ -137,8 +137,8 @@ jobs:
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|echo -e "${SEARCH}${BOLD}${DGN}Verbose Mode: ${BGN}Enabled${CL}"|echo -e "${SEARCH}${BOLD}${DGN}Режим отладки: ${BGN}Enabled${CL}"|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|echo -e "${CREATING}${BOLD}${BL}Creating a ${APP} LXC using the above default settings${CL}"|echo -e "${CREATING}${BOLD}${BL}Создаю контейнер с приложением ${APP} используя вышеуказанные базовые настройки${CL}"|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|echo -e "\\n${CROSS}${RD}User exited script${CL}\\n"|echo -e "\\n${CROSS}${RD}Выход из скрипта по инициативе пользователя${CL}\\n"|g' {} +
-        # find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|title "Here is an instructional tip:"|title "Подсказка по использованию:"|g' {} +
-        # find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|"To make a selection, use the Spacebar."|"Чтобы сделать выбор - используйте ПРОБЕЛ."|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|title "Here is an instructional tip:"|title "Подсказка по использованию:"|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|"To make a selection, use the Spacebar."|"Чтобы сделать выбор - используйте ПРОБЕЛ."|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|title "Default distribution for $APP" "${var_os} ${var_version} \\n \\nIf the default Linux distribution is not adhered to, script support will be discontinued.|title "Дистрибутив по умолчанию для приложения $APP" "${var_os} ${var_version} \\n \\nIf используеммый дистрибутив Linux отличается от рекомендованного , поддержка скрипта невозможна.|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|title "DISTRIBUTION"|title "ДИСТРИБУТИВ"|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|radiolist "Choose Distribution:"|radiolist "Выберите дистрибутив :"|g' {} +
@@ -262,14 +262,14 @@ jobs:
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_ok "Set up Container OS"|msg_ok "Настроил ОС контейнера"|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|No Network After \$RETRY_NUM Tries|Сеть отсутствует после \$RETRY_NUM попыток|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|Check Network Settings"|Проверьте настройки сети"|g' {} +
-        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_ok "Network Connected:|msg_ok "Сеть подключена:|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_ok "Network Connected:|msg_ok "Сеть подключена. IP:|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_ok "Internet Connected"|msg_ok "Интернет соеденение доступно"|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_error "Internet NOT Connected"|msg_error "Интернет соеденение НЕ доступно"|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|"Would you like to continue anyway?|"Стоит ли продолжать?|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|Expect Issues Without Internet|Без доступа к интернету - ожидаются проблемы с работой скрипта|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_error "DNS Lookup Failure";|msg_error "Ошибка. DNS сервер не доступен ";|g' {} +
-        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_ok "DNS Resolved github.com to|msg_ok "Github.com зарезервирован как DNS сервер:|g' {} +
-        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_ok "Updated Container OS"|msg_ok "Обновлена ОС контейнера"|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_ok "DNS Resolved github.com to|msg_ok "DNS сервером зарезервирован github.com:|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_ok "Updated Container OS"|msg_ok "Обновлена операционная система контейнера"|g' {} +
         # find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|LXC Container\${CL}"|LXC контейнер\${CL}"|g' {} +
         # find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|Provided by: \${GN}community-scripts ORG \${YW}\| Project: \${GN}ProxmoxVE \${YW}\| GitHub: \${GN}https://github.com/community-scripts/ProxmoxVE\${CL}\\n"|Кодовая база подготовлена: \${GN}community-scripts ORG \${YW}\| Project: \${GN}ProxmoxVE \${YW}\| GitHub: \${GN}https://github.com/community-scripts/ProxmoxVE\${CL}\\n\${YW}\| Перевод и модификации:\${GN}samohosting.ru\\n"|g' {} +
         # find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|Provided by: \${GN}community-scripts ORG \${YW}\| GitHub: \${GN}https://github.com/community-scripts/ProxmoxVE\${CL}\\n"|Кодовая база подготовлена: \${GN}community-scripts ORG \${YW}\| GitHub: \${GN}https://github.com/community-scripts/ProxmoxVE\${CL}\\n\${YW}\| Перевод и модификации:\${GN}samohosting.ru\\n"|g' {} +
@@ -282,7 +282,9 @@ jobs:
         # find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_error "IPv4 Internet Not Connected";|msg_error "IPv4 интернет соеденение НЕ установлено";|g' {} +
         # find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_ok "IPv6 Internet Connected";|msg_ok "IPv4 интернет соеденение установлено";|g' {} +
         # find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_error "IPv6 Internet Not Connected";|msg_error "IPv4 интернет соеденение НЕ установлено";|g' {} +
-        # # find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|Container OS"|ОС контейнера"|g' {} +
+        # # find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|Container OS"|операционная система контейнера"|g' {} +
+
+        
         # find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|TEXT1|TEXT2|g' {} +
         # find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|TEXT1|TEXT2|g' {} +
         # find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|TEXT1|TEXT2|g' {} +
