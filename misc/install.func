@@ -251,7 +251,7 @@ customize() {
 EOF
     systemctl daemon-reload
     systemctl restart $(basename $(dirname $GETTY_OVERRIDE) | sed 's/\.d//')
-    msg_ok "Контейнер кастомезирован."
+    msg_ok "Контейнер кастомизирован."
   fi
   echo "bash -c \"\$(wget -qLO - https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/ct/${app}.sh)\"" >/usr/bin/update
   chmod +x /usr/bin/update
