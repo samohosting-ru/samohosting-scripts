@@ -39,14 +39,10 @@ cd /opt/dashy
 $STD npm install
 $STD npm run build
 echo "${RELEASE}" >/opt/${APPLICATION}_version.txt
-echo "Dashboard Configuration"
-msg_info "Dashboard Configuration"
-echo "Dashboard Configuration"
-echo "Dashboard Configuration"
-echo "Dashboard Configuration"
+msg_info "Настраиваю Ваш линый дашборд by samohosting.ru"
 wget -qO/opt/dashy/user-data/conf.yml https://raw.githubusercontent.com/LiaGen/samohosting/refs/heads/main/files_from_videos/conf.yml
-msg_info "Dashboard was configured"
-msg_ok "Installed Dashy ${RELEASE}"
+msg_ok "Ваш линчый дашборд by SAMOHOSTING.RU настроен"
+msg_ok "Установлено приложение Dashy ${RELEASE}"
 
 msg_info "Creating Service"
 cat <<EOF >/etc/systemd/system/dashy.service
