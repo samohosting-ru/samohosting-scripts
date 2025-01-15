@@ -59,7 +59,7 @@ $STD docker run -d \
   --restart=always \
   lissy93/dashy:latest 
 msg_ok "Dashy Dashboard установлен."
-echo -e "${TAB}${INFO}${YW} Dashy Dashboard: ${GN}${IP}${CL}:4000" >> "$MOTD_FILE"
+
     
 motd_ssh
 customize
