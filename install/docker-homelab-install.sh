@@ -39,7 +39,6 @@ echo -e '{\n  "log-driver": "journald"\n}' >/etc/docker/daemon.json
 $STD sh <(curl -sSL https://get.docker.com)
 msg_ok "Docker $DOCKER_LATEST_VERSION установлен."
 msg_info "Устанавливаю Portainer $PORTAINER_LATEST_VERSION"
-docker volume create portainer_data >/dev/null
 $STD docker run -d \
   -p 8000:8000 \
   -p 9443:9443 \
@@ -55,7 +54,7 @@ $STD docker run -d \
   -p 4000:8080 \
   --name samohosting-dashboard \
   --restart=always \
-  -v ./opt/dashy/user-data/conf.yml:/app/user-data/conf.yml \
+  -v -/opt/dashy/user-data/conf.yml:/app/user-data/conf.yml \
   lissy93/dashy:latest 
 msg_ok "Dashy Dashboard установлен."
 msg_info "Настраиваю Ваш линый дашборд by samohosting.ru"
