@@ -50,16 +50,16 @@ $STD docker run -d \
   -v portainer_data:/data \
   portainer/portainer-ce:latest
   msg_ok "Portainer $PORTAINER_LATEST_VERSION установлен."
-  msg_info "Устанавливаю Dashy Dashboard.."
-  docker volume create dashy_data >/dev/null
-  $STD docker run -d \
-    -p 4000:8080 \
-    -v dashy_data/conf.yml:/app/user-data/conf.yml \
-    --name samohosting-dashboard \
-    --restart=always \
-    lissy93/dashy:latest 
-  msg_ok "Dashy Dashboard установлен."
-  echo -e "${TAB}${INFO}${YW} Dashy Dashboard: ${GN}${IP}${CL}:4000" >> "$MOTD_FILE"
+msg_info "Устанавливаю Dashy Dashboard.."
+docker volume create dashy_data >/dev/null
+$STD docker run -d \
+  -p 4000:8080 \
+  -v dashy_data/conf.yml:/app/user-data/conf.yml \
+  --name samohosting-dashboard \
+  --restart=always \
+  lissy93/dashy:latest 
+msg_ok "Dashy Dashboard установлен."
+echo -e "${TAB}${INFO}${YW} Dashy Dashboard: ${GN}${IP}${CL}:4000" >> "$MOTD_FILE"
     
 motd_ssh
 customize
