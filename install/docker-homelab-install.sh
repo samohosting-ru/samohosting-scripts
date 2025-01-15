@@ -22,7 +22,7 @@ msg_ok "Зависимости(необходимое ПО) установлен
 msg_ok "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!ВНИМАНИЕ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 msg_ok "Начинаю устанавливать набор приложений для домашенго сервера от samohosting.ru"
 msg_ok "Это может занять около 30 минут.."
-msg_ok "Налейте чашечку чая..почитайте книгу..я все сделаю за Вас...."
+msg_ok "Налейте чашечку чая..почитайте книгу..я все сделаю за Вас....Приятного отдыха.."
 msg_ok "--------------------------------------------------------------------------------------"
 get_latest_release() {
   curl -sL https://api.github.com/repos/$1/releases/latest | grep '"tag_name":' | cut -d'"' -f4
@@ -38,7 +38,7 @@ DOCKER_CONFIG_PATH='/etc/docker/daemon.json'
 mkdir -p $(dirname $DOCKER_CONFIG_PATH)
 echo -e '{\n  "log-driver": "journald"\n}' >/etc/docker/daemon.json
 $STD sh <(curl -sSL https://get.docker.com)
-msg_ok "Installed Docker $DOCKER_LATEST_VERSION"
+msg_ok "Docker $DOCKER_LATEST_VERSION установлен."
 msg_info "Устанавливаю Portainer $PORTAINER_LATEST_VERSION"
 docker volume create portainer_data >/dev/null
 $STD docker run -d \
@@ -49,15 +49,16 @@ $STD docker run -d \
   -v /var/run/docker.sock:/var/run/docker.sock \
   -v portainer_data:/data \
   portainer/portainer-ce:latest
-  msg_ok "Installed Portainer $PORTAINER_LATEST_VERSION"
-  msg_info "Устанавливаю Dashy Dashboard"
+  msg_ok "Portainer $PORTAINER_LATEST_VERSION установлен."
+  msg_info "Устанавливаю Dashy Dashboard.."
+  docker volume create dashy_data >/dev/null
   $STD docker run -d \
     -p 4000:8080 \
-    -v /root/my-local-conf.yml:/app/user-data/conf.yml \
-    --name my-dashboard \
+    -v dashy_data/conf.yml:/app/user-data/conf.yml \
+    --name samohosting-dashboard \
     --restart=always \
     lissy93/dashy:latest 
-  msg_ok "Dashy Dashboard"
+  msg_ok "Dashy Dashboard установлен."
   echo -e "${TAB}${INFO}${YW} Dashy Dashboard: ${GN}${IP}${CL}:4000" >> "$MOTD_FILE"
     
 motd_ssh
