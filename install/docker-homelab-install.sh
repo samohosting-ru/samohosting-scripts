@@ -49,12 +49,12 @@ $STD docker run -d \
   portainer/portainer-ce:latest
   msg_ok "Portainer $PORTAINER_LATEST_VERSION установлен."
 msg_info "Устанавливаю Dashy Dashboard.."
-docker volume create dashy_volume >/dev/null
+mkdir /opt/dashy/user-data/
 $STD docker run -d \
   -p 4000:8080 \
   --name samohosting-dashboard \
   --restart=always \
-  -v /opt/dashy/user-data/conf.yml:/app/user-data/conf.yml \
+  -v /opt/dashy/user-data:/app/user-data \
   lissy93/dashy:latest 
 msg_ok "Dashy Dashboard установлен."
 # msg_info "Настраиваю Ваш линый дашборд by samohosting.ru"
