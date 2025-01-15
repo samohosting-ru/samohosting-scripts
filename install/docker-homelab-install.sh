@@ -30,7 +30,6 @@ get_latest_release() {
 
 DOCKER_LATEST_VERSION=$(get_latest_release "moby/moby")
 PORTAINER_LATEST_VERSION=$(get_latest_release "portainer/portainer")
-PORTAINER_AGENT_LATEST_VERSION=$(get_latest_release "portainer/agent")
 DOCKER_COMPOSE_LATEST_VERSION=$(get_latest_release "docker/compose")
 
 msg_info "Устанавливаю Docker $DOCKER_LATEST_VERSION"
@@ -51,12 +50,12 @@ $STD docker run -d \
   portainer/portainer-ce:latest
   msg_ok "Portainer $PORTAINER_LATEST_VERSION установлен."
 msg_info "Устанавливаю Dashy Dashboard.."
-docker volume create dashy_data >/dev/null
+# docker volume create dashy_data >/dev/null
 $STD docker run -d \
   -p 4000:8080 \
-  -v dashy_data/conf.yml:/app/user-data/conf.yml \
   --name samohosting-dashboard \
   --restart=always \
+  -v portainer_data/dashy/conf.yml:/app/user-data/conf.yml \
   lissy93/dashy:latest 
 msg_ok "Dashy Dashboard установлен."
 
