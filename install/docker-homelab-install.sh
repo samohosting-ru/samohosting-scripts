@@ -50,17 +50,19 @@ $STD docker run -d \
   msg_ok "Portainer $PORTAINER_LATEST_VERSION установлен."
 msg_info "Устанавливаю Dashy Dashboard.."
 mkdir -p /opt/dashy/user-data/
+msg_info "Скачиваю шаблон дашборда by samohosting.ru"
+wget -qO/opt/dashy/user-data/conf.yml https://raw.githubusercontent.com/LiaGen/samohosting/refs/heads/main/files_from_videos/conf.yml
+msg_info "Устанавливаю Dashy Dashboard.."
 $STD docker run -d \
   -p 4000:8080 \
   --name samohosting-dashboard \
   --restart=always \
-  -v /opt/dashy/user-data:/app/user-data \
+  -v /opt/dashy/user-data/conf.yml:/app/user-data/ \
   lissy93/dashy:latest 
 msg_ok "Dashy Dashboard установлен."
 msg_info "Настраиваю Ваш линый дашборд by samohosting.ru"
-wget -qO/opt/dashy/user-data/conf.yml https://raw.githubusercontent.com/LiaGen/samohosting/refs/heads/main/files_from_videos/conf.yml
 msg_ok "Ваш линчый дашборд by SAMOHOSTING.RU настроен"
-msg_ok "Установлено приложение Dashy ${RELEASE}"
+msg_ok "Установлено приложение Dashy"
 
     
 motd_ssh
