@@ -57,10 +57,10 @@ $STD docker run -d \
   -v /opt/dashy/user-data:/app/user-data \
   lissy93/dashy:latest 
 msg_ok "Dashy Dashboard установлен."
-# msg_info "Настраиваю Ваш линый дашборд by samohosting.ru"
-# wget -qO/opt/dashy/user-data/conf.yml https://raw.githubusercontent.com/LiaGen/samohosting/refs/heads/main/files_from_videos/conf.yml
-# msg_ok "Ваш линчый дашборд by SAMOHOSTING.RU настроен"
-# msg_ok "Установлено приложение Dashy ${RELEASE}"
+msg_info "Настраиваю Ваш линый дашборд by samohosting.ru"
+wget -qO/opt/dashy/user-data/conf.yml https://raw.githubusercontent.com/LiaGen/samohosting/refs/heads/main/files_from_videos/conf.yml
+msg_ok "Ваш линчый дашборд by SAMOHOSTING.RU настроен"
+msg_ok "Установлено приложение Dashy ${RELEASE}"
 
     
 motd_ssh
