@@ -36,33 +36,33 @@ echo -e '{\n  "log-driver": "journald"\n}' >/etc/docker/daemon.json
 $STD sh <(curl -sSL https://get.docker.com)
 msg_ok "Installed Docker $DOCKER_LATEST_VERSION"
 
-read -r -p "Would you like to add Portainer? <y/N> " prompt
-if [[ ${prompt,,} =~ ^(y|yes)$ ]]; then
-  msg_info "Устанавливаю Portainer $PORTAINER_LATEST_VERSION"
-  docker volume create portainer_data >/dev/null
-  $STD docker run -d \
-    -p 8000:8000 \
-    -p 9443:9443 \
-    --name=portainer \
-    --restart=always \
-    -v /var/run/docker.sock:/var/run/docker.sock \
-    -v portainer_data:/data \
-    portainer/portainer-ce:latest
+# read -r -p "Would you like to add Portainer? <y/N> " prompt
+# if [[ ${prompt,,} =~ ^(y|yes)$ ]]; then
+msg_info "Устанавливаю Portainer $PORTAINER_LATEST_VERSION"
+docker volume create portainer_data >/dev/null
+$STD docker run -d \
+  -p 8000:8000 \
+  -p 9443:9443 \
+  --name=portainer \
+  --restart=always \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  -v portainer_data:/data \
+  portainer/portainer-ce:latest
   msg_ok "Installed Portainer $PORTAINER_LATEST_VERSION"
-else
-  read -r -p "Would you like to add the Portainer Agent? <y/N> " prompt
-  if [[ ${prompt,,} =~ ^(y|yes)$ ]]; then
-    msg_info "Устанавливаю Portainer agent $PORTAINER_AGENT_LATEST_VERSION"
-    $STD docker run -d \
-      -p 9001:9001 \
-      --name portainer_agent \
-      --restart=always \
-      -v /var/run/docker.sock:/var/run/docker.sock \
-      -v /var/lib/docker/volumes:/var/lib/docker/volumes \
-      portainer/agent
-    msg_ok "Installed Portainer Agent $PORTAINER_AGENT_LATEST_VERSION"
-  fi
-fi
+# else
+#   read -r -p "Would you like to add the Portainer Agent? <y/N> " prompt
+#   if [[ ${prompt,,} =~ ^(y|yes)$ ]]; then
+#     msg_info "Устанавливаю Portainer agent $PORTAINER_AGENT_LATEST_VERSION"
+#     $STD docker run -d \
+#       -p 4000:8080 \
+#       -v /root/my-local-conf.yml:/app/user-data/conf.yml \
+#       --name my-dashboard \
+#       --restart=always \
+#       lissy93/dashy:latest 
+#     msg_ok "Installed Portainer Agent $PORTAINER_AGENT_LATEST_VERSION"
+#     echo -e "${TAB}${INFO}${YW} main dashboard ip: ${GN}${IP}${CL}:4000" >> "$MOTD_FILE"
+#   fi
+# fi
 
 motd_ssh
 customize
