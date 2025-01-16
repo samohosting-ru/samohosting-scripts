@@ -52,6 +52,7 @@ msg_info "Устанавливаю Dashy Dashboard.."
 mkdir -p /opt/dashy/user-data/
 msg_info "Скачиваю шаблон дашборда by samohosting.ru"
 wget -qO/opt/dashy/user-data/conf.yml https://raw.githubusercontent.com/LiaGen/samohosting/refs/heads/main/files_from_videos/conf.yml
+sed -i 's|samohosting.ru|\$(hostname -I)|g' /opt/dashy/user-data/conf.yml
 msg_info "Устанавливаю Dashy Dashboard.."
 $STD docker run -d \
   -p 4000:8080 \
@@ -69,7 +70,8 @@ chmod +x install.sh
 $STD ./install.sh
 chmod 666 /opt/runtipi/state/settings.json
 msg_ok "Установлено приложение Runtipi"
-sed -i 's|samohosting.ru|\$(hostname -I)|g' /opt/dashy/user-data/conf.yml
+# Get the current private IP address
+IP=$(hostname -I | awk '{print $1}')  # Private IP
 
 # update MOTD with application info, system details
 MOTD_FILE="/etc/motd"
