@@ -63,7 +63,22 @@ msg_ok "Dashy Dashboard установлен."
 msg_info "Настраиваю Ваш линый дашборд by samohosting.ru"
 msg_ok "Ваш линчый дашборд by SAMOHOSTING.RU настроен"
 msg_ok "Установлено приложение Dashy"
+cd /opt
+wget -q https://raw.githubusercontent.com/runtipi/runtipi/master/scripts/install.sh
+chmod +x install.sh
+$STD ./install.sh
+chmod 666 /opt/runtipi/state/settings.json
+msg_ok "Установлено приложение Runtipi"
+find ./ -type f \(  -name "/opt/dashy/user-data/conf.yml" \) -exec sed -i 's|samohosting.ru|\${IP}|g' {} +
 
+# update MOTD with application info, system details
+MOTD_FILE="/etc/motd"
+if [ -f "$MOTD_FILE" ]; then
+  # Start MOTD with application info and link
+  echo -e "${TAB}${INFO}${YW} Ваш персональный дашборд by samohosting.ru ==>> ${GN}${IP}${CL}:4000" >> "$MOTD_FILE"
+else
+  echo "MotD file does not exist!" >&2
+fi
     
 motd_ssh
 customize
