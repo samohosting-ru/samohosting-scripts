@@ -50,11 +50,11 @@ $STD docker run -d \
   -v /var/run/docker.sock:/var/run/docker.sock \
   -v portainer_data:/data \
   portainer/portainer-ce:latest
-  msg_ok "Portainer $PORTAINER_LATEST_VERSION установлен."
+msg_ok "Portainer $PORTAINER_LATEST_VERSION установлен."
 msg_info "Устанавливаю Dashy Dashboard.."
 mkdir -p /opt/dashy/user-data/
 wget -qO/opt/dashy/user-data/conf.yml https://raw.githubusercontent.com/LiaGen/samohosting/refs/heads/main/files_from_videos/conf.yml
-sed -i -e 's|samohosting.ru|$IP|g' /opt/dashy/user-data/conf.yml
+sed -i -e "s|samohosting.ru|$IP|g" /opt/dashy/user-data/conf.yml
 msg_info "Устанавливаю Dashy Dashboard.."
 $STD docker run -d \
   -p 1000:8080 \
@@ -76,7 +76,7 @@ msg_ok "Установлено приложение Runtipi"
 MOTD_FILE="/etc/motd"
 if [ -f "$MOTD_FILE" ]; then
   # Start MOTD with application info and link
-  echo -e "Начните изучать Ваш домашний сервер by samohosting.ru ==>> $IP:1000" >> "$MOTD_FILE"
+  echo -e "Начните изучать Ваш домашний сервер by samohosting.ru ==>> http://$IP:1000" >> "$MOTD_FILE"
 else
   echo "MotD file does not exist!" >&2
 fi
@@ -88,4 +88,4 @@ msg_info "Cleaning up"
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
 msg_ok "Временные файлы установки - удалены!"
-msg_ok "Начните изучать Ваш домашний сервер by samohosting.ru ==>> $IP:1000 . Удачного самохостинга!"
+msg_ok "Начните изучать Ваш домашний сервер by samohosting.ru ==>> http://$IP:1000 . Удачного самохостинга!"
