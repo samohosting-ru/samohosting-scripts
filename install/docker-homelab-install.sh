@@ -54,10 +54,10 @@ $STD docker run -d \
 msg_info "Устанавливаю Dashy Dashboard.."
 mkdir -p /opt/dashy/user-data/
 wget -qO/opt/dashy/user-data/conf.yml https://raw.githubusercontent.com/LiaGen/samohosting/refs/heads/main/files_from_videos/conf.yml
-sed -i 's|samohosting.ru|\$IP|g' /opt/dashy/user-data/conf.yml
+sed -i -e 's|samohosting.ru|$IP|g' /opt/dashy/user-data/conf.yml
 msg_info "Устанавливаю Dashy Dashboard.."
 $STD docker run -d \
-  -p 4000:8080 \
+  -p 1000:8080 \
   --name samohosting-dashboard \
   --restart=always \
   -v /opt/dashy/user-data/conf.yml:/app/user-data/conf.yml \
@@ -76,7 +76,7 @@ msg_ok "Установлено приложение Runtipi"
 MOTD_FILE="/etc/motd"
 if [ -f "$MOTD_FILE" ]; then
   # Start MOTD with application info and link
-  echo -e "Ваш персональный дашборд by samohosting.ru $IP:4000" >> "$MOTD_FILE"
+  echo -e "Начните изучать Ваш домашний сервер by samohosting.ru ==>> $IP:1000" >> "$MOTD_FILE"
 else
   echo "MotD file does not exist!" >&2
 fi
@@ -88,4 +88,4 @@ msg_info "Cleaning up"
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
 msg_ok "Временные файлы установки - удалены!"
-msg_ok "Ваш персональный дашборд by samohosting.ru $IP:4000"
+msg_ok "Начните изучать Ваш домашний сервер by samohosting.ru ==>> $IP:1000 . Удачного самохостинга!"
