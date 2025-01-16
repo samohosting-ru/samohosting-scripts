@@ -53,7 +53,6 @@ $STD docker run -d \
   msg_ok "Portainer $PORTAINER_LATEST_VERSION установлен."
 msg_info "Устанавливаю Dashy Dashboard.."
 mkdir -p /opt/dashy/user-data/
-msg_info "Скачиваю шаблон дашборда by samohosting.ru"
 wget -qO/opt/dashy/user-data/conf.yml https://raw.githubusercontent.com/LiaGen/samohosting/refs/heads/main/files_from_videos/conf.yml
 sed -i 's|samohosting.ru|\$IP|g' /opt/dashy/user-data/conf.yml
 msg_info "Устанавливаю Dashy Dashboard.."
