@@ -14,6 +14,10 @@ setting_up_container
 network_check
 update_os
 
+#set colors
+GN=$(echo "\033[1;92m")
+BGN=$(echo "\033[4;92m")
+CL=$(echo "\033[m")
 # Get the current private IP address
 IP=$(hostname -I | awk '{print $1}')  # Private IP
 
@@ -84,13 +88,9 @@ fi
     
 motd_ssh
 customize
-GN=$(echo "\033[1;92m")
-CL=$(echo "\033[m")
 msg_info "Cleaning up"
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
 msg_ok "Временные файлы установки - удалены!"
-msg_ok "Начните изучать Ваш домашний сервер by samohosting.ru ==>> http://$IP:1000 . Удачного самохостинга!"
-msg_ok "Начните изучать Ваш домашний сервер by samohosting.ru ==>> http://${GN}${IP}${CL}:1000 . Удачного самохостинга!"
-echo -e "Начните изучать Ваш домашний сервер by samohosting.ru ==>> ${GN}http://${IP}:1000${CL} . Удачного самохостинга!"
+echo -e "    ${GN}Начните изучать Ваш домашний сервер by samohosting.ru${CL} ==>> ${BGN}http://${IP}:1000 .${CL}Удачного самохостинга!"
 
