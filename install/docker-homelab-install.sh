@@ -65,6 +65,7 @@ $STD docker run -d \
 msg_ok "Dashy Dashboard установлен."
 msg_info "Настраиваю Ваш линый дашборд by samohosting.ru"
 msg_ok "Ваш линчый дашборд by SAMOHOSTING.RU настроен"
+msg_info "Устанавливаю приложение Runtipi"
 cd /opt
 wget -q https://raw.githubusercontent.com/runtipi/runtipi/master/scripts/install.sh
 chmod +x install.sh
@@ -83,9 +84,13 @@ fi
     
 motd_ssh
 customize
-
+GN=$(echo "\033[1;92m")
+CL=$(echo "\033[m")
 msg_info "Cleaning up"
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
 msg_ok "Временные файлы установки - удалены!"
 msg_ok "Начните изучать Ваш домашний сервер by samohosting.ru ==>> http://$IP:1000 . Удачного самохостинга!"
+msg_ok "Начните изучать Ваш домашний сервер by samohosting.ru ==>> http://${GN}${IP}${CL}:1000 . Удачного самохостинга!"
+echo -e "Начните изучать Ваш домашний сервер by samohosting.ru ==>> ${GN}http://${IP}:1000${CL} . Удачного самохостинга!"
+
