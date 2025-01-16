@@ -69,7 +69,7 @@ chmod +x install.sh
 $STD ./install.sh
 chmod 666 /opt/runtipi/state/settings.json
 msg_ok "Установлено приложение Runtipi"
-find ./ -type f \(  -name "/opt/dashy/user-data/conf.yml" \) -exec sed -i 's|samohosting.ru|\${IP}|g' {} +
+sed -i 's|samohosting.ru|\$(hostname -I)|g' /opt/dashy/user-data/conf.yml
 
 # update MOTD with application info, system details
 MOTD_FILE="/etc/motd"
