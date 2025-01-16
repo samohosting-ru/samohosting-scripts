@@ -238,7 +238,7 @@ jobs:
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|"Which storage pool you would like to use for the container?\\n\\n"|"Выберите хранилище для размещения данных\\n\\n"|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|"Which storage pool you would like to use for the \${CONTENT_LABEL,,}?\\nTo make a selection, use the Spacebar.\\n"|"Выберите хранилище для размещения \${CONTENT_LABEL,,}?\\nЧтобы выбрать - используйте ПРОБЕЛ.\\n"|g' {} +
 
-        "Which storage pool you would like to use for the ${CONTENT_LABEL,,}?\nTo make a selection, use the Spacebar.\n"
+        # "Which storage pool you would like to use for the ${CONTENT_LABEL,,}?\nTo make a selection, use the Spacebar.\n"
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|die "Menu aborted."|die "Меню выбора было закрыто."|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|echo "Loading..."|echo "Загрузка..."|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|echo -e "Loading..."|echov -e "Загрузка..."|g' {} +
