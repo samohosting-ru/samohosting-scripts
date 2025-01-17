@@ -72,6 +72,8 @@ $STD docker run -d \
 msg_ok "Dashy Dashboard установлен."
 msg_info "Настраиваю Ваш линый дашборд by samohosting.ru"
 msg_ok "Ваш линчый дашборд by SAMOHOSTING.RU настроен"
+pwd
+
 
 
 # update MOTD with application info, system details
