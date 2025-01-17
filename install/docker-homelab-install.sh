@@ -38,10 +38,8 @@ get_latest_release() {
   curl -sL https://api.github.com/repos/$1/releases/latest | grep '"tag_name":' | cut -d'"' -f4
 }
 
-# DOCKER_LATEST_VERSION=$(get_latest_release "moby/moby")
 PORTAINER_LATEST_VERSION=$(get_latest_release "portainer/portainer")
 # DOCKER_COMPOSE_LATEST_VERSION=$(get_latest_release "docker/compose")
-
 # msg_info "Устанавливаю Docker $DOCKER_LATEST_VERSION"
 # DOCKER_CONFIG_PATH='/etc/docker/daemon.json'
 # mkdir -p $(dirname $DOCKER_CONFIG_PATH)
@@ -57,7 +55,6 @@ $STD ./install.sh
 chmod 666 /opt/runtipi/state/settings.json
 msg_ok "Установлено приложение Runtipi"
 
-
 msg_info "Устанавливаю Dashy Dashboard.."
 mkdir -p /opt/dashy/user-data/
 wget -qO/opt/dashy/user-data/conf.yml https://raw.githubusercontent.com/LiaGen/samohosting/refs/heads/main/files_from_videos/conf.yml
@@ -72,27 +69,6 @@ $STD docker run -d \
 msg_ok "Dashy Dashboard установлен."
 msg_info "Настраиваю Ваш линый дашборд by samohosting.ru"
 msg_ok "Ваш линчый дашборд by SAMOHOSTING.RU настроен"
-pwd
-
-
-
-# update MOTD with application info, system details
-MOTD_FILE="/etc/motd"
-echo -e "Начните изучать Ваш домашний сервер by samohosting.ru ==>> http://$IP:1000" >> "$MOTD_FILE"
-echo -e "MOTD_FILE_updated"
-cat /etc/motd
-echo -e "Начните изучать Ваш домашний сервер by samohosting.ru ==>> http://$IP:1000" >> /etc/motd
-cat /etc/motd
-NEXTCTID=$(pvesh get /cluster/nextid)
-CURRENTCTID=$((next_id - 1))
-MOTD_FILE="/etc/motd"
-if [ -f "$MOTD_FILE" ]; then
-  # Start MOTD with application info and link
-  pct enter $CURRENTCTID
-  echo -e "Начните изучать Ваш домашний сервер by samohosting.ru ==>> http://$IP:1000" >> "$MOTD_FILE"
-else
-  echo "MotD file does not exist!" >&2
-fi
 msg_info "Устанавливаю Portainer $PORTAINER_LATEST_VERSION"
 $STD docker run -d \
   -p 8000:8000 \
