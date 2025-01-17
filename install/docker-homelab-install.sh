@@ -16,6 +16,7 @@ update_os
 
 #set colors
 GN=$(echo "\033[1;92m")
+BL=$(echo "\033[36m")
 BGN=$(echo "\033[4;92m")
 CL=$(echo "\033[m")
 # Get the current private IP address
@@ -26,6 +27,7 @@ $STD apt-get install -y curl
 $STD apt-get install -y sudo
 $STD apt-get install -y mc
 msg_ok "Зависимости(необходимое ПО) установлены."
+msg_ok "--------------------------------------------------------------------------------------"
 msg_ok "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!ВНИМАНИЕ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 msg_ok "Начинаю устанавливать набор приложений для домашенго сервера от samohosting.ru"
 msg_ok "Это может занять около 30 минут.."
@@ -75,6 +77,7 @@ msg_ok "Ваш линчый дашборд by SAMOHOSTING.RU настроен"
 MOTD_FILE="/etc/motd"
 if [ -f "$MOTD_FILE" ]; then
   # Start MOTD with application info and link
+  # pct enter
   echo -e "Начните изучать Ваш домашний сервер by samohosting.ru ==>> http://$IP:1000" >> "$MOTD_FILE"
 else
   echo "MotD file does not exist!" >&2
@@ -95,5 +98,9 @@ msg_info "Cleaning up"
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
 msg_ok "Временные файлы установки - удалены!"
-echo -e "    ${GN}Начните изучать Ваш домашний сервер by samohosting.ru${CL} ==>> ${BGN}http://${IP}:1000${CL}. Удачного самохостинга!"
+msg_ok "Ваш новенький домашний сервер собран и установлен!"
+msg_ok "--------------------------------------------------------------------------------------"
+echo -e "      ${BL}Начните изучать Ваш домашний сервер by samohosting.ru${CL} ==>> ${BGN}http://${IP}:1000${CL} Удачного самохостинга!"
+echo -e "      ${GN}Пожалуйста начните с создания аккаунта Portianer.${CL} На его регистрацию у Вас 5 минут после установки."
+echo -e "      Если Вы не успеете - потребуется перезагрузка Docker\LXC контейнера для регистрации в сервисе."
 
