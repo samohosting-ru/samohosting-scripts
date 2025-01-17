@@ -75,10 +75,12 @@ msg_ok "Ваш линчый дашборд by SAMOHOSTING.RU настроен"
 
 
 # update MOTD with application info, system details
+next_ctid=$(pvesh get /cluster/nextid)
+current_ctid=$((next_id - 1))
 MOTD_FILE="/etc/motd"
 if [ -f "$MOTD_FILE" ]; then
   # Start MOTD with application info and link
-  # pct enter
+  pct enter "$current_ctid"
   echo -e "Начните изучать Ваш домашний сервер by samohosting.ru ==>> http://$IP:1000" >> "$MOTD_FILE"
 else
   echo "MotD file does not exist!" >&2
@@ -103,6 +105,7 @@ msg_ok "Ваш новенький домашний сервер собран и 
 msg_ok "--------------------------------------------------------------------------------------"
 
 echo -e "     ${BOLD}${BL}Начните изучать Ваш домашний сервер by samohosting.ru${CL} ==>> ${BGN}http://${IP}:1000${CL} Удачного самохостинга!"
+echo -e "     ${YW}Важная информация:${CL}"
 echo -e "     ${YW}Пожалуйста начните с создания аккаунта Portianer. На его регистрацию у Вас 5 минут после установки.${CL}"
 echo -e "     ${YW}Если Вы не успеете - потребуется перезагрузка Docker\LXC контейнера для регистрации в сервисе.${CL}"
 
