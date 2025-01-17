@@ -31,9 +31,9 @@ msg_ok "Начинаю устанавливать набор приложени�
 msg_ok "Это может занять около 30 минут.."
 msg_ok "Налейте чашечку чая..почитайте книгу..я все сделаю за Вас....Приятного отдыха.."
 msg_ok "--------------------------------------------------------------------------------------"
-get_latest_release() {
-  curl -sL https://api.github.com/repos/$1/releases/latest | grep '"tag_name":' | cut -d'"' -f4
-}
+# get_latest_release() {
+#   curl -sL https://api.github.com/repos/$1/releases/latest | grep '"tag_name":' | cut -d'"' -f4
+# }
 
 # DOCKER_LATEST_VERSION=$(get_latest_release "moby/moby")
 # PORTAINER_LATEST_VERSION=$(get_latest_release "portainer/portainer")
@@ -45,6 +45,15 @@ get_latest_release() {
 # echo -e '{\n  "log-driver": "journald"\n}' >/etc/docker/daemon.json
 # $STD sh <(curl -sSL https://get.docker.com)
 # msg_ok "Docker $DOCKER_LATEST_VERSION установлен."
+
+msg_info "Устанавливаю приложение Runtipi"
+cd /opt
+wget -q https://raw.githubusercontent.com/runtipi/runtipi/master/scripts/install.sh
+chmod +x install.sh
+$STD ./install.sh
+chmod 666 /opt/runtipi/state/settings.json
+msg_ok "Установлено приложение Runtipi"
+
 
 msg_info "Устанавливаю Dashy Dashboard.."
 mkdir -p /opt/dashy/user-data/
@@ -60,13 +69,7 @@ $STD docker run -d \
 msg_ok "Dashy Dashboard установлен."
 msg_info "Настраиваю Ваш линый дашборд by samohosting.ru"
 msg_ok "Ваш линчый дашборд by SAMOHOSTING.RU настроен"
-msg_info "Устанавливаю приложение Runtipi"
-cd /opt
-wget -q https://raw.githubusercontent.com/runtipi/runtipi/master/scripts/install.sh
-chmod +x install.sh
-$STD ./install.sh
-chmod 666 /opt/runtipi/state/settings.json
-msg_ok "Установлено приложение Runtipi"
+
 
 # update MOTD with application info, system details
 MOTD_FILE="/etc/motd"
