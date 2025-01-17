@@ -31,12 +31,12 @@ msg_ok "Начинаю устанавливать набор приложени�
 msg_ok "Это может занять около 30 минут.."
 msg_ok "Налейте чашечку чая..почитайте книгу..я все сделаю за Вас....Приятного отдыха.."
 msg_ok "--------------------------------------------------------------------------------------"
-# get_latest_release() {
-#   curl -sL https://api.github.com/repos/$1/releases/latest | grep '"tag_name":' | cut -d'"' -f4
-# }
+get_latest_release() {
+  curl -sL https://api.github.com/repos/$1/releases/latest | grep '"tag_name":' | cut -d'"' -f4
+}
 
 # DOCKER_LATEST_VERSION=$(get_latest_release "moby/moby")
-# PORTAINER_LATEST_VERSION=$(get_latest_release "portainer/portainer")
+PORTAINER_LATEST_VERSION=$(get_latest_release "portainer/portainer")
 # DOCKER_COMPOSE_LATEST_VERSION=$(get_latest_release "docker/compose")
 
 # msg_info "Устанавливаю Docker $DOCKER_LATEST_VERSION"
