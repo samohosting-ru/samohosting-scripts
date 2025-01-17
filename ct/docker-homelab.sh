@@ -10,7 +10,7 @@ source <(curl -s https://raw.githubusercontent.com/samohosting-ru/samohosting-sc
 APP="docker-homelab"
 var_tags="docker-homelab"
 var_cpu="4"
-var_ram="12288"
+var_ram="8192"
 var_disk="15"
 var_os="debian"
 var_version="12"
@@ -44,5 +44,5 @@ start
 build_container
 description
 
-msg_ok "Установка успешно завершена!\n"
-echo -e "${CREATING}${GN}${APP} Установка успешно завершена!${CL}"
+# msg_ok "Установка успешно завершена!\n"
+# echo -e "${CREATING}${GN}${APP} Установка успешно завершена!${CL}"
