@@ -77,6 +77,12 @@ pwd
 
 
 # update MOTD with application info, system details
+MOTD_FILE="/etc/motd"
+echo -e "Начните изучать Ваш домашний сервер by samohosting.ru ==>> http://$IP:1000" >> "$MOTD_FILE"
+echo -e "MOTD_FILE_updated"
+cat /etc/motd
+echo -e "Начните изучать Ваш домашний сервер by samohosting.ru ==>> http://$IP:1000" >> /etc/motd
+cat /etc/motd
 NEXTCTID=$(pvesh get /cluster/nextid)
 CURRENTCTID=$((next_id - 1))
 MOTD_FILE="/etc/motd"
