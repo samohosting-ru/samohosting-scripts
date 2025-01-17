@@ -67,8 +67,10 @@ $STD docker run -d \
   -v /opt/dashy/user-data/conf.yml:/app/user-data/conf.yml \
   lissy93/dashy:latest 
 msg_ok "Dashy Dashboard установлен."
+
 msg_info "Настраиваю Ваш линый дашборд by samohosting.ru"
 msg_ok "Ваш линчый дашборд by SAMOHOSTING.RU настроен"
+
 msg_info "Устанавливаю Portainer $PORTAINER_LATEST_VERSION"
 $STD docker run -d \
   -p 8000:8000 \
@@ -78,10 +80,11 @@ $STD docker run -d \
   -v /var/run/docker.sock:/var/run/docker.sock \
   -v portainer_data:/data \
   portainer/portainer-ce:latest
-msg_ok "Portainer $PORTAINER_LATEST_VERSION установлен."    
+msg_ok "Portainer $PORTAINER_LATEST_VERSION установлен."
+
 motd_ssh
 customize
-msg_info "Cleaning up"
+msg_info "Провожу уборку. Нет, не генеральную.."
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
 msg_ok "Временные файлы установки - удалены!"
