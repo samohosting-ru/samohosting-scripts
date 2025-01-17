@@ -35,26 +35,17 @@ get_latest_release() {
   curl -sL https://api.github.com/repos/$1/releases/latest | grep '"tag_name":' | cut -d'"' -f4
 }
 
-DOCKER_LATEST_VERSION=$(get_latest_release "moby/moby")
-PORTAINER_LATEST_VERSION=$(get_latest_release "portainer/portainer")
-DOCKER_COMPOSE_LATEST_VERSION=$(get_latest_release "docker/compose")
+# DOCKER_LATEST_VERSION=$(get_latest_release "moby/moby")
+# PORTAINER_LATEST_VERSION=$(get_latest_release "portainer/portainer")
+# DOCKER_COMPOSE_LATEST_VERSION=$(get_latest_release "docker/compose")
 
-msg_info "Устанавливаю Docker $DOCKER_LATEST_VERSION"
-DOCKER_CONFIG_PATH='/etc/docker/daemon.json'
-mkdir -p $(dirname $DOCKER_CONFIG_PATH)
-echo -e '{\n  "log-driver": "journald"\n}' >/etc/docker/daemon.json
-$STD sh <(curl -sSL https://get.docker.com)
-msg_ok "Docker $DOCKER_LATEST_VERSION установлен."
-msg_info "Устанавливаю Portainer $PORTAINER_LATEST_VERSION"
-$STD docker run -d \
-  -p 8000:8000 \
-  -p 9443:9443 \
-  --name=portainer \
-  --restart=always \
-  -v /var/run/docker.sock:/var/run/docker.sock \
-  -v portainer_data:/data \
-  portainer/portainer-ce:latest
-msg_ok "Portainer $PORTAINER_LATEST_VERSION установлен."
+# msg_info "Устанавливаю Docker $DOCKER_LATEST_VERSION"
+# DOCKER_CONFIG_PATH='/etc/docker/daemon.json'
+# mkdir -p $(dirname $DOCKER_CONFIG_PATH)
+# echo -e '{\n  "log-driver": "journald"\n}' >/etc/docker/daemon.json
+# $STD sh <(curl -sSL https://get.docker.com)
+# msg_ok "Docker $DOCKER_LATEST_VERSION установлен."
+
 msg_info "Устанавливаю Dashy Dashboard.."
 mkdir -p /opt/dashy/user-data/
 wget -qO/opt/dashy/user-data/conf.yml https://raw.githubusercontent.com/LiaGen/samohosting/refs/heads/main/files_from_videos/conf.yml
@@ -85,12 +76,21 @@ if [ -f "$MOTD_FILE" ]; then
 else
   echo "MotD file does not exist!" >&2
 fi
-    
+msg_info "Устанавливаю Portainer $PORTAINER_LATEST_VERSION"
+$STD docker run -d \
+  -p 8000:8000 \
+  -p 9443:9443 \
+  --name=portainer \
+  --restart=always \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  -v portainer_data:/data \
+  portainer/portainer-ce:latest
+msg_ok "Portainer $PORTAINER_LATEST_VERSION установлен."    
 motd_ssh
 customize
 msg_info "Cleaning up"
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
 msg_ok "Временные файлы установки - удалены!"
-echo -e "    ${GN}Начните изучать Ваш домашний сервер by samohosting.ru${CL} ==>> ${BGN}http://${IP}:1000 .${CL}Удачного самохостинга!"
+echo -e "    ${GN}Начните изучать Ваш домашний сервер by samohosting.ru${CL} ==>> ${BGN}http://${IP}:1000${CL}. Удачного самохостинга!"
 
