@@ -75,12 +75,12 @@ msg_ok "Ваш линчый дашборд by SAMOHOSTING.RU настроен"
 
 
 # update MOTD with application info, system details
-next_ctid=$(pvesh get /cluster/nextid)
-current_ctid=$((next_id - 1))
+NEXT_CTID="echo $(pvesh get /cluster/nextid)"
+CURRENT_CTID="echo $((next_id - 1))"
 MOTD_FILE="/etc/motd"
 if [ -f "$MOTD_FILE" ]; then
   # Start MOTD with application info and link
-  pct enter "$current_ctid"
+  pct enter $CURRENT_CTID
   echo -e "Начните изучать Ваш домашний сервер by samohosting.ru ==>> http://$IP:1000" >> "$MOTD_FILE"
 else
   echo "MotD file does not exist!" >&2
