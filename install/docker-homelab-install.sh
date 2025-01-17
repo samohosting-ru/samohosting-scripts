@@ -29,10 +29,10 @@ $STD apt-get install -y sudo
 $STD apt-get install -y mc
 msg_ok "Зависимости(необходимое ПО) установлены."
 msg_ok "--------------------------------------------------------------------------------------"
-msg_ok "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!ВНИМАНИЕ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-msg_ok "Начинаю устанавливать набор приложений для домашенго сервера от samohosting.ru"
-msg_ok "Это может занять какое-то время(не переживайте)"
-msg_ok "Налейте чашечку чая.. почитайте книгу.. я все сделаю за Вас.. Приятного отдыха.."
+msg_ok "${BOLD}${YW}!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!ВНИМАНИЕ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!${CL}"
+msg_ok "${BOLD}${YW}Начинаю устанавливать набор приложений для домашенго сервера от samohosting.ru${CL}"
+msg_ok "${BOLD}${YW}Это может занять какое-то время(не переживайте)${CL}"
+msg_ok "${BOLD}${YW}Налейте чашечку чая.. почитайте книгу.. я все сделаю за Вас.. Приятного отдыха..${CL}"
 msg_ok "--------------------------------------------------------------------------------------"
 get_latest_release() {
   curl -sL https://api.github.com/repos/$1/releases/latest | grep '"tag_name":' | cut -d'"' -f4
@@ -75,12 +75,12 @@ msg_ok "Ваш линчый дашборд by SAMOHOSTING.RU настроен"
 
 
 # update MOTD with application info, system details
-NEXT_CTID="echo $(pvesh get /cluster/nextid)"
-CURRENT_CTID="echo $((next_id - 1))"
+NEXTCTID=$(pvesh get /cluster/nextid)
+CURRENTCTID=$((next_id - 1))
 MOTD_FILE="/etc/motd"
 if [ -f "$MOTD_FILE" ]; then
   # Start MOTD with application info and link
-  pct enter $CURRENT_CTID
+  pct enter $CURRENTCTID
   echo -e "Начните изучать Ваш домашний сервер by samohosting.ru ==>> http://$IP:1000" >> "$MOTD_FILE"
 else
   echo "MotD file does not exist!" >&2
