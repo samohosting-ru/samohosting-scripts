@@ -103,6 +103,15 @@ $STD docker run -d \
   nicolargo/glances:latest-full
 msg_ok "Glances установлен."
 
+msg_info "Устанавливаю Сервис заметок Memos.."
+$STD docker run -d \
+  -p 1003:5230 \
+  --name=memos \
+  --restart=unless-stopped \
+  -v /opt/memos/:/var/opt/memos \
+  neosmemo/memos:stable
+msg_ok "Memos установлен."
+
 motd_ssh
 customize
 msg_info "Провожу уборку. Нет, не генеральную.."
