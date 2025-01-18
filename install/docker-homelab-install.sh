@@ -87,7 +87,7 @@ $STD docker run -d \
   -p 1001:80 \
   --name=filebrowser\
   --restart=unless-stopped \
-  -v /:/srv/host \
+  -v /:/srv/AIO-SAMOHOSTING-LXC \
   -v /opt/filebrowser/data/db:/database \
   filebrowser/filebrowser:s6
 msg_ok "Веб-файл-браузер установлен."
