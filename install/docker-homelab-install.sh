@@ -89,7 +89,7 @@ $STD docker run -d \
   --restart=always \
   -v /opt:/host \
   -v /opt/filebrowser/data/general:/srv/general \
-  -v /opt/filebrowser/data/db:/database
+  -v /opt/filebrowser/data/db:/database \
   filebrowser/filebrowser:s6
 msg_ok "Веб-файл-браузер установлен."
 
