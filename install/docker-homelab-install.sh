@@ -82,6 +82,17 @@ $STD docker run -d \
   portainer/portainer-ce:latest
 msg_ok "Portainer $PORTAINER_LATEST_VERSION установлен."
 
+msg_info "Устанавливаю веб-файл-браузер"
+$STD docker run -d \
+  -p 1001:80 \
+  --name=filebrowser \
+  --restart=always \
+  -v /opt:/host \
+  -v /opt/filebrowser/data/general:/srv/general \
+  -v /opt/filebrowser/data/db:/database
+  filebrowser/filebrowser:s6
+msg_ok "Веб-файл-браузер установлен."
+
 motd_ssh
 customize
 msg_info "Провожу уборку. Нет, не генеральную.."
