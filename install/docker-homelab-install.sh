@@ -71,7 +71,7 @@ msg_ok "Dashy Dashboard установлен."
 msg_info "Настраиваю Ваш линый дашборд by samohosting.ru"
 msg_ok "Ваш линчый дашборд by SAMOHOSTING.RU настроен"
 
-msg_info "Устанавливаю Portainer $PORTAINER_LATEST_VERSION"
+msg_info "Устанавливаю Portainer $PORTAINER_LATEST_VERSION.."
 $STD docker run -d \
   -p 8000:8000 \
   -p 9443:9443 \
@@ -82,16 +82,26 @@ $STD docker run -d \
   portainer/portainer-ce:latest
 msg_ok "Portainer $PORTAINER_LATEST_VERSION установлен."
 
-msg_info "Устанавливаю веб-файл-браузер"
+msg_info "Устанавливаю веб-файл-браузер.."
 $STD docker run -d \
   -p 1001:80 \
-  --name=filebrowser \
-  --restart=always \
-  -v /opt:/host \
-  -v /opt/filebrowser/data/general:/srv/general \
+  --name=filebrowser\
+  --restart=unless-stopped \
+  -v /:/srv/host \
   -v /opt/filebrowser/data/db:/database \
   filebrowser/filebrowser:s6
 msg_ok "Веб-файл-браузер установлен."
+
+msg_info "Устанавливаю Glances.."
+$STD docker run -d \
+  -p 1002:61208 \
+  --name=glance \
+  --restart=unless-stopped \
+  --pid=host \
+  -e GLANCES_OPT=-w \
+  -v /var/run/docker.sock:/var/run/docker.sock:ro \
+  nicolargo/glances:latest-full
+msg_ok "Glances установлен."
 
 motd_ssh
 customize
