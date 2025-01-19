@@ -58,6 +58,7 @@ msg_ok "Установлено приложение Runtipi"
 msg_info "Устанавливаю Dashy Dashboard.."
 mkdir -p /opt/dashy/user-data/
 wget -qO/opt/dashy/user-data/conf.yml https://raw.githubusercontent.com/LiaGen/samohosting/refs/heads/main/files_from_videos/conf.yml
+wget -qO/opt/dashy/user-data/page2.yml https://raw.githubusercontent.com/lissy93/dashy/refs/heads/master/user-data/conf.yml
 sed -i -e "s|localhost|$IP|g" /opt/dashy/user-data/conf.yml
 msg_info "Устанавливаю Dashy Dashboard.."
 $STD docker run -d \
