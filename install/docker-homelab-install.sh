@@ -58,8 +58,9 @@ msg_ok "Установлено приложение Runtipi"
 msg_info "Устанавливаю Dashy Dashboard.."
 mkdir -p /opt/dashy/user-data/
 wget -qO/opt/dashy/user-data/conf.yml https://raw.githubusercontent.com/LiaGen/samohosting/refs/heads/main/files_from_videos/conf.yml
-wget -qO/opt/dashy/user-data/page2.yml https://raw.githubusercontent.com/lissy93/dashy/refs/heads/master/user-data/conf.yml
+wget -qO/opt/dashy/user-data/conf2.yml https://raw.githubusercontent.com/LiaGen/samohosting/refs/heads/main/files_from_videos/conf2.yml
 sed -i -e "s|localhost|$IP|g" /opt/dashy/user-data/conf.yml
+sed -i -e "s|localhost|$IP|g" /opt/dashy/user-data/conf2.yml
 msg_info "Устанавливаю Dashy Dashboard.."
 $STD docker run -d \
   -p 1000:8080 \
@@ -88,6 +89,8 @@ $STD docker run -d \
   -p 1001:80 \
   --name=filebrowser\
   --restart=unless-stopped \
+  -e PUID=$(id -u) \
+  -e PGID=$(id -g) \
   -v /:/srv/AIO-SAMOHOSTING-LXC \
   -v /opt/filebrowser/data/db:/database \
   filebrowser/filebrowser:s6
