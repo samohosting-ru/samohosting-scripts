@@ -67,6 +67,7 @@ $STD docker run -d \
   --name samohosting-dashboard \
   --restart=always \
   -v /opt/dashy/user-data/conf.yml:/app/user-data/conf.yml \
+  -v /opt/dashy/user-data/conf2.yml:/app/user-data/conf2.yml \
   lissy93/dashy:latest 
 msg_ok "Dashy Dashboard установлен."
 
