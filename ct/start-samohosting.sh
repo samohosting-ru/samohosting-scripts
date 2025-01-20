@@ -7,8 +7,8 @@ source <(curl -s https://raw.githubusercontent.com/samohosting-ru/samohosting-sc
 # Source: https://www.docker.com/
 
 # App Default Values
-APP="docker-homelab"
-var_tags="docker-homelab"
+APP="start-samohosting"
+var_tags="start-samohosting"
 var_cpu="4"
 var_ram="8192"
 var_disk="15"
