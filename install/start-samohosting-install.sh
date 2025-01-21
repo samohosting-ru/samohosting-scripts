@@ -53,6 +53,7 @@ wget -q https://raw.githubusercontent.com/runtipi/runtipi/master/scripts/install
 chmod +x install.sh
 $STD ./install.sh
 chmod 666 /opt/runtipi/state/settings.json
+chmod -R 777 /opt/runtipi/
 msg_ok "Установлено приложение Runtipi"
 
 msg_info "Устанавливаю Dashy Dashboard.."
