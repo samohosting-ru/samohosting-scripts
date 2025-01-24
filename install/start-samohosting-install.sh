@@ -73,7 +73,7 @@ $STD docker run -d \
 msg_ok "Dashy Dashboard установлен."
 
 msg_info "Настраиваю Ваш линый дашборд by samohosting.ru"
-msg_ok "Ваш линчый дашборд by SAMOHOSTING.RU настроен"
+msg_ok "Ваш личный дашборд by SAMOHOSTING.RU настроен"
 
 msg_info "Устанавливаю Portainer $PORTAINER_LATEST_VERSION.."
 $STD docker run -d \
