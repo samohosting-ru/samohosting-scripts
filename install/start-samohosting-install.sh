@@ -94,7 +94,7 @@ $STD docker run -d \
   -e PUID=$(id -u) \
   -e PGID=$(id -g) \
   -v /:/srv/ALL_FOLDERS_LXC-START-SAMOHOSTING \
-  -v /opt:/srv/APPS_FOLDER(OPT) \
+  -v /opt:/srv/APPS_FOLDER \
   -v /opt/runtipi/logs:/srv/RUNTIPI_LOGS \
   -v /opt/filebrowser/data/db:/database \
   filebrowser/filebrowser:s6
