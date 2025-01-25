@@ -93,7 +93,9 @@ $STD docker run -d \
   --restart=unless-stopped \
   -e PUID=$(id -u) \
   -e PGID=$(id -g) \
-  -v /:/srv/AIO-SAMOHOSTING-LXC \
+  -v /:/srv/ALL_FOLDERS_LXC-START-SAMOHOSTING \
+  -v /opt:/srv/APPS_FOLDER(OPT) \
+  -v /opt/runtipi/logs:/srv/RUNTIPI_LOGS \
   -v /opt/filebrowser/data/db:/database \
   filebrowser/filebrowser:s6
 msg_ok "Веб-файл-браузер установлен."
