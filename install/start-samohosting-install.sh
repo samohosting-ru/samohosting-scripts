@@ -34,11 +34,14 @@ msg_ok "${BOLD}${YW}Начинаю устанавливать набор при�
 msg_ok "${BOLD}${YW}Это может занять какое-то время(не переживайте)${CL}"
 msg_ok "${BOLD}${YW}Налейте чашечку чая.. почитайте книгу.. я все сделаю за Вас.. Приятного отдыха..${CL}"
 msg_ok "--------------------------------------------------------------------------------------"
-get_latest_release() {
-  curl -sL https://api.github.com/repos/$1/releases/latest | grep '"tag_name":' | cut -d'"' -f4
-}
 
-PORTAINER_LATEST_VERSION=$(get_latest_release "portainer/portainer")
+motd_ssh
+customize
+# _____НЕ ЗАБУДЬ МЕНЯ УДАЛИТЬ__СТАРТ__________________________________________________________
+# get_latest_release() {
+#   curl -sL https://api.github.com/repos/$1/releases/latest | grep '"tag_name":' | cut -d'"' -f4
+# }
+# PORTAINER_LATEST_VERSION=$(get_latest_release "portainer/portainer")
 # DOCKER_COMPOSE_LATEST_VERSION=$(get_latest_release "docker/compose")
 # msg_info "Устанавливаю Docker $DOCKER_LATEST_VERSION"
 # DOCKER_CONFIG_PATH='/etc/docker/daemon.json'
@@ -46,9 +49,7 @@ PORTAINER_LATEST_VERSION=$(get_latest_release "portainer/portainer")
 # echo -e '{\n  "log-driver": "journald"\n}' >/etc/docker/daemon.json
 # $STD sh <(curl -sSL https://get.docker.com)
 # msg_ok "Docker $DOCKER_LATEST_VERSION установлен."
-
-motd_ssh
-customize
+# _____НЕ ЗАБУДЬ МЕНЯ УДАЛИТЬ__КОНЕЦ__________________________________________________________
 
 msg_info "Устанавливаю приложение Runtipi"
 cd /opt
@@ -78,16 +79,18 @@ msg_ok "Dashy Dashboard установлен."
 msg_info "Настраиваю Ваш линый дашборд by samohosting.ru"
 msg_ok "Ваш личный дашборд by SAMOHOSTING.RU настроен"
 
-msg_info "Устанавливаю Portainer $PORTAINER_LATEST_VERSION.."
+msg_info "Устанавливаю Dockge для управления Docker контейнерами и стэками.."
 $STD docker run -d \
-  -p 8000:8000 \
-  -p 9443:9443 \
-  --name=portainer \
-  --restart=always \
+  -p 5001:5001 \
+  --name=dockge\
+  --restart=unless-stopped \
+  -e PUID=$(id -u) \
+  -e PGID=$(id -g) \
   -v /var/run/docker.sock:/var/run/docker.sock \
-  -v portainer_data:/data \
-  portainer/portainer-ce:latest
-msg_ok "Portainer $PORTAINER_LATEST_VERSION установлен."
+  -v /opt/dockge/data/app-data:/app/data \
+  -v /opt/dockge/data/stacks:/data/stacks \
+  louislam/dockge:latest
+msg_ok "Dockge установлен."
 
 msg_info "Устанавливаю веб-файл-браузер.."
 $STD docker run -d \
@@ -113,15 +116,6 @@ $STD docker run -d \
   -v /var/run/docker.sock:/var/run/docker.sock:ro \
   nicolargo/glances:latest-full
 msg_ok "Glances установлен."
-
-# msg_info "Устанавливаю Сервис заметок Memos.."
-# $STD docker run -d \
-#   -p 1003:5230 \
-#   --name=memos \
-#   --restart=unless-stopped \
-#   -v /opt/memos/:/var/opt/memos \
-#   neosmemo/memos:stable
-# msg_ok "Memos установлен."
 
 msg_info "Провожу уборку. Нет, не генеральную.."
 $STD apt-get -y autoremove
