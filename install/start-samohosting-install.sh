@@ -86,7 +86,7 @@ $STD docker run -d \
   -p 5001:5001 \
   --name=dockge\
   --restart=unless-stopped \
-  --stacksPath=/opt/dockge/data/stacks
+  --stacksPath=/opt/dockge/data/stacks \
   -e PUID=$(id -u) \
   -e PGID=$(id -g) \
   -v /var/run/docker.sock:/var/run/docker.sock \
