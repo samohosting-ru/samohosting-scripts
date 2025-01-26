@@ -80,6 +80,7 @@ msg_info "Настраиваю Ваш линый дашборд by samohosting.r
 msg_ok "Ваш личный дашборд by SAMOHOSTING.RU настроен"
 
 msg_info "Устанавливаю Dockge для управления Docker контейнерами и стэками.."
+mkdir -p /opt/dockge/data/
 $STD docker run -d \
   -p 5001:5001 \
   --name=dockge\
@@ -91,6 +92,36 @@ $STD docker run -d \
   -v /opt/dockge/data/stacks:/data/stacks \
   louislam/dockge:latest
 msg_ok "Dockge установлен."
+
+msg_info "Добавляю Firefox конфигурацию в Dockge"
+mkdir -p /opt/dockge/data/stacks/firefox
+cat <<EOF >/opt/dockge/data/stacks/firefox/compose.yaml
+services:
+  firefox:
+    image: lscr.io/linuxserver/firefox:latest
+    container_name: firefox
+    security_opt:
+      - seccomp:unconfined #optional
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - FIREFOX_CLI=https://www.samohosting.ru/ #optional
+    volumes:
+      - ./opt/firefox/data/config:/config
+    ports:
+      - 3000:3000
+      - 3001:3001
+    shm_size: 1gb
+    restart: unless-stopped
+EOF
+msg_ok "Конфигурация для запуска Firefox в Dockge добавлена"
+
+
+
+
+
+
 
 msg_info "Устанавливаю веб-файл-браузер.."
 $STD docker run -d \
