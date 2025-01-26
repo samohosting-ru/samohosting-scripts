@@ -22,7 +22,7 @@ CL=$(echo "\033[m")
 YW=$(echo "\033[33m")
 # Get the current private IP address
 IP=$(hostname -I | awk '{print $1}')  # Private IP
-
+# --------------------------------------------------------------------------------------------------------------------
 msg_info "Устанавливаю зависимости(необходимое ПО).."
 $STD apt-get install -y curl
 $STD apt-get install -y sudo
@@ -34,9 +34,10 @@ msg_ok "${BOLD}${YW}Начинаю устанавливать набор при�
 msg_ok "${BOLD}${YW}Это может занять какое-то время(не переживайте)${CL}"
 msg_ok "${BOLD}${YW}Налейте чашечку чая.. почитайте книгу.. я все сделаю за Вас.. Приятного отдыха..${CL}"
 msg_ok "--------------------------------------------------------------------------------------"
-
+# --------------------------------------------------------------------------------------------------------------------
 motd_ssh
 customize
+# --------------------------------------------------------------------------------------------------------------------
 # _____НЕ ЗАБУДЬ МЕНЯ УДАЛИТЬ__СТАРТ__________________________________________________________
 # get_latest_release() {
 #   curl -sL https://api.github.com/repos/$1/releases/latest | grep '"tag_name":' | cut -d'"' -f4
@@ -51,6 +52,7 @@ customize
 # msg_ok "Docker $DOCKER_LATEST_VERSION установлен."
 # _____НЕ ЗАБУДЬ МЕНЯ УДАЛИТЬ__КОНЕЦ__________________________________________________________
 
+# --------------------------------------------------------------------------------------------------------------------
 msg_info "Устанавливаю приложение Runtipi"
 cd /opt
 wget -q https://raw.githubusercontent.com/runtipi/runtipi/master/scripts/install.sh
@@ -59,7 +61,7 @@ $STD ./install.sh
 chmod 666 /opt/runtipi/state/settings.json
 chmod -R 777 /opt/runtipi/
 msg_ok "Установлено приложение Runtipi"
-
+# --------------------------------------------------------------------------------------------------------------------
 msg_info "Устанавливаю Dashy Dashboard.."
 mkdir -p /opt/dashy/user-data/
 wget -qO/opt/dashy/user-data/conf.yml https://raw.githubusercontent.com/LiaGen/samohosting/refs/heads/main/files_from_videos/conf.yml
@@ -75,10 +77,9 @@ $STD docker run -d \
   -v /opt/dashy/user-data/conf2.yml:/app/user-data/conf2.yml \
   lissy93/dashy:latest 
 msg_ok "Dashy Dashboard установлен."
-
 msg_info "Настраиваю Ваш линый дашборд by samohosting.ru"
 msg_ok "Ваш личный дашборд by SAMOHOSTING.RU настроен"
-
+# --------------------------------------------------------------------------------------------------------------------
 msg_info "Устанавливаю Dockge для управления Docker контейнерами и стэками.."
 mkdir -p /opt/dockge/stacks
 mkdir -p /opt/dockge/data
@@ -94,31 +95,7 @@ $STD docker run -d \
   -e DOCKGE_STACKS_DIR=/opt/dockge/stacks \
   louislam/dockge:latest
 msg_ok "Dockge установлен."
-
-msg_info "Добавляю Firefox конфигурацию в Dockge"
-mkdir -p /opt/dockge/stacks/firefox
-cat <<EOF >/opt/dockge/stacks/firefox/compose.yaml
-services:
-  firefox:
-    image: lscr.io/linuxserver/firefox:latest
-    container_name: firefox
-    security_opt:
-      - seccomp:unconfined #optional
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Etc/UTC
-      - FIREFOX_CLI=https://www.samohosting.ru/ #optional
-    volumes:
-      - ./opt/firefox/data/config:/config
-    ports:
-      - 3000:3000
-      - 3001:3001
-    shm_size: 1gb
-    restart: unless-stopped
-EOF
-msg_ok "Конфигурация для запуска Firefox в Dockge добавлена в шаблоны конфигураций"
-
+# --------------------------------------------------------------------------------------------------------------------
 msg_info "Устанавливаю веб-файл-браузер.."
 $STD docker run -d \
   -p 1001:80 \
@@ -132,7 +109,7 @@ $STD docker run -d \
   -v /opt/filebrowser/data/db:/database \
   filebrowser/filebrowser:s6
 msg_ok "Веб-файл-браузер установлен."
-
+# --------------------------------------------------------------------------------------------------------------------
 msg_info "Устанавливаю Glances.."
 $STD docker run -d \
   -p 1002:61208 \
@@ -143,6 +120,109 @@ $STD docker run -d \
   -v /var/run/docker.sock:/var/run/docker.sock:ro \
   nicolargo/glances:latest-full
 msg_ok "Glances установлен."
+
+# --------------------------------------------------------------------------------------------------------------------
+msg_info "Добавляю Firefox1 конфигурацию в Dockge"
+mkdir -p /opt/dockge/stacks/firefox1
+cat <<EOF >/opt/dockge/stacks/firefox1/compose.yaml
+services:
+  firefox:
+    image: lscr.io/linuxserver/firefox:latest
+    container_name: firefox1
+    security_opt:
+      - seccomp:unconfined #optional
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - FIREFOX_CLI=https://www.samohosting.ru/ #optional
+    volumes:
+      - ./opt/firefox1/data/config:/config
+    ports:
+      - 3000:3000
+      - 3001:3001
+    shm_size: 1gb
+    restart: unless-stopped
+EOF
+msg_ok "Конфигурация для запуска Firefox1 в Dockge добавлена в шаблоны конфигураций"
+
+# --------------------------------------------------------------------------------------------------------------------
+msg_info "Добавляю Firefox2 конфигурацию в Dockge"
+mkdir -p /opt/dockge/stacks/firefox2
+cat <<EOF >/opt/dockge/stacks/firefox2/compose.yaml
+services:
+  firefox:
+    image: lscr.io/linuxserver/firefox:latest
+    container_name: firefox2
+    security_opt:
+      - seccomp:unconfined #optional
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - FIREFOX_CLI=https://www.samohosting.ru/ #optional
+    volumes:
+      - ./opt/firefox2/data/config:/config
+    ports:
+      - 3002:3000
+      # - 3001:3001
+    shm_size: 1gb
+    restart: unless-stopped
+EOF
+msg_ok "Конфигурация для запуска Firefox2 в Dockge добавлена в шаблоны конфигураций"
+# --------------------------------------------------------------------------------------------------------------------
+
+# --------------------------------------------------------------------------------------------------------------------
+msg_info "Добавляю Firefox3 конфигурацию в Dockge"
+mkdir -p /opt/dockge/stacks/firefox3
+cat <<EOF >/opt/dockge/stacks/firefox3/compose.yaml
+services:
+  firefox:
+    image: lscr.io/linuxserver/firefox:latest
+    container_name: firefox3
+    security_opt:
+      - seccomp:unconfined #optional
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - FIREFOX_CLI=https://www.samohosting.ru/ #optional
+    volumes:
+      - ./opt/firefox3/data/config:/config
+    ports:
+      - 3003:3000
+      - 3001:3001
+    shm_size: 1gb
+    restart: unless-stopped
+EOF
+msg_ok "Конфигурация для запуска Firefox3 в Dockge добавлена в шаблоны конфигураций"
+# --------------------------------------------------------------------------------------------------------------------
+
+# --------------------------------------------------------------------------------------------------------------------
+msg_info "Добавляю Firefox4 конфигурацию в Dockge"
+mkdir -p /opt/dockge/stacks/firefox4
+cat <<EOF >/opt/dockge/stacks/firefox4/compose.yaml
+services:
+  firefox:
+    image: lscr.io/linuxserver/firefox:latest
+    container_name: firefox4
+    security_opt:
+      - seccomp:unconfined #optional
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - FIREFOX_CLI=https://www.samohosting.ru/ #optional
+    volumes:
+      - ./opt/firefox4/data/config:/config
+    ports:
+      - 3004:3000
+      # - 3001:3001
+    shm_size: 1gb
+    restart: unless-stopped
+EOF
+msg_ok "Конфигурация для запуска Firefox4 в Dockge добавлена в шаблоны конфигураций"
+# --------------------------------------------------------------------------------------------------------------------
 
 msg_info "Провожу уборку. Нет, не генеральную.."
 $STD apt-get -y autoremove
