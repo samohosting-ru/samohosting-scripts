@@ -47,6 +47,9 @@ PORTAINER_LATEST_VERSION=$(get_latest_release "portainer/portainer")
 # $STD sh <(curl -sSL https://get.docker.com)
 # msg_ok "Docker $DOCKER_LATEST_VERSION установлен."
 
+motd_ssh
+customize
+
 msg_info "Устанавливаю приложение Runtipi"
 cd /opt
 wget -q https://raw.githubusercontent.com/runtipi/runtipi/master/scripts/install.sh
@@ -111,17 +114,15 @@ $STD docker run -d \
   nicolargo/glances:latest-full
 msg_ok "Glances установлен."
 
-msg_info "Устанавливаю Сервис заметок Memos.."
-$STD docker run -d \
-  -p 1003:5230 \
-  --name=memos \
-  --restart=unless-stopped \
-  -v /opt/memos/:/var/opt/memos \
-  neosmemo/memos:stable
-msg_ok "Memos установлен."
+# msg_info "Устанавливаю Сервис заметок Memos.."
+# $STD docker run -d \
+#   -p 1003:5230 \
+#   --name=memos \
+#   --restart=unless-stopped \
+#   -v /opt/memos/:/var/opt/memos \
+#   neosmemo/memos:stable
+# msg_ok "Memos установлен."
 
-motd_ssh
-customize
 msg_info "Провожу уборку. Нет, не генеральную.."
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
