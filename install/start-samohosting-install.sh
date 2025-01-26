@@ -140,7 +140,7 @@ services:
       - ./opt/firefox1/data/config:/config
     ports:
       - 3000:3000
-      - 3001:3001
+      # - 3001:3001
     shm_size: 1gb
     restart: unless-stopped
 EOF
@@ -191,7 +191,7 @@ services:
       - ./opt/firefox3/data/config:/config
     ports:
       - 3003:3000
-      - 3001:3001
+      # - 3001:3001
     shm_size: 1gb
     restart: unless-stopped
 EOF
