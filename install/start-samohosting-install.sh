@@ -80,11 +80,13 @@ msg_info "Настраиваю Ваш линый дашборд by samohosting.r
 msg_ok "Ваш личный дашборд by SAMOHOSTING.RU настроен"
 
 msg_info "Устанавливаю Dockge для управления Docker контейнерами и стэками.."
-mkdir -p /opt/dockge/data/
+mkdir -p /opt/dockge/data/stacks
+mkdir -p /opt/dockge/data
 $STD docker run -d \
   -p 5001:5001 \
   --name=dockge\
   --restart=unless-stopped \
+  --stacksPath=/opt/dockge/data/stacks
   -e PUID=$(id -u) \
   -e PGID=$(id -g) \
   -v /var/run/docker.sock:/var/run/docker.sock \
@@ -115,13 +117,7 @@ services:
     shm_size: 1gb
     restart: unless-stopped
 EOF
-msg_ok "Конфигурация для запуска Firefox в Dockge добавлена"
-
-
-
-
-
-
+msg_ok "Конфигурация для запуска Firefox в Dockge добавлена в шаблоны конфигураций"
 
 msg_info "Устанавливаю веб-файл-браузер.."
 $STD docker run -d \
