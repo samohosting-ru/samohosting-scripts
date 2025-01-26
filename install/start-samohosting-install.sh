@@ -80,8 +80,6 @@ msg_info "Настраиваю Ваш линый дашборд by samohosting.r
 msg_ok "Ваш личный дашборд by SAMOHOSTING.RU настроен"
 
 msg_info "Устанавливаю Dockge для управления Docker контейнерами и стэками.."
-mkdir -p /opt/dockge/data/stacks/
-mkdir -p /opt/dockge/data/
 $STD docker run -d \
   -p 5001:5001 \
   --name=dockge\
@@ -90,14 +88,12 @@ $STD docker run -d \
   -e PUID=$(id -u) \
   -e PGID=$(id -g) \
   -v /var/run/docker.sock:/var/run/docker.sock \
-  -v /opt/dockge/data/app-data:/app/data \
-  -v /opt/dockge/data/stacks:/data/stacks \
   louislam/dockge:latest
 msg_ok "Dockge установлен."
 
 msg_info "Добавляю Firefox конфигурацию в Dockge"
-mkdir -p /opt/dockge/data/stacks/firefox/
-cat <<EOF >/opt/dockge/data/stacks/firefox/compose.yaml
+mkdir -p /opt/stacks/firefox
+cat <<EOF >/opt/stacks/firefox/compose.yaml
 services:
   firefox:
     image: lscr.io/linuxserver/firefox:latest
