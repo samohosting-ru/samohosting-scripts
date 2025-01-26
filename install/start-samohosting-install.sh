@@ -82,9 +82,8 @@ msg_ok "Ваш личный дашборд by SAMOHOSTING.RU настроен"
 msg_info "Устанавливаю Dockge для управления Docker контейнерами и стэками.."
 $STD docker run -d \
   -p 5001:5001 \
-  --name=dockge\
+  --name=dockge \
   --restart=unless-stopped \
-  --stacksPath=/opt/dockge/data/stacks \
   -e PUID=$(id -u) \
   -e PGID=$(id -g) \
   -v /var/run/docker.sock:/var/run/docker.sock \
@@ -118,7 +117,7 @@ msg_ok "Конфигурация для запуска Firefox в Dockge доб�
 msg_info "Устанавливаю веб-файл-браузер.."
 $STD docker run -d \
   -p 1001:80 \
-  --name=filebrowser\
+  --name=filebrowser \
   --restart=unless-stopped \
   -e PUID=$(id -u) \
   -e PGID=$(id -g) \
