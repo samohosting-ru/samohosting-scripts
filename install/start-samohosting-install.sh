@@ -90,7 +90,7 @@ $STD docker run -d \
   -e PUID=$(id -u) \
   -e PGID=$(id -g) \
   -v /var/run/docker.sock:/var/run/docker.sock \
-  -v ./opt/dockge/data:/app/data \
+  -v /opt/dockge/data:/app/data \
   -v /opt/dockge/stacks:/opt/dockge/stacks \
   -e DOCKGE_STACKS_DIR=/opt/dockge/stacks \
   louislam/dockge:latest
@@ -137,7 +137,7 @@ services:
       - TZ=Etc/UTC
       - FIREFOX_CLI=https://www.samohosting.ru/ #optional
     volumes:
-      - ./opt/firefox1/data/config:/config
+      - /opt/firefox1/data/config:/config
     ports:
       - 3000:3000
       # - 3001:3001
@@ -162,7 +162,7 @@ services:
       - TZ=Etc/UTC
       - FIREFOX_CLI=https://www.samohosting.ru/ #optional
     volumes:
-      - ./opt/firefox2/data/config:/config
+      - /opt/firefox2/data/config:/config
     ports:
       - 3002:3000
       # - 3001:3001
@@ -188,7 +188,7 @@ services:
       - TZ=Etc/UTC
       - FIREFOX_CLI=https://www.samohosting.ru/ #optional
     volumes:
-      - ./opt/firefox3/data/config:/config
+      - /opt/firefox3/data/config:/config
     ports:
       - 3003:3000
       # - 3001:3001
@@ -214,7 +214,7 @@ services:
       - TZ=Etc/UTC
       - FIREFOX_CLI=https://www.samohosting.ru/ #optional
     volumes:
-      - ./opt/firefox4/data/config:/config
+      - /opt/firefox4/data/config:/config
     ports:
       - 3004:3000
       # - 3001:3001
