@@ -121,7 +121,7 @@ services:
 networks: {}
 EOF
 docker compose up -d
-
+msg_ok "Dockge установлен."
 
 # --------------------------------------------------------------------------------------------------------------------
 # msg_info "Устанавливаю веб-файл-браузер.."
@@ -137,7 +137,6 @@ services:
     environment:
       - PUID=$(id -u)
       - PGID=$(id -g)
-    user: "true"
     volumes:
       - /:/srv/ALL_FOLDERS_LXC-START-SAMOHOSTING
       - /opt:/srv/APPS_FOLDER
@@ -147,6 +146,7 @@ services:
 networks: {}
 EOF
 docker compose up -d
+msg_ok "Веб-файл-браузер установлен."
 
 # --------------------------------------------------------------------------------------------------------------------
 # msg_info "Устанавливаю Dockge для управления Docker контейнерами и стэками.."
