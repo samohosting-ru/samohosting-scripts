@@ -91,7 +91,7 @@ services:
       - /opt/dashy/user-data/conf2.yml:/app/user-data/conf2.yml
     image: lissy93/dashy:latest
 EOF
-docker compose up -d
+docker compose up -d --quiet-pull
 msg_ok "Dashy Dashboard установлен."
 msg_info "Настраиваю Ваш линый дашборд by samohosting.ru"
 msg_ok "Ваш личный дашборд by SAMOHOSTING.RU настроен"
@@ -120,7 +120,7 @@ services:
     image: louislam/dockge:latest
 networks: {}
 EOF
-docker compose up -d
+docker compose up -d --quiet-pull
 msg_ok "Dockge установлен."
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -145,7 +145,7 @@ services:
     image: filebrowser/filebrowser:s6
 networks: {}
 EOF
-docker compose up -d
+$STD docker compose up -d --quiet-pull
 msg_ok "Веб-файл-браузер установлен."
 
 # --------------------------------------------------------------------------------------------------------------------
