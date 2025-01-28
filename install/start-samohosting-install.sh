@@ -98,8 +98,7 @@ services:
       - /opt/dashy/user-data/conf2.yml:/app/user-data/conf2.yml
     image: lissy93/dashy:latest
 EOF
-
-docker compose up --quiet-pull
+docker compose up -d
 msg_ok "Dashy Dashboard установлен."
 msg_info "Настраиваю Ваш линый дашборд by samohosting.ru"
 msg_ok "Ваш личный дашборд by SAMOHOSTING.RU настроен"
