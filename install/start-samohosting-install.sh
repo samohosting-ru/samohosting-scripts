@@ -39,29 +39,29 @@ motd_ssh
 customize
 # --------------------------------------------------------------------------------------------------------------------
 # _____НЕ ЗАБУДЬ МЕНЯ УДАЛИТЬ__СТАРТ__________________________________________________________
-get_latest_release() {
-  curl -sL https://api.github.com/repos/$1/releases/latest | grep '"tag_name":' | cut -d'"' -f4
-}
-PORTAINER_LATEST_VERSION=$(get_latest_release "portainer/portainer")
-DOCKER_COMPOSE_LATEST_VERSION=$(get_latest_release "docker/compose")
-DOCKER_LATEST_VERSION=$(get_latest_release "moby/moby")
-msg_info "Устанавливаю Docker $DOCKER_LATEST_VERSION"
-DOCKER_CONFIG_PATH='/etc/docker/daemon.json'
-mkdir -p $(dirname $DOCKER_CONFIG_PATH)
-echo -e '{\n  "log-driver": "journald"\n}' >/etc/docker/daemon.json
-$STD sh <(curl -sSL https://get.docker.com)
-msg_ok "Docker $DOCKER_LATEST_VERSION установлен."
+# get_latest_release() {
+#   curl -sL https://api.github.com/repos/$1/releases/latest | grep '"tag_name":' | cut -d'"' -f4
+# }
+# PORTAINER_LATEST_VERSION=$(get_latest_release "portainer/portainer")
+# DOCKER_COMPOSE_LATEST_VERSION=$(get_latest_release "docker/compose")
+# DOCKER_LATEST_VERSION=$(get_latest_release "moby/moby")
+# msg_info "Устанавливаю Docker $DOCKER_LATEST_VERSION"
+# DOCKER_CONFIG_PATH='/etc/docker/daemon.json'
+# mkdir -p $(dirname $DOCKER_CONFIG_PATH)
+# echo -e '{\n  "log-driver": "journald"\n}' >/etc/docker/daemon.json
+# $STD sh <(curl -sSL https://get.docker.com)
+# msg_ok "Docker $DOCKER_LATEST_VERSION установлен."
 # _____НЕ ЗАБУДЬ МЕНЯ УДАЛИТЬ__КОНЕЦ__________________________________________________________
 
 # --------------------------------------------------------------------------------------------------------------------
-# msg_info "Устанавливаю приложение Runtipi"
-# cd /opt
-# wget -q https://raw.githubusercontent.com/runtipi/runtipi/master/scripts/install.sh
-# chmod +x install.sh
-# $STD ./install.sh
-# chmod 666 /opt/runtipi/state/settings.json
-# chmod -R 777 /opt/runtipi/
-# msg_ok "Установлено приложение Runtipi"
+msg_info "Устанавливаю приложение Runtipi"
+cd /opt
+wget -q https://raw.githubusercontent.com/runtipi/runtipi/master/scripts/install.sh
+chmod +x install.sh
+$STD ./install.sh
+chmod 666 /opt/runtipi/state/settings.json
+chmod -R 777 /opt/runtipi/
+msg_ok "Установлено приложение Runtipi"
 # --------------------------------------------------------------------------------------------------------------------
 msg_info "Устанавливаю Dashy Dashboard.."
 mkdir -p /opt/dashy/user-data/
