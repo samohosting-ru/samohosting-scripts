@@ -99,7 +99,7 @@ services:
     image: lissy93/dashy:latest
 EOF
 
-docker compose up
+docker compose up --quiet-pull
 msg_ok "Dashy Dashboard установлен."
 msg_info "Настраиваю Ваш линый дашборд by samohosting.ru"
 msg_ok "Ваш личный дашборд by SAMOHOSTING.RU настроен"
