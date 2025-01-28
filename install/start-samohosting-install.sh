@@ -113,7 +113,6 @@ services:
       - PUID=$(id -u)
       - PGID=$(id -g)
       - DOCKGE_STACKS_DIR=/opt/dockge/stacks
-    user: "true"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /opt/dockge/data:/app/data
@@ -122,6 +121,7 @@ services:
 networks: {}
 EOF
 docker compose up -d
+
 
 # --------------------------------------------------------------------------------------------------------------------
 # msg_info "Устанавливаю веб-файл-браузер.."
