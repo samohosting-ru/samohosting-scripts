@@ -91,7 +91,7 @@ services:
       - /opt/dashy/user-data/conf2.yml:/app/user-data/conf2.yml
     image: lissy93/dashy:latest
 EOF
-docker compose up -d --quiet-pull
+$STD docker compose up -d --quiet-pull
 msg_ok "Dashy Dashboard установлен."
 msg_info "Настраиваю Ваш линый дашборд by samohosting.ru"
 msg_ok "Ваш личный дашборд by SAMOHOSTING.RU настроен"
@@ -120,11 +120,11 @@ services:
     image: louislam/dockge:latest
 networks: {}
 EOF
-docker compose up -d --quiet-pull
+$STD docker compose up -d --quiet-pull
 msg_ok "Dockge установлен."
 
 # --------------------------------------------------------------------------------------------------------------------
-# msg_info "Устанавливаю веб-файл-браузер.."
+msg_info "Устанавливаю веб-файл-браузер.."
 mkdir -p /opt/dockge/stacks/filebrowser
 cd /opt/dockge/stacks/filebrowser
 cat <<EOF >/opt/dockge/stacks/filebrowser/compose.yaml
@@ -147,6 +147,36 @@ networks: {}
 EOF
 $STD docker compose up -d --quiet-pull
 msg_ok "Веб-файл-браузер установлен."
+
+# --------------------------------------------------------------------------------------------------------------------
+msg_info "Устанавливаю веб-файл-браузер.."
+mkdir -p /opt/dockge/stacks/filebrowser
+cd /opt/dockge/stacks/filebrowser
+cat <<EOF >/opt/dockge/stacks/filebrowser/compose.yaml
+services:
+  filebrowser:
+    ports:
+      - 1001:80
+    container_name: filebrowser
+    restart: unless-stopped
+    environment:
+      - PUID=$(id -u)
+      - PGID=$(id -g)
+    volumes:
+      - /:/srv/ALL_FOLDERS_LXC-START-SAMOHOSTING
+      - /opt:/srv/APPS_FOLDER
+      - /opt/runtipi/logs:/srv/RUNTIPI_LOGS
+      - /opt/filebrowser/data/db:/database
+    image: filebrowser/filebrowser:s6
+networks: {}
+EOF
+$STD docker compose up -d --quiet-pull
+msg_ok "Веб-файл-браузер установлен."
+
+
+#======================================================================================================================
+#======================================================================================================================
+#======================================================================================================================
 
 # --------------------------------------------------------------------------------------------------------------------
 # msg_info "Устанавливаю Dockge для управления Docker контейнерами и стэками.."
@@ -182,15 +212,20 @@ msg_ok "Веб-файл-браузер установлен."
 
 # --------------------------------------------------------------------------------------------------------------------
 # msg_info "Устанавливаю Glances.."
-# $STD docker run -d \
-#   -p 1002:61208 \
-#   --name=glance \
-#   --restart=unless-stopped \
-#   --pid=host \
-#   -e GLANCES_OPT=-w \
-#   -v /var/run/docker.sock:/var/run/docker.sock:ro \
-#   nicolargo/glances:latest-full
-# msg_ok "Glances установлен."
+$STD docker run -d \
+  -p 1002:61208 \
+  --name=glance \
+  --restart=unless-stopped \
+  --pid=host \
+  -e GLANCES_OPT=-w \
+  -v /var/run/docker.sock:/var/run/docker.sock:ro \
+  nicolargo/glances:latest-full
+msg_ok "Glances установлен."
+
+#======================================================================================================================
+#======================================================================================================================
+#======================================================================================================================
+
 
 # --------------------------------------------------------------------------------------------------------------------
 msg_info "Добавляю Firefox1 конфигурацию в Dockge"
@@ -273,6 +308,15 @@ msg_ok "Конфигурация для запуска Firefox3 в Dockge доб
 msg_info "Добавляю Firefox4 конфигурацию в Dockge"
 mkdir -p /opt/dockge/stacks/firefox4
 cat <<EOF >/opt/dockge/stacks/firefox4/compose.yaml
+#  <== ДЛЯ ЗАПУСКА СЕРВИСА ЖМИ КНОПКУ ЗАПУСТИТЬ <==
+#  <== ДЛЯ ОТКРЫТИЯ ЖМИ КНОПКУ С НОМЕРОМ ПОРТА ПРИЛОЖЕНИЯ <==
+
+#  НАЗВАНИЕ: Веб-браузер в докере!
+#  Описание: Если Вам нужен изолированный бразуер, живущий в докере, это - ОНО  
+#  Страница проекта: https://docs.linuxserver.io/images/docker-firefox/
+#  Видео\обзор: https://www.youtube.com/@samohosting
+#----------------------------------------------------------------------
+
 services:
   firefox:
     image: lscr.io/linuxserver/firefox:latest
