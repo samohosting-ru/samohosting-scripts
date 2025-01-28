@@ -39,28 +39,28 @@ motd_ssh
 customize
 # --------------------------------------------------------------------------------------------------------------------
 # _____НЕ ЗАБУДЬ МЕНЯ УДАЛИТЬ__СТАРТ__________________________________________________________
-# get_latest_release() {
-#   curl -sL https://api.github.com/repos/$1/releases/latest | grep '"tag_name":' | cut -d'"' -f4
-# }
-# PORTAINER_LATEST_VERSION=$(get_latest_release "portainer/portainer")
-# DOCKER_COMPOSE_LATEST_VERSION=$(get_latest_release "docker/compose")
-# msg_info "Устанавливаю Docker $DOCKER_LATEST_VERSION"
-# DOCKER_CONFIG_PATH='/etc/docker/daemon.json'
-# mkdir -p $(dirname $DOCKER_CONFIG_PATH)
-# echo -e '{\n  "log-driver": "journald"\n}' >/etc/docker/daemon.json
-# $STD sh <(curl -sSL https://get.docker.com)
-# msg_ok "Docker $DOCKER_LATEST_VERSION установлен."
+get_latest_release() {
+  curl -sL https://api.github.com/repos/$1/releases/latest | grep '"tag_name":' | cut -d'"' -f4
+}
+PORTAINER_LATEST_VERSION=$(get_latest_release "portainer/portainer")
+DOCKER_COMPOSE_LATEST_VERSION=$(get_latest_release "docker/compose")
+msg_info "Устанавливаю Docker $DOCKER_LATEST_VERSION"
+DOCKER_CONFIG_PATH='/etc/docker/daemon.json'
+mkdir -p $(dirname $DOCKER_CONFIG_PATH)
+echo -e '{\n  "log-driver": "journald"\n}' >/etc/docker/daemon.json
+$STD sh <(curl -sSL https://get.docker.com)
+msg_ok "Docker $DOCKER_LATEST_VERSION установлен."
 # _____НЕ ЗАБУДЬ МЕНЯ УДАЛИТЬ__КОНЕЦ__________________________________________________________
 
 # --------------------------------------------------------------------------------------------------------------------
-msg_info "Устанавливаю приложение Runtipi"
-cd /opt
-wget -q https://raw.githubusercontent.com/runtipi/runtipi/master/scripts/install.sh
-chmod +x install.sh
-$STD ./install.sh
-chmod 666 /opt/runtipi/state/settings.json
-chmod -R 777 /opt/runtipi/
-msg_ok "Установлено приложение Runtipi"
+# msg_info "Устанавливаю приложение Runtipi"
+# cd /opt
+# wget -q https://raw.githubusercontent.com/runtipi/runtipi/master/scripts/install.sh
+# chmod +x install.sh
+# $STD ./install.sh
+# chmod 666 /opt/runtipi/state/settings.json
+# chmod -R 777 /opt/runtipi/
+# msg_ok "Установлено приложение Runtipi"
 # --------------------------------------------------------------------------------------------------------------------
 msg_info "Устанавливаю Dashy Dashboard.."
 mkdir -p /opt/dashy/user-data/
@@ -69,16 +69,43 @@ wget -qO/opt/dashy/user-data/conf2.yml https://raw.githubusercontent.com/LiaGen/
 sed -i -e "s|localhost|$IP|g" /opt/dashy/user-data/conf.yml
 sed -i -e "s|localhost|$IP|g" /opt/dashy/user-data/conf2.yml
 msg_info "Устанавливаю Dashy Dashboard.."
-$STD docker run -d \
-  -p 1000:8080 \
-  --name samohosting-dashboard \
-  --restart=always \
-  -v /opt/dashy/user-data/conf.yml:/app/user-data/conf.yml \
-  -v /opt/dashy/user-data/conf2.yml:/app/user-data/conf2.yml \
-  lissy93/dashy:latest 
+
+
+
+# $STD docker run -d \
+#   -p 1000:8080 \
+#   --name samohosting-dashboard \
+#   --restart=always \
+#   -v /opt/dashy/user-data/conf.yml:/app/user-data/conf.yml \
+#   -v /opt/dashy/user-data/conf2.yml:/app/user-data/conf2.yml \
+#   lissy93/dashy:latest 
+
+
+
+
+mkdir -p /opt/dockge/stacks/samohosting-dashboard
+cd /opt/dockge/stacks/samohosting-dashboard
+cat <<EOF >/opt/dockge/stacks/samohosting-dashboard/compose.yaml
+services:
+  dashy:
+    ports:
+      - 1000:8080
+    container_name: samohosting-dashboard
+    restart: always
+    volumes:
+      - /opt/dashy/user-data/conf.yml:/app/user-data/conf.yml
+      - /opt/dashy/user-data/conf2.yml:/app/user-data/conf2.yml
+    image: lissy93/dashy:latest
+EOF
+
+docker compose up
 msg_ok "Dashy Dashboard установлен."
 msg_info "Настраиваю Ваш линый дашборд by samohosting.ru"
 msg_ok "Ваш личный дашборд by SAMOHOSTING.RU настроен"
+
+
+
+
 # --------------------------------------------------------------------------------------------------------------------
 msg_info "Устанавливаю Dockge для управления Docker контейнерами и стэками.."
 mkdir -p /opt/dockge/stacks
