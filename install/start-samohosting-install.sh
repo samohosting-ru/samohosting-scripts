@@ -70,20 +70,13 @@ wget -qO/opt/dashy/user-data/conf2.yml https://raw.githubusercontent.com/LiaGen/
 sed -i -e "s|localhost|$IP|g" /opt/dashy/user-data/conf.yml
 sed -i -e "s|localhost|$IP|g" /opt/dashy/user-data/conf2.yml
 msg_info "Устанавливаю Dashy Dashboard.."
-
-
-
-# $STD docker run -d \
-#   -p 1000:8080 \
-#   --name samohosting-dashboard \
-#   --restart=always \
-#   -v /opt/dashy/user-data/conf.yml:/app/user-data/conf.yml \
-#   -v /opt/dashy/user-data/conf2.yml:/app/user-data/conf2.yml \
-#   lissy93/dashy:latest 
-
-
-
-
+      # $STD docker run -d \
+      #   -p 1000:8080 \
+      #   --name samohosting-dashboard \
+      #   --restart=always \
+      #   -v /opt/dashy/user-data/conf.yml:/app/user-data/conf.yml \
+      #   -v /opt/dashy/user-data/conf2.yml:/app/user-data/conf2.yml \
+      #   lissy93/dashy:latest 
 mkdir -p /opt/dockge/stacks/samohosting-dashboard
 cd /opt/dockge/stacks/samohosting-dashboard
 cat <<EOF >/opt/dockge/stacks/samohosting-dashboard/compose.yaml
@@ -103,50 +96,101 @@ msg_ok "Dashy Dashboard установлен."
 msg_info "Настраиваю Ваш линый дашборд by samohosting.ru"
 msg_ok "Ваш личный дашборд by SAMOHOSTING.RU настроен"
 
-
-
-
 # --------------------------------------------------------------------------------------------------------------------
 msg_info "Устанавливаю Dockge для управления Docker контейнерами и стэками.."
 mkdir -p /opt/dockge/stacks
 mkdir -p /opt/dockge/data
-$STD docker run -d \
-  -p 5001:5001 \
-  --name=dockge \
-  --restart=unless-stopped \
-  -e PUID=$(id -u) \
-  -e PGID=$(id -g) \
-  -v /var/run/docker.sock:/var/run/docker.sock \
-  -v /opt/dockge/data:/app/data \
-  -v /opt/dockge/stacks:/opt/dockge/stacks \
-  -e DOCKGE_STACKS_DIR=/opt/dockge/stacks \
-  louislam/dockge:latest
-msg_ok "Dockge установлен."
+mkdir -p /opt/dockge/stacks/dockge
+cd /opt/dockge/stacks/dockge
+cat <<EOF >/opt/dockge/stacks/dockge/compose.yaml
+services:
+  dockge:
+    ports:
+      - 5001:5001
+    container_name: dockge
+    restart: unless-stopped
+    environment:
+      - PUID=$(id -u)
+      - PGID=$(id -g)
+      - DOCKGE_STACKS_DIR=/opt/dockge/stacks
+    user: "true"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /opt/dockge/data:/app/data
+      - /opt/dockge/stacks:/opt/dockge/stacks
+    image: louislam/dockge:latest
+networks: {}
+EOF
+docker compose up -d
+
 # --------------------------------------------------------------------------------------------------------------------
-msg_info "Устанавливаю веб-файл-браузер.."
-$STD docker run -d \
-  -p 1001:80 \
-  --name=filebrowser \
-  --restart=unless-stopped \
-  -e PUID=$(id -u) \
-  -e PGID=$(id -g) \
-  -v /:/srv/ALL_FOLDERS_LXC-START-SAMOHOSTING \
-  -v /opt:/srv/APPS_FOLDER \
-  -v /opt/runtipi/logs:/srv/RUNTIPI_LOGS \
-  -v /opt/filebrowser/data/db:/database \
-  filebrowser/filebrowser:s6
-msg_ok "Веб-файл-браузер установлен."
+# msg_info "Устанавливаю веб-файл-браузер.."
+mkdir -p /opt/dockge/stacks/filebrowser
+cd /opt/dockge/stacks/filebrowser
+cat <<EOF >/opt/dockge/stacks/filebrowser/compose.yaml
+services:
+  filebrowser:
+    ports:
+      - 1001:80
+    container_name: filebrowser
+    restart: unless-stopped
+    environment:
+      - PUID=$(id -u)
+      - PGID=$(id -g)
+    user: "true"
+    volumes:
+      - /:/srv/ALL_FOLDERS_LXC-START-SAMOHOSTING
+      - /opt:/srv/APPS_FOLDER
+      - /opt/runtipi/logs:/srv/RUNTIPI_LOGS
+      - /opt/filebrowser/data/db:/database
+    image: filebrowser/filebrowser:s6
+networks: {}
+EOF
+docker compose up -d
+
 # --------------------------------------------------------------------------------------------------------------------
-msg_info "Устанавливаю Glances.."
-$STD docker run -d \
-  -p 1002:61208 \
-  --name=glance \
-  --restart=unless-stopped \
-  --pid=host \
-  -e GLANCES_OPT=-w \
-  -v /var/run/docker.sock:/var/run/docker.sock:ro \
-  nicolargo/glances:latest-full
-msg_ok "Glances установлен."
+# msg_info "Устанавливаю Dockge для управления Docker контейнерами и стэками.."
+# mkdir -p /opt/dockge/stacks
+# mkdir -p /opt/dockge/data
+# $STD docker run -d \
+#   -p 5001:5001 \
+#   --name=dockge \
+#   --restart=unless-stopped \
+#   -e PUID=$(id -u) \
+#   -e PGID=$(id -g) \
+#   -v /var/run/docker.sock:/var/run/docker.sock \
+#   -v /opt/dockge/data:/app/data \
+#   -v /opt/dockge/stacks:/opt/dockge/stacks \
+#   -e DOCKGE_STACKS_DIR=/opt/dockge/stacks \
+#   louislam/dockge:latest
+# msg_ok "Dockge установлен."
+
+# --------------------------------------------------------------------------------------------------------------------
+# msg_info "Устанавливаю веб-файл-браузер.."
+# $STD docker run -d \
+#   -p 1001:80 \
+#   --name=filebrowser \
+#   --restart=unless-stopped \
+#   -e PUID=$(id -u) \
+#   -e PGID=$(id -g) \
+#   -v /:/srv/ALL_FOLDERS_LXC-START-SAMOHOSTING \
+#   -v /opt:/srv/APPS_FOLDER \
+#   -v /opt/runtipi/logs:/srv/RUNTIPI_LOGS \
+#   -v /opt/filebrowser/data/db:/database \
+#   filebrowser/filebrowser:s6
+# msg_ok "Веб-файл-браузер установлен."
+
+# --------------------------------------------------------------------------------------------------------------------
+# msg_info "Устанавливаю Glances.."
+# $STD docker run -d \
+#   -p 1002:61208 \
+#   --name=glance \
+#   --restart=unless-stopped \
+#   --pid=host \
+#   -e GLANCES_OPT=-w \
+#   -v /var/run/docker.sock:/var/run/docker.sock:ro \
+#   nicolargo/glances:latest-full
+# msg_ok "Glances установлен."
 
 # --------------------------------------------------------------------------------------------------------------------
 msg_info "Добавляю Firefox1 конфигурацию в Dockge"
