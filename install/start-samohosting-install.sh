@@ -192,8 +192,8 @@ mkdir -p /opt/runtipi/user-config/qbittorrent
 cat <<EOF >/opt/runtipi/user-config/qbittorrent/docker-compose.yml
 services:
   qbittorrent:
-      - ${ROOT_FOLDER_HOST}/media/torrents:/media/torrents
-      - ${ROOT_FOLDER_HOST}/media/downloads:/downloads
+      - /opt/runtipi/media/torrents:/media/torrents
+      - /opt/runtipi/media/downloads:/downloads
 EOF
 msg_ok "Добавил в конфигурацию qbittorrent для скачки по умолчанию в /media/downloads"
 
