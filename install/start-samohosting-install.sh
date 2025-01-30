@@ -37,21 +37,6 @@ msg_ok "------------------------------------------------------------------------
 # --------------------------------------------------------------------------------------------------------------------
 motd_ssh
 customize
-# --------------------------------------------------------------------------------------------------------------------
-# _____НЕ ЗАБУДЬ МЕНЯ УДАЛИТЬ__СТАРТ__________________________________________________________
-# get_latest_release() {
-#   curl -sL https://api.github.com/repos/$1/releases/latest | grep '"tag_name":' | cut -d'"' -f4
-# }
-# PORTAINER_LATEST_VERSION=$(get_latest_release "portainer/portainer")
-# DOCKER_COMPOSE_LATEST_VERSION=$(get_latest_release "docker/compose")
-# DOCKER_LATEST_VERSION=$(get_latest_release "moby/moby")
-# msg_info "Устанавливаю Docker $DOCKER_LATEST_VERSION"
-# DOCKER_CONFIG_PATH='/etc/docker/daemon.json'
-# mkdir -p $(dirname $DOCKER_CONFIG_PATH)
-# echo -e '{\n  "log-driver": "journald"\n}' >/etc/docker/daemon.json
-# $STD sh <(curl -sSL https://get.docker.com)
-# msg_ok "Docker $DOCKER_LATEST_VERSION установлен."
-# _____НЕ ЗАБУДЬ МЕНЯ УДАЛИТЬ__КОНЕЦ__________________________________________________________
 
 # --------------------------------------------------------------------------------------------------------------------
 msg_info "Устанавливаю приложение Runtipi"
@@ -62,6 +47,7 @@ $STD ./install.sh
 chmod 666 /opt/runtipi/state/settings.json
 chmod -R 777 /opt/runtipi/
 msg_ok "Установлено приложение Runtipi"
+
 # --------------------------------------------------------------------------------------------------------------------
 msg_info "Устанавливаю Dashy Dashboard.."
 mkdir -p /opt/dashy/user-data/
@@ -70,13 +56,6 @@ wget -qO/opt/dashy/user-data/conf2.yml https://raw.githubusercontent.com/LiaGen/
 sed -i -e "s|localhost|$IP|g" /opt/dashy/user-data/conf.yml
 sed -i -e "s|localhost|$IP|g" /opt/dashy/user-data/conf2.yml
 msg_info "Устанавливаю Dashy Dashboard.."
-      # $STD docker run -d \
-      #   -p 1000:8080 \
-      #   --name samohosting-dashboard \
-      #   --restart=always \
-      #   -v /opt/dashy/user-data/conf.yml:/app/user-data/conf.yml \
-      #   -v /opt/dashy/user-data/conf2.yml:/app/user-data/conf2.yml \
-      #   lissy93/dashy:latest 
 mkdir -p /opt/dockge/stacks/samohosting-dashboard
 cd /opt/dockge/stacks/samohosting-dashboard
 cat <<EOF >/opt/dockge/stacks/samohosting-dashboard/compose.yaml
@@ -118,7 +97,6 @@ services:
       - /opt/dockge/data:/app/data
       - /opt/dockge/stacks:/opt/dockge/stacks
     image: louislam/dockge:latest
-networks: {}
 EOF
 $STD docker compose up -d --quiet-pull
 msg_ok "Dockge установлен."
@@ -143,89 +121,35 @@ services:
       - /opt/runtipi/logs:/srv/RUNTIPI_LOGS
       - /opt/filebrowser/data/db:/database
     image: filebrowser/filebrowser:s6
-networks: {}
 EOF
 $STD docker compose up -d --quiet-pull
 msg_ok "Веб-файл-браузер установлен."
 
 # --------------------------------------------------------------------------------------------------------------------
-msg_info "Устанавливаю веб-файл-браузер.."
-mkdir -p /opt/dockge/stacks/filebrowser
-cd /opt/dockge/stacks/filebrowser
-cat <<EOF >/opt/dockge/stacks/filebrowser/compose.yaml
+msg_info "Устанавливаю Glances.."
+mkdir -p /opt/dockge/stacks/glances
+cd /opt/dockge/stacks/glances
+cat <<EOF >/opt/dockge/stacks/glances/compose.yaml
 services:
-  filebrowser:
-    ports:
-      - 1001:80
-    container_name: filebrowser
-    restart: unless-stopped
-    environment:
-      - PUID=$(id -u)
-      - PGID=$(id -g)
-    volumes:
-      - /:/srv/ALL_FOLDERS_LXC-START-SAMOHOSTING
-      - /opt:/srv/APPS_FOLDER
-      - /opt/runtipi/logs:/srv/RUNTIPI_LOGS
-      - /opt/filebrowser/data/db:/database
-    image: filebrowser/filebrowser:s6
-networks: {}
+      glances:
+        ports:
+            - 1002:61208
+        container_name: glance
+        restart: unless-stopped
+        pid: host
+        environment:
+            - GLANCES_OPT=-w
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock:ro
+        image: nicolargo/glances:latest-full
 EOF
 $STD docker compose up -d --quiet-pull
-msg_ok "Веб-файл-браузер установлен."
-
-
-#======================================================================================================================
-#======================================================================================================================
-#======================================================================================================================
-
-# --------------------------------------------------------------------------------------------------------------------
-# msg_info "Устанавливаю Dockge для управления Docker контейнерами и стэками.."
-# mkdir -p /opt/dockge/stacks
-# mkdir -p /opt/dockge/data
-# $STD docker run -d \
-#   -p 5001:5001 \
-#   --name=dockge \
-#   --restart=unless-stopped \
-#   -e PUID=$(id -u) \
-#   -e PGID=$(id -g) \
-#   -v /var/run/docker.sock:/var/run/docker.sock \
-#   -v /opt/dockge/data:/app/data \
-#   -v /opt/dockge/stacks:/opt/dockge/stacks \
-#   -e DOCKGE_STACKS_DIR=/opt/dockge/stacks \
-#   louislam/dockge:latest
-# msg_ok "Dockge установлен."
-
-# --------------------------------------------------------------------------------------------------------------------
-# msg_info "Устанавливаю веб-файл-браузер.."
-# $STD docker run -d \
-#   -p 1001:80 \
-#   --name=filebrowser \
-#   --restart=unless-stopped \
-#   -e PUID=$(id -u) \
-#   -e PGID=$(id -g) \
-#   -v /:/srv/ALL_FOLDERS_LXC-START-SAMOHOSTING \
-#   -v /opt:/srv/APPS_FOLDER \
-#   -v /opt/runtipi/logs:/srv/RUNTIPI_LOGS \
-#   -v /opt/filebrowser/data/db:/database \
-#   filebrowser/filebrowser:s6
-# msg_ok "Веб-файл-браузер установлен."
-
-# --------------------------------------------------------------------------------------------------------------------
-# msg_info "Устанавливаю Glances.."
-$STD docker run -d \
-  -p 1002:61208 \
-  --name=glance \
-  --restart=unless-stopped \
-  --pid=host \
-  -e GLANCES_OPT=-w \
-  -v /var/run/docker.sock:/var/run/docker.sock:ro \
-  nicolargo/glances:latest-full
 msg_ok "Glances установлен."
 
-#======================================================================================================================
-#======================================================================================================================
-#======================================================================================================================
 
+#======================================================================================================================
+#===========================установка подгтовленных конфигураций=======================================================
+#======================================================================================================================
 
 # --------------------------------------------------------------------------------------------------------------------
 msg_info "Добавляю Firefox1 конфигурацию в Dockge"
