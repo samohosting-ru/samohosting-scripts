@@ -248,7 +248,7 @@ cat <<EOF >/opt/dockge/stacks/openproject/compose.yaml
 # -------------------------------------------------------
 services:
   openproject:
-    image: openproject/community
+    image: openproject/community:13
     environment:
       - OPENPROJECT_SECRET_KEY_BASE=secret
       # - OPENPROJECT_HOST__NAME=projects.samohosting.ru
