@@ -254,7 +254,7 @@ services:
       # - OPENPROJECT_HOST__NAME=projects.samohosting.ru
       # - OPENPROJECT_HTTPS=True
       - OPENPROJECT_HOST__NAME=$IP:1580
-      # - OPENPROJECT_HTTPS=false
+      - OPENPROJECT_HTTPS=false
       - OPENPROJECT_MAIN__CONTENT__LANGUAGE=english
       # EMAIL_DELIVERY_METHOD: smtp
       # SMTP_ADDRESS: smtp.sendgrid.net
@@ -270,7 +270,7 @@ services:
       - /opt/openproject/Files/AppData/openproject/static:/var/openproject/assets
     ports:
       # - "8080"
-      - "1580:80"
+      - 1580:8080
     restart: unless-stopped
 EOF
 msg_ok "Конфигурация для запуска OpenProject в Dockge добавлена в шаблоны конфигураций"
@@ -309,8 +309,8 @@ services:
       DISK_SIZE: "10G"
       RAM_SIZE: "4G"
       CPU_CORES: "4"
-    devices:
-      - /dev/kvm
+    # devices:
+    #   - /dev/kvm
     cap_add:
       - NET_ADMIN
     ports:
