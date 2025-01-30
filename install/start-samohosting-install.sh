@@ -141,6 +141,10 @@ $STD docker compose up -d --quiet-pull
 msg_ok "Веб-файл-браузер установлен."
 
 # --------------------------------------------------------------------------------------------------------------------
+msg_info "Устанавливаю Glances.."
+mkdir -p /opt/dockge/stacks/glances
+cd /opt/dockge/stacks/glances
+cat <<EOF >/opt/dockge/stacks/glances/compose.yaml
 # <== "ЗАПУСТИТЬ"- ДЛЯ ЗАПУСКА <==
 # <== "ИЗМЕНИТЬ" - ДЛЯ ИЗМЕНЕНИЯ ВАШИХ ДАННЫХ <==
 # <== "ПЕРЕЗАПУСТИТЬ" - ДЛЯ ПРИМЕНЕНИЯ НОВЫХ НАСТРОЕК <==
@@ -155,10 +159,6 @@ msg_ok "Веб-файл-браузер установлен."
 # СТРАНИЦА ПРОЕКТА: https://github.com/nicolargo/glances
 # ВИДЕО\ОБЗОР: https://www.youtube.com/@samohosting
 # -------------------------------------------------------
-msg_info "Устанавливаю Glances.."
-mkdir -p /opt/dockge/stacks/glances
-cd /opt/dockge/stacks/glances
-cat <<EOF >/opt/dockge/stacks/glances/compose.yaml
 services:
       glances:
         ports:
@@ -229,30 +229,100 @@ msg_ok "Добавил в конфигурацию qbittorrent runtipi - ска�
 
 
 # --------------------------------------------------------------------------------------------------------------------
-msg_info "Добавляю Firefox2 конфигурацию в Dockge"
-mkdir -p /opt/dockge/stacks/firefox2
-cat <<EOF >/opt/dockge/stacks/firefox2/compose.yaml
+msg_info "Добавляю OpenProject конфигурацию в Dockge"
+mkdir -p /opt/dockge/stacks/openproject
+cat <<EOF >/opt/dockge/stacks/openproject/compose.yaml
+# <== "ЗАПУСТИТЬ"- ДЛЯ ЗАПУСКА <==
+# <== "ИЗМЕНИТЬ" - ДЛЯ ИЗМЕНЕНИЯ ВАШИХ ДАННЫХ <==
+# <== "ПЕРЕЗАПУСТИТЬ" - ДЛЯ ПРИМЕНЕНИЯ НОВЫХ НАСТРОЕК <==
+#
+# --------------------Ваши доступы-----------------------
+# Адрес Вашего OpenProject - http://$IP:1580
+# -------------------------------------------------------
+#
+# --------------------О ПРИЛОЖЕНИИ-----------------------
+# НАЗВАНИЕ: OpenProject
+# ОПИСАНИЕ: Сервис для ведения проектов. Канбан | Гантт | Задачи | Проекты
+# СТРАНИЦА ПРОЕКТА: https://github.com/opf/openproject
+# ВИДЕО\ОБЗОР: https://www.youtube.com/watch?v=E9nCQo3TOkw
+# -------------------------------------------------------
 services:
-  firefox:
-    image: lscr.io/linuxserver/firefox:latest
-    container_name: firefox2
-    security_opt:
-      - seccomp:unconfined #optional
+  openproject:
+    image: openproject/community
     environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Etc/UTC
-      - FIREFOX_CLI=https://www.samohosting.ru/ #optional
+      - OPENPROJECT_SECRET_KEY_BASE=secret
+      # - OPENPROJECT_HOST__NAME=projects.samohosting.ru
+      # - OPENPROJECT_HTTPS=True
+      - OPENPROJECT_HOST__NAME=$IP:1580
+      # - OPENPROJECT_HTTPS=false
+      - OPENPROJECT_MAIN__CONTENT__LANGUAGE=english
+      # EMAIL_DELIVERY_METHOD: smtp
+      # SMTP_ADDRESS: smtp.sendgrid.net
+      # SMTP_PORT: 587
+      # SMTP_DOMAIN: "your.domain.com"
+      # SMTP_AUTHENTICATION: login
+      # SMTP_ENABLE_STARTTLS_AUTO: "true"
+      # SMTP_USER_NAME: "apikey"
+      # SMTP_PASSWORD: "*********"
     volumes:
-      - /opt/firefox2/data/config:/config
+      - /opt/openproject/Files/AppData/openproject/pgdata:/var/openproject/pgdata
+      - /opt/openproject/Files/AppData/openproject/logs:/var/log/supervisor
+      - /opt/openproject/Files/AppData/openproject/static:/var/openproject/assets
     ports:
-      - 3002:3000
-      # - 3001:3001
-    shm_size: 1gb
+      # - "8080"
+      - "1580:80"
     restart: unless-stopped
 EOF
-msg_ok "Конфигурация для запуска Firefox2 в Dockge добавлена в шаблоны конфигураций"
+msg_ok "Конфигурация для запуска OpenProject в Dockge добавлена в шаблоны конфигураций"
 # --------------------------------------------------------------------------------------------------------------------
+
+# --------------------------------------------------------------------------------------------------------------------
+msg_info "Добавляю Dockur-Windows конфигурацию в Dockge"
+mkdir -p /opt/dockge/stacks/dockur-windows
+cat <<EOF >/opt/dockge/stacks/dockur-windows/compose.yaml
+# <== "ЗАПУСТИТЬ"- ДЛЯ ЗАПУСКА <==
+# <== "ИЗМЕНИТЬ" - ДЛЯ ИЗМЕНЕНИЯ ВАШИХ ДАННЫХ <==
+# <== "ПЕРЕЗАПУСТИТЬ" - ДЛЯ ПРИМЕНЕНИЯ НОВЫХ НАСТРОЕК <==
+#
+# --------------------Ваши доступы-----------------------
+# Адрес Вашего OpenProject - http://$IP:8106
+# По умолчанию создается пользователь с именем Docker и пустым паролем.
+# USERNAME: "bill"
+# PASSWORD: "gates"
+# KVM: "N" #if need to switch off kvm - uncomment but device need to be commented out
+# -------------------------------------------------------
+#
+# --------------------О ПРИЛОЖЕНИИ-----------------------
+# НАЗВАНИЕ: Dockur-Windows
+# ОПИСАНИЕ: Запуск виртуальной машины windows в докер контейнере 
+# СТРАНИЦА ПРОЕКТА: https://github.com/dockur/windows
+# ВИДЕО\ОБЗОР: https://www.youtube.com/watch?v=cSRZRPgwg64
+# -------------------------------------------------------
+services:
+  windowstinycore:
+    image: dockurr/windows
+    container_name: windowstinycore
+    environment:
+      VERSION: "core11"
+      REGION: "en-US"
+      KEYBOARD: "en-US"
+      DISK_SIZE: "10G"
+      RAM_SIZE: "4G"
+      CPU_CORES: "4"
+    devices:
+      - /dev/kvm
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - 8106:8006
+      - 3319:3389/tcp
+      - 3319:3389/udp
+    stop_grace_period: 2m
+EOF
+msg_ok "Конфигурация для запуска Dockur-Windows в Dockge добавлена в шаблоны конфигураций"
+# --------------------------------------------------------------------------------------------------------------------
+
+
 
 # --------------------------------------------------------------------------------------------------------------------
 msg_info "Добавляю Firefox3 конфигурацию в Dockge"
