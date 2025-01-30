@@ -146,35 +146,57 @@ EOF
 $STD docker compose up -d --quiet-pull
 msg_ok "Glances установлен."
 
+# --------------------------------------------------------------------------------------------------------------------
+msg_info "Устанавливаю SAMBA(ОТКРЫТИЕ ПАПКИ ВАШЕГО СЕРВЕРА НА ДРУГИХ ПК,ТВ,..).."
+mkdir -p /opt/dockge/stacks/samba
+cd /opt/dockge/stacks/samba
+cat <<EOF >/opt/dockge/stacks/samba/compose.yaml
+# <== "ЗАПУСТИТЬ"- ДЛЯ ЗАПУСКА <==
+# <== "ИЗМЕНИТЬ" - ДЛЯ ИЗМЕНЕНИЯ ВАШИХ ДАННЫХ <==
+# <== "ПЕРЕЗАПУСТИТЬ" - ДЛЯ ПРИМЕНЕНИЯ НОВЫХ НАСТРОЕК <==
+#
+# --------------------Ваши доступы-----------------------
+# Адрес Вашего Samba server - \\$IP\public
+# по умолчанию заданы login:"LOGIN" password:"PASSWORD"
+# -------------------------------------------------------
+#
+# --------------------О ПРИЛОЖЕНИИ-----------------------
+# НАЗВАНИЕ: SMB СЕРВЕР
+# ОПИСАНИЕ: Сервис для предоставления доступа к Вашим данным по протоколу smb с пк, тв, телефона, ..
+# СТРАНИЦА ПРОЕКТА: https://github.com/dperson/samba/tree/master
+# ВИДЕО\ОБЗОР: https://www.youtube.com/@samohosting
+# -------------------------------------------------------
+services:
+  samba:
+    restart: unless-stopped
+    container_name: samba
+    ports:
+      - 139:139
+      - 445:445
+    volumes:
+      - /opt/runtipi/media/downloads:/share
+    image: dperson/samba
+    command: -u "LOGIN;PASSWORD" -s "public;/share;yes;no;yes"
+EOF
+$STD docker compose up -d --quiet-pull
+msg_ok "SAMBA(ОТКРЫТИЕ ПАПКИ ВАШЕГО СЕРВЕРА НА ДРУГИХ ПК,ТВ,..) установлен."
+
 
 #======================================================================================================================
 #===========================установка подгтовленных конфигураций=======================================================
 #======================================================================================================================
 
 # --------------------------------------------------------------------------------------------------------------------
-msg_info "Добавляю Firefox1 конфигурацию в Dockge"
-mkdir -p /opt/dockge/stacks/firefox1
-cat <<EOF >/opt/dockge/stacks/firefox1/compose.yaml
+msg_info "Добавляю в конфигурацию qbittorrent для скачки по умолчанию в /media/downloads"
+mkdir -p /opt/runtipi/user-config/qbittorrent
+cat <<EOF >/opt/runtipi/user-config/qbittorrent/docker-compose.yml
 services:
-  firefox:
-    image: lscr.io/linuxserver/firefox:latest
-    container_name: firefox1
-    security_opt:
-      - seccomp:unconfined #optional
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Etc/UTC
-      - FIREFOX_CLI=https://www.samohosting.ru/ #optional
-    volumes:
-      - /opt/firefox1/data/config:/config
-    ports:
-      - 3000:3000
-      # - 3001:3001
-    shm_size: 1gb
-    restart: unless-stopped
+  qbittorrent:
+      - ${ROOT_FOLDER_HOST}/media/torrents:/media/torrents
+      - ${ROOT_FOLDER_HOST}/media/downloads:/downloads
 EOF
-msg_ok "Конфигурация для запуска Firefox1 в Dockge добавлена в шаблоны конфигураций"
+msg_ok "Добавил в конфигурацию qbittorrent для скачки по умолчанию в /media/downloads"
+
 
 # --------------------------------------------------------------------------------------------------------------------
 msg_info "Добавляю Firefox2 конфигурацию в Dockge"
