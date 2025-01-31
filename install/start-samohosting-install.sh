@@ -133,7 +133,7 @@ services:
       - /:/srv/ALL_FOLDERS_LXC-START-SAMOHOSTING
       - /opt:/srv/APPS_FOLDER
       - /opt/runtipi/logs:/srv/RUNTIPI_LOGS
-      - /opt/runtipi/media/downloads:/DOWNLOADS
+      - /opt/runtipi/media/downloads:/srv/DOWNLOADS
       - /opt/filebrowser/data/db:/database
     image: filebrowser/filebrowser:s6
 EOF
