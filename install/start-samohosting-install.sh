@@ -268,9 +268,7 @@ services:
       - /opt/openproject/Files/AppData/openproject/logs:/var/log/supervisor
       - /opt/openproject/Files/AppData/openproject/static:/var/openproject/assets
     ports:
-      #- "8080"
       - 1080:8080
-      #- 1081:80
     restart: unless-stopped
 networks: {}
 EOF
