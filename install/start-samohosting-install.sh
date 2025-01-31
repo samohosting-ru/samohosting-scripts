@@ -82,7 +82,7 @@ services:
     volumes:
       - /opt/dashy/user-data/conf.yml:/app/user-data/conf.yml
       - /opt/dashy/user-data/conf2.yml:/app/user-data/conf2.yml
-    image: lissy93/dashy:latest
+    image: mirror.gcr.io/lissy93/dashy:latest
 EOF
 $STD docker compose up -d --quiet-pull
 msg_ok "Dashy Dashboard установлен."
@@ -110,7 +110,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - /opt/dockge/data:/app/data
       - /opt/dockge/stacks:/opt/dockge/stacks
-    image: louislam/dockge:latest
+    image: mirror.gcr.io/louislam/dockge:latest
 EOF
 $STD docker compose up -d --quiet-pull
 msg_ok "Dockge установлен."
@@ -135,7 +135,7 @@ services:
       - /opt/runtipi/logs:/srv/RUNTIPI_LOGS
       - /opt/runtipi/media/downloads:/srv/DOWNLOADS
       - /opt/filebrowser/data/db:/database
-    image: filebrowser/filebrowser:s6
+    image: mirror.gcr.io/filebrowser/filebrowser:s6
 EOF
 $STD docker compose up -d --quiet-pull
 msg_ok "Веб-файл-браузер установлен."
@@ -170,7 +170,7 @@ services:
             - GLANCES_OPT=-w
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock:ro
-        image: nicolargo/glances:latest-full
+        image: mirror.gcr.io/nicolargo/glances:latest-full
 EOF
 $STD docker compose up -d --quiet-pull
 msg_ok "Glances установлен."
@@ -204,7 +204,7 @@ services:
       - 445:445
     volumes:
       - /opt/runtipi/media/downloads:/share
-    image: dperson/samba
+    image: mirror.gcr.io/dperson/samba
     command: -u "LOGIN;PASSWORD" -s "public;/share;yes;no;yes"
 EOF
 $STD docker compose up -d --quiet-pull
@@ -249,7 +249,7 @@ cat <<EOF >/opt/dockge/stacks/openproject/compose.yaml
 # -------------------------------------------------------
 services:
   openproject:
-    image: openproject/community:13
+    image: mirror.gcr.io/openproject/community:13.4
     environment:
       - OPENPROJECT_SECRET_KEY_BASE=secret
       - OPENPROJECT_HOST__NAME=92.168.1.18:1080
@@ -284,7 +284,7 @@ cat <<EOF >/opt/dockge/stacks/dockur-windows/compose.yaml
 # <== "ПЕРЕЗАПУСТИТЬ" - ДЛЯ ПРИМЕНЕНИЯ НОВЫХ НАСТРОЕК <==
 #
 # --------------------Ваши доступы-----------------------
-# Адрес Вашего OpenProject - http://$IP:8106
+# Адрес Вашего dockur-windows - http://$IP:8106
 # По умолчанию создается пользователь:
 # USERNAME: "samohosting"
 # PASSWORD: "samohosting"
@@ -298,7 +298,7 @@ cat <<EOF >/opt/dockge/stacks/dockur-windows/compose.yaml
 # -------------------------------------------------------
 services:
   windowstinycore:
-    image: dockurr/windows
+    image: mirror.gcr.io/dockurr/windows
     container_name: windowstinycore
     environment:
       VERSION: core11
@@ -334,7 +334,7 @@ cat <<EOF >/opt/dockge/stacks/dockur-macos/compose.yaml
 # <== "ПЕРЕЗАПУСТИТЬ" - ДЛЯ ПРИМЕНЕНИЯ НОВЫХ НАСТРОЕК <==
 #
 # --------------------Ваши доступы-----------------------
-# Адрес Вашего OpenProject - http://$IP:8107
+# Адрес Вашего dockur-macos - http://$IP:8107
 # -------------------------------------------------------
 #
 # --------------------О ПРИЛОЖЕНИИ-----------------------
@@ -345,7 +345,7 @@ cat <<EOF >/opt/dockge/stacks/dockur-macos/compose.yaml
 # -------------------------------------------------------
 services:
   macos:
-    image: dockurr/macos
+    image: mirror.gcr.io/dockurr/macos
     container_name: macos
     environment:
       VERSION: "13"
