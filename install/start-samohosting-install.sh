@@ -339,7 +339,7 @@ cat <<EOF >/opt/dockge/stacks/dockur-macos/compose.yaml
 #
 # --------------------О ПРИЛОЖЕНИИ-----------------------
 # НАЗВАНИЕ: Dockur-MacOS
-# ОПИСАНИЕ: Запуск виртуальной машины windows в докер контейнере 
+# ОПИСАНИЕ: Запуск виртуальной машины MacOS в докер контейнере 
 # СТРАНИЦА ПРОЕКТА: https://github.com/dockur/macos
 # ВИДЕО\ОБЗОР: https://www.youtube.com/watch?v=cSRZRPgwg64
 # -------------------------------------------------------
@@ -380,7 +380,7 @@ cat <<EOF >/opt/dockge/stacks/webtop/compose.yaml
 #
 # --------------------О ПРИЛОЖЕНИИ-----------------------
 # НАЗВАНИЕ: Webtop - linux in docker
-# ОПИСАНИЕ: Запуск виртуальной машины windows в докер контейнере 
+# ОПИСАНИЕ: Запуск виртуальной машины linux в докер контейнере 
 # СТРАНИЦА ПРОЕКТА: https://github.com/linuxserver/docker-webtop
 # ВИДЕО\ОБЗОР: https://www.youtube.com/watch?v=cSRZRPgwg64
 # -------------------------------------------------------
