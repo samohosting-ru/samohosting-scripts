@@ -237,7 +237,7 @@ cat <<EOF >/opt/dockge/stacks/openproject/compose.yaml
 # <== "ПЕРЕЗАПУСТИТЬ" - ДЛЯ ПРИМЕНЕНИЯ НОВЫХ НАСТРОЕК <==
 #
 # --------------------Ваши доступы-----------------------
-# Адрес Вашего OpenProject - http://$IP:1580
+# Адрес Вашего OpenProject - http://$IP:1080
 # -------------------------------------------------------
 #
 # --------------------О ПРИЛОЖЕНИИ-----------------------
@@ -251,27 +251,27 @@ services:
     image: openproject/community:13
     environment:
       - OPENPROJECT_SECRET_KEY_BASE=secret
-      # - OPENPROJECT_HOST__NAME=projects.samohosting.ru
-      # - OPENPROJECT_HTTPS=True
-      - OPENPROJECT_HOST__NAME=$IP:1580
+      - OPENPROJECT_HOST__NAME=92.168.1.18:1080
       - OPENPROJECT_HTTPS=false
       - OPENPROJECT_MAIN__CONTENT__LANGUAGE=english
-      # EMAIL_DELIVERY_METHOD: smtp
-      # SMTP_ADDRESS: smtp.sendgrid.net
-      # SMTP_PORT: 587
-      # SMTP_DOMAIN: "your.domain.com"
-      # SMTP_AUTHENTICATION: login
-      # SMTP_ENABLE_STARTTLS_AUTO: "true"
-      # SMTP_USER_NAME: "apikey"
-      # SMTP_PASSWORD: "*********"
+    # - EMAIL_DELIVERY_METHOD: smtp
+    # - SMTP_ADDRESS: smtp.sendgrid.net
+    # - SMTP_PORT: 587
+    # - SMTP_DOMAIN: "your.domain.com"
+    # - SMTP_AUTHENTICATION: login
+    # - SMTP_ENABLE_STARTTLS_AUTO: "true"
+    # - SMTP_USER_NAME: "apikey"
+    # - SMTP_PASSWORD: "*********"
     volumes:
       - /opt/openproject/Files/AppData/openproject/pgdata:/var/openproject/pgdata
       - /opt/openproject/Files/AppData/openproject/logs:/var/log/supervisor
       - /opt/openproject/Files/AppData/openproject/static:/var/openproject/assets
     ports:
-      # - "8080"
-      - 1580:8080
+      #- "8080"
+      - 1080:8080
+      #- 1081:80
     restart: unless-stopped
+networks: {}
 EOF
 msg_ok "Конфигурация для запуска OpenProject в Dockge добавлена в шаблоны конфигураций"
 # --------------------------------------------------------------------------------------------------------------------
@@ -286,10 +286,9 @@ cat <<EOF >/opt/dockge/stacks/dockur-windows/compose.yaml
 #
 # --------------------Ваши доступы-----------------------
 # Адрес Вашего OpenProject - http://$IP:8106
-# По умолчанию создается пользователь с именем Docker и пустым паролем.
-# USERNAME: "bill"
-# PASSWORD: "gates"
-# KVM: "N" #if need to switch off kvm - uncomment but device need to be commented out
+# По умолчанию создается пользователь:
+# USERNAME: "samohosting"
+# PASSWORD: "samohosting"
 # -------------------------------------------------------
 #
 # --------------------О ПРИЛОЖЕНИИ-----------------------
@@ -303,14 +302,18 @@ services:
     image: dockurr/windows
     container_name: windowstinycore
     environment:
-      VERSION: "core11"
-      REGION: "en-US"
-      KEYBOARD: "en-US"
-      DISK_SIZE: "10G"
-      RAM_SIZE: "4G"
+      VERSION: core11
+      REGION: en-US
+      KEYBOARD: en-US
+      DISK_SIZE: 10G
+      RAM_SIZE: 4G
       CPU_CORES: "4"
-    # devices:
-    #   - /dev/kvm
+      USERNAME: samohosting
+      PASSWORD: samohosting
+#      devices:
+#        - /dev/kvm
+#        - /dev/net/tun
+      KVM: "N"
     cap_add:
       - NET_ADMIN
     ports:
@@ -318,11 +321,96 @@ services:
       - 3319:3389/tcp
       - 3319:3389/udp
     stop_grace_period: 2m
+networks: {}
 EOF
 msg_ok "Конфигурация для запуска Dockur-Windows в Dockge добавлена в шаблоны конфигураций"
 # --------------------------------------------------------------------------------------------------------------------
 
+# --------------------------------------------------------------------------------------------------------------------
+msg_info "Добавляю Dockur-MacOS конфигурацию в Dockge"
+mkdir -p /opt/dockge/stacks/dockur-macos
+cat <<EOF >/opt/dockge/stacks/dockur-macos/compose.yaml
+# <== "ЗАПУСТИТЬ"- ДЛЯ ЗАПУСКА <==
+# <== "ИЗМЕНИТЬ" - ДЛЯ ИЗМЕНЕНИЯ ВАШИХ ДАННЫХ <==
+# <== "ПЕРЕЗАПУСТИТЬ" - ДЛЯ ПРИМЕНЕНИЯ НОВЫХ НАСТРОЕК <==
+#
+# --------------------Ваши доступы-----------------------
+# Адрес Вашего OpenProject - http://$IP:8107
+# -------------------------------------------------------
+#
+# --------------------О ПРИЛОЖЕНИИ-----------------------
+# НАЗВАНИЕ: Dockur-MacOS
+# ОПИСАНИЕ: Запуск виртуальной машины windows в докер контейнере 
+# СТРАНИЦА ПРОЕКТА: https://github.com/dockur/macos
+# ВИДЕО\ОБЗОР: https://www.youtube.com/watch?v=cSRZRPgwg64
+# -------------------------------------------------------
+services:
+  macos:
+    image: dockurr/macos
+    container_name: macos
+    environment:
+      VERSION: "13"
+    # devices:
+    #   - /dev/kvm
+    #   - /dev/net/tun
+    KVM: "N"  
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - 8107:8006
+      - 5900:5900/tcp
+      - 5900:5900/udp
+    stop_grace_period: 2m
+networks: {}
+EOF
+msg_ok "Конфигурация для запуска Dockur-MacOS в Dockge добавлена в шаблоны конфигураций"
+# --------------------------------------------------------------------------------------------------------------------
 
+
+# --------------------------------------------------------------------------------------------------------------------
+msg_info "Добавляю Webtop-linux-in-docker конфигурацию в Dockge"
+mkdir -p /opt/dockge/stacks/webtop
+cat <<EOF >/opt/dockge/stacks/webtop/compose.yaml
+# <== "ЗАПУСТИТЬ"- ДЛЯ ЗАПУСКА <==
+# <== "ИЗМЕНИТЬ" - ДЛЯ ИЗМЕНЕНИЯ ВАШИХ ДАННЫХ <==
+# <== "ПЕРЕЗАПУСТИТЬ" - ДЛЯ ПРИМЕНЕНИЯ НОВЫХ НАСТРОЕК <==
+#
+# --------------------Ваши доступы-----------------------
+# Адрес Вашего OpenProject - http://$IP:3000
+# -------------------------------------------------------
+#
+# --------------------О ПРИЛОЖЕНИИ-----------------------
+# НАЗВАНИЕ: Webtop - linux in docker
+# ОПИСАНИЕ: Запуск виртуальной машины windows в докер контейнере 
+# СТРАНИЦА ПРОЕКТА: https://github.com/linuxserver/docker-webtop
+# ВИДЕО\ОБЗОР: https://www.youtube.com/watch?v=cSRZRPgwg64
+# -------------------------------------------------------
+services:
+  webtop:
+    image: lscr.io/linuxserver/webtop:latest
+    container_name: webtop
+    security_opt:
+      - seccomp:unconfined #optional
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      # - SUBFOLDER=/ #optional
+      - TITLE=SAMOHOSTING #optional
+    volumes:
+      - /path/to/data:/config
+      - /var/run/docker.sock:/var/run/docker.sock #optional
+    ports:
+      - 3000:3000
+      - 3001:3001
+    # devices:
+    #   - /dev/dri:/dev/dri #optional
+    shm_size: "1gb" #optional
+    restart: unless-stopped
+networks: {}
+EOF
+msg_ok "Конфигурация для запуска Webtop-linux-in-docker в Dockge добавлена в шаблоны конфигураций"
+# --------------------------------------------------------------------------------------------------------------------
 
 # --------------------------------------------------------------------------------------------------------------------
 msg_info "Добавляю Firefox3 конфигурацию в Dockge"
