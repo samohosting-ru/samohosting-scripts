@@ -25,17 +25,22 @@ jobs:
         # Fetch data from samohosting-scripts
         # git fetch samohosting-scripts && echo "info: Fetched from samohosting-scripts $(date +'%Y-%m-%d %H:%M:%S')"
 
-        # Check if dev branch exists in remote repository
+        # Check if community_repo_clone branch exists in remote repository
         BRANCH_EXISTS=$(git ls-remote --heads samohosting-scripts refs/heads/community_repo_clone)
         if [ -z "$BRANCH_EXISTS" ]; then
           echo "info: cant find targeted community_repo_clone branch"
+          
+          #creating temp_local_community_repo_clone branch
+          git branch temp_local_community_repo_clone
+          git switch temp_local_community_repo_clone
+          
           #clone helper-scripts original repo
-          git clone --single-branch --branch main https://github.com/community-scripts/ProxmoxVE.git temp_repo
+          git clone --single-branch --branch temp_local_community_repo_clone https://github.com/community-scripts/ProxmoxVE.git temp_repo
           cp -r temp_repo/* .
           rm -r temp_repo
           git add . && echo "info: DONE add . $(date +'%Y-%m-%d %H:%M:%S')"
           git commit -m "pushed ProxmoxVE cloned repo to community_repo_clone by workflow: $(date +'%Y-%m-%d %H:%M:%S')" && echo "info: Committed changes $(date +'%Y-%m-%d %H:%M:%S')"
-          git push -u samohosting-scripts main:community_repo_clone && echo "info: Pushed cloned repo in samohosting-scripts/community_repo_clone $(date +'%Y-%m-%d %H:%M:%S')"
+          git push -u samohosting-scripts temp_local_community_repo_clone:community_repo_clone && echo "info: Pushed cloned repo in samohosting-scripts/community_repo_clone $(date +'%Y-%m-%d %H:%M:%S')"
         else
           echo "info: found targeted branch -> $BRANCH_EXISTS"
           echo "info: Fetch the latest changes from both repositories $(date +'%Y-%m-%d %H:%M:%S')"
