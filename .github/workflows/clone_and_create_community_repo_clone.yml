@@ -35,7 +35,7 @@ jobs:
           git switch temp_local_community_repo_clone
           
           #clone helper-scripts original repo
-          git clone --single-branch --branch temp_local_community_repo_clone https://github.com/community-scripts/ProxmoxVE.git temp_repo
+          git clone --single-branch --branch main https://github.com/community-scripts/ProxmoxVE.git temp_repo
           cp -r temp_repo/* .
           rm -r temp_repo
           git add . && echo "info: DONE add . $(date +'%Y-%m-%d %H:%M:%S')"
