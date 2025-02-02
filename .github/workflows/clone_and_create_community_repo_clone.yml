@@ -23,7 +23,7 @@ jobs:
     - name: Create\Update samohosting-scripts/community_repo_clone
       run: |
         # Fetch data from samohosting-scripts
-        git fetch samohosting-scripts && echo "info: Fetched from samohosting-scripts $(date +'%Y-%m-%d %H:%M:%S')"
+        # git fetch samohosting-scripts && echo "info: Fetched from samohosting-scripts $(date +'%Y-%m-%d %H:%M:%S')"
 
         # Check if dev branch exists in remote repository
         BRANCH_EXISTS=$(git ls-remote --heads samohosting-scripts refs/heads/community_repo_clone)
