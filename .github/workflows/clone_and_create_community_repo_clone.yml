@@ -58,7 +58,14 @@ jobs:
           echo "info: diff is detected in samohosting-scripts/community_repo_clone VS community-scripts/ProxmoxVE"
           echo "info: switching to samohosting-scripts/community_repo_clone"
           # Switch to the community_repo_clone branch and pull changes from upstream.
-          git switch community_repo_clone && git pull
+          git switch community_repo_clone
+          git show-branch --current
+          echo "info: current branch files :"
+          ls -a
+          git pull
+          echo "info: current branch files :"
+          ls -a
+          git pull
           echo "info: switched and pulled"
           echo "info: merging upstream/main" && git merge upstream/main --allow-unrelated-histories
           echo "info: sucsessfully merged"
