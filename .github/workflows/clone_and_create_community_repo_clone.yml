@@ -67,7 +67,7 @@ jobs:
           rm -rf .editorconfig && echo "info:  rm -rf .editorconfig"
           # ls -a
           git add .
-          git commit -m "get_update_changes_from_helper-scripts_community"
+          git commit -m "get_update_changes_from_helper-scripts_community $(date +'%Y-%m-%d %H:%M:%S')"
           echo "info: start pushing origin $(date +'%Y-%m-%d %H:%M:%S')"
           git push -u -f samohosting-scripts community_repo_clone:community_repo_clone 
           echo "info: Pushed repo update in samohosting-scripts/community_repo_clone $(date +'%Y-%m-%d %H:%M:%S')"
