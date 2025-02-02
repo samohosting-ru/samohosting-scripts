@@ -59,7 +59,7 @@ jobs:
           # Switch to the community_repo_clone branch and pull changes from upstream.
           git switch community_repo_clone && git pull
           echo "info: switched and pulled"
-          echo "info: merging upstream/community_repo_clone" && git merge upstream/community_repo_clone --allow-unrelated-histories
+          echo "info: merging upstream/main" && git merge upstream/main --allow-unrelated-histories
           echo "info: sucsessfully merged"
           git add . && echo "info: DONE add . $(date +'%Y-%m-%d %H:%M:%S')"
           rm -rf .github && echo "info:  rm -rf .github"
