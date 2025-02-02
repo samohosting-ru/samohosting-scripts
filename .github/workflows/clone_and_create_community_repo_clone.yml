@@ -53,7 +53,7 @@ jobs:
           echo "info: checking diff samohosting-scripts/community_repo_clone VS community-scripts/ProxmoxVE $(date +'%Y-%m-%d %H:%M:%S')"
           
           # Compare the main branches
-          # if ! git diff --name-only samohosting-scripts/community_repo_clone..upstream/main -- . ':!.github' ':!.editorconfig'; then
+          # if ! git diff samohosting-scripts/community_repo_clone..upstream/main -- . ':!.github' ':!.editorconfig'; then
           if  git diff --name-only samohosting-scripts/community_repo_clone..upstream/main; then
           echo "info: diff is detected in samohosting-scripts/community_repo_clone VS community-scripts/ProxmoxVE"
           echo "info: switching to samohosting-scripts/community_repo_clone"
@@ -62,12 +62,12 @@ jobs:
           echo "info: switched and pulled"
           echo "info: merging upstream/main" && git merge upstream/main --allow-unrelated-histories
           echo "info: sucsessfully merged"
-          git add . && echo "info: DONE add . $(date +'%Y-%m-%d %H:%M:%S')"
+          echo "info: deleting .github | .vscode | .editorconfig  ..."
           rm -rf .github && echo "info:  rm -rf .github"
           rm -rf .vscode && echo "info:  rm -rf .vscode"
           rm -rf .editorconfig && echo "info:  rm -rf .editorconfig"
+          git add . && echo "info: DONE add . $(date +'%Y-%m-%d %H:%M:%S')"
           # ls -a
-          git add .
           git commit -m "get_update_changes_from_helper-scripts_community $(date +'%Y-%m-%d %H:%M:%S')"
           echo "info: start pushing origin $(date +'%Y-%m-%d %H:%M:%S')"
           git push -u -f samohosting-scripts community_repo_clone:community_repo_clone 
