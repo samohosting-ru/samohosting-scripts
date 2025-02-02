@@ -62,7 +62,7 @@ jobs:
           echo "info: current branch files :"
           ls -a
           git fetch upstream main
-          git merge upstream/main --allow-unrelated-histories
+          git rebase upstream/main --allow-unrelated-histories
           echo "info: current branch files :"
           ls -a
           # echo "info: switched and pulled"
