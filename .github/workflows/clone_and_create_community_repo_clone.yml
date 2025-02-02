@@ -33,6 +33,7 @@ jobs:
           #creating temp_local_community_repo_clone branch
           git branch temp_local_community_repo_clone
           git switch temp_local_community_repo_clone
+          ls -a
           
           #clone helper-scripts original repo
           git show-branch --current
