@@ -62,8 +62,8 @@ jobs:
           echo "info: current branch files(after  git checkout):"
           ls -a
           git fetch upstream main
-          # git reset --hard upstream/main
-          git rebase upstream/main --force-rebase
+          git reset --hard upstream/main
+          # git rebase upstream/main --force-rebase
           echo "info: current branch files (after git reset --hard):"
           ls -a
           # echo "info: switched and pulled"
