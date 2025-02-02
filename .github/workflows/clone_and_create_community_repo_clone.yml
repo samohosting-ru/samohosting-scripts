@@ -35,7 +35,9 @@ jobs:
           git switch temp_local_community_repo_clone
           
           #clone helper-scripts original repo
+          git show-branch --current
           git clone --single-branch --branch main https://github.com/community-scripts/ProxmoxVE.git temp_repo
+          git show-branch --current
           ls -a
           cp -r temp_repo/* .
           rm -r temp_repo
