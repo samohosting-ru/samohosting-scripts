@@ -59,12 +59,12 @@ jobs:
           echo "info: switching to samohosting-scripts/community_repo_clone"
           # Switch to the community_repo_clone branch and pull changes from upstream.
           git checkout community_repo_clone
-          echo "info: current branch files :"
+          echo "info: current branch files(after  git checkout):"
           ls -a
           git fetch upstream main
           # git rebase upstream/main
           git reset --hard upstream/main
-          echo "info: current branch files :"
+          echo "info: current branch files (after git reset --hard):"
           ls -a
           # echo "info: switched and pulled"
           # echo "info: merging upstream/main" && git merge upstream/main --allow-unrelated-histories
@@ -74,6 +74,7 @@ jobs:
           rm -rf .vscode && echo "info:  rm -rf .vscode"
           rm -rf .editorconfig && echo "info:  rm -rf .editorconfig"
           git add -A && echo "info: DONE add -A $(date +'%Y-%m-%d %H:%M:%S')"
+          echo "info: current branch files (after removing):"
           ls -a
           git commit --allow-empty -m "get_update_changes_from_helper-scripts_community $(date +'%Y-%m-%d %H:%M:%S')"
           echo "info: start pushing local community_repo_clone to samohosting-scripts/community_repo_clone  $(date +'%Y-%m-%d %H:%M:%S')"
