@@ -58,7 +58,7 @@ jobs:
           git add . && echo "info: DONE add . $(date +'%Y-%m-%d %H:%M:%S')"
           rm -rf .github && echo "info:  rm -rf .github"
           rm -rf .editorconfig && echo "info:  rm -rf .editorconfig"
-          ls -a
+          # ls -a
           git add .
           git commit -m "get_update_changes_from_helper-scripts_community"
           echo "info: start pushing origin $(date +'%Y-%m-%d %H:%M:%S')"
