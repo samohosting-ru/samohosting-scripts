@@ -57,6 +57,7 @@ jobs:
           echo "info: sucsessfully merged"
           git add . && echo "info: DONE add . $(date +'%Y-%m-%d %H:%M:%S')"
           rm -rf .github && echo "info:  rm -rf .github"
+          rm -rf .vscode && echo "info:  rm -rf .vscode"
           rm -rf .editorconfig && echo "info:  rm -rf .editorconfig"
           # ls -a
           git add .
