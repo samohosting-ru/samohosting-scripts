@@ -148,7 +148,7 @@ network_check() {
     msg_ok "IPv4 интернет соеденение установлено.";
     ipv4_connected=true
   else
-    msg_error "IPv4 интернет соеденение НЕ установлено.";
+    msg_error "Отсутствует IPv4 интернет соеденение. Проверьте настройки сети!";
   fi
 
 # Check IPv6 connectivity to Google, Cloudflare & Quad9 DNS servers.
@@ -156,7 +156,7 @@ network_check() {
     msg_ok "IPv6 интернет соеденение установлено.";
     ipv6_connected=true
   else
-    msg_error "IPv6 интернет соеденение НЕ установлено.";
+    msg_error "Отсутствует IPv6 интернет соеденение. *НОРМАЛЬНО ПРИ УСТАНОВКЕ ПО УМОЛЧАНИЮ";
   fi
 
 # If both IPv4 and IPv6 checks fail, prompt the user
