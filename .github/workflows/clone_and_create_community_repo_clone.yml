@@ -53,7 +53,8 @@ jobs:
           echo "info: checking diff samohosting-scripts/community_repo_clone VS community-scripts/ProxmoxVE $(date +'%Y-%m-%d %H:%M:%S')"
           
           # Compare the main branches
-          if ! git diff --name-only samohosting-scripts/community_repo_clone..upstream/main -- . ':!.github' ':!.editorconfig'; then
+          # if ! git diff --name-only samohosting-scripts/community_repo_clone..upstream/main -- . ':!.github' ':!.editorconfig'; then
+          if ! git diff --name-only samohosting-scripts/community_repo_clone..upstream/main; then
           echo "info: diff is detected in samohosting-scripts/community_repo_clone VS community-scripts/ProxmoxVE"
           echo "info: switching to samohosting-scripts/community_repo_clone"
           # Switch to the community_repo_clone branch and pull changes from upstream.
