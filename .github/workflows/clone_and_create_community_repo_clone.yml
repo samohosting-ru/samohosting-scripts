@@ -67,7 +67,7 @@ jobs:
           rm -rf .vscode && echo "info:  rm -rf .vscode"
           rm -rf .editorconfig && echo "info:  rm -rf .editorconfig"
           git add . && echo "info: DONE add . $(date +'%Y-%m-%d %H:%M:%S')"
-          # ls -a
+          ls -a
           git commit -m "get_update_changes_from_helper-scripts_community $(date +'%Y-%m-%d %H:%M:%S')"
           echo "info: start pushing origin $(date +'%Y-%m-%d %H:%M:%S')"
           git push -u -f samohosting-scripts community_repo_clone:community_repo_clone 
