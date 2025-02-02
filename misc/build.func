@@ -195,7 +195,7 @@ header_info() {
     echo -e "${INFO}${BOLD}${DGN}Устанавливаю FIGlet(программа для вывода логотипа в консоль)...${CL}"
 
     temp_dir=$(mktemp -d)
-    curl -sL https://github.com/community-scripts/ProxmoxVE/raw/refs/heads/main/misc/figlet.tar.xz -o "$temp_dir/figlet.tar.xz"
+    curl -sL https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/ru_dev/misc/figlet.tar.xz -o "$temp_dir/figlet.tar.xz"
     mkdir -p /tmp/figlet
     tar -xf "$temp_dir/figlet.tar.xz" -C /tmp/figlet --strip-components=1
     cd /tmp/figlet
