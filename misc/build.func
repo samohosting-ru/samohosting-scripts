@@ -252,8 +252,8 @@ header_info() {
 # This function checks if the script is running through SSH and prompts the user to confirm if they want to proceed or exit.
 ssh_check() {
   if [ -n "${SSH_CLIENT:+x}" ]; then
-    if whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --defaultno --title "Обнаружено подключение по SSH" --yesno "Настоятельно рекомендуется использовать консоль(shell) Proxmox вместо SSH, т.к. могут возникнуть ошибки. Продолжить используя SSH?" 10 72; then
-      whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --msgbox --title "Установка при подключении по SSH" "Вы подтвердили продолжение установки с SSH подключением. Если у Вас возникнут ошибки - пожалуйста повторите установку в консоли(shell) Proxmox прежде, чем писать разработчикам о проблеме." 10 72
+    if whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.2" --defaultno --title "Обнаружено подключение по SSH" --yesno "Настоятельно рекомендуется использовать консоль(shell) Proxmox вместо SSH, т.к. могут возникнуть ошибки. Продолжить используя SSH?" 10 72; then
+      whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.2" --msgbox --title "Установка при подключении по SSH" "Вы подтвердили продолжение установки с SSH подключением. Если у Вас возникнут ошибки - пожалуйста повторите установку в консоли(shell) Proxmox прежде, чем писать разработчикам о проблеме." 10 72
     else
       clear
       echo "Выхожу в связи с использованием подключения по SSH. Пожалуйста рассмотрите возможность использовать для установки Proxmox shell."
@@ -335,12 +335,12 @@ exit_script() {
 
 # This function allows the user to configure advanced settings for the script.
 advanced_settings() {
-  whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --msgbox --title "Подсказка по использованию:" "Чтобы сделать выбор - используйте ПРОБЕЛ." 8 58
-  whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --msgbox --title "Дистрибутив по умолчанию для приложения $APP" "${var_os} ${var_version} \n \nIf используеммый дистрибутив Linux отличается от рекомендованного , поддержка скрипта невозможна. \n" 10 58
+  whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.2" --msgbox --title "Подсказка по использованию:" "Чтобы сделать выбор - используйте ПРОБЕЛ." 8 58
+  whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.2" --msgbox --title "Дистрибутив по умолчанию для приложения $APP" "${var_os} ${var_version} \n \nIf используеммый дистрибутив Linux отличается от рекомендованного , поддержка скрипта невозможна. \n" 10 58
   if [ "$var_os" != "alpine" ]; then
     var_os=""
     while [ -z "$var_os" ]; do
-      if var_os=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --title "ДИСТРИБУТИВ" --radiolist "Выберите дистрибутив :" 10 58 2 \
+      if var_os=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.2" --title "ДИСТРИБУТИВ" --radiolist "Выберите дистрибутив :" 10 58 2 \
         "debian" "" OFF \
         "ubuntu" "" OFF \
         3>&1 1>&2 2>&3); then
@@ -356,7 +356,7 @@ advanced_settings() {
   if [ "$var_os" == "debian" ]; then
     var_version=""
     while [ -z "$var_version" ]; do
-      if var_version=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --title "ВЕРСИЯ DEBIAN" --radiolist "Выберите версию" 10 58 2 \
+      if var_version=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.2" --title "ВЕРСИЯ DEBIAN" --radiolist "Выберите версию" 10 58 2 \
         "11" "Bullseye" OFF \
         "12" "Bookworm" OFF \
         3>&1 1>&2 2>&3); then
@@ -372,7 +372,7 @@ advanced_settings() {
   if [ "$var_os" == "ubuntu" ]; then
     var_version=""
     while [ -z "$var_version" ]; do
-      if var_version=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --title "ВЕРСИЯ UBUNTU" --radiolist "Выберите версию" 10 58 4 \
+      if var_version=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.2" --title "ВЕРСИЯ UBUNTU" --radiolist "Выберите версию" 10 58 4 \
         "20.04" "Focal" OFF \
         "22.04" "Jammy" OFF \
         "24.04" "Noble" OFF \
@@ -391,7 +391,7 @@ advanced_settings() {
 
   CT_TYPE=""
   while [ -z "$CT_TYPE" ]; do
-    if CT_TYPE=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --title "ТИП КОНТЕЙНЕРА" --radiolist "Выберите Тип" 10 58 2 \
+    if CT_TYPE=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.2" --title "ТИП КОНТЕЙНЕРА" --radiolist "Выберите Тип" 10 58 2 \
       "1" "Unprivileged" OFF \
       "0" "Privileged" OFF \
       3>&1 1>&2 2>&3); then
@@ -408,14 +408,14 @@ advanced_settings() {
   done
 
   while true; do
-    if PW1=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --passwordbox "\nЗадайте пароль для root (необходим для root ssh доступа)" 9 58 --title "ПАРОЛЬ (оставьте пустым для автологина)" 3>&1 1>&2 2>&3); then
+    if PW1=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.2" --passwordbox "\nЗадайте пароль для root (необходим для root ssh доступа)" 9 58 --title "ПАРОЛЬ (оставьте пустым для автологина)" 3>&1 1>&2 2>&3); then
       if [[ ! -z "$PW1" ]]; then
         if [[ "$PW1" == *" "* ]]; then
           whiptail --msgbox "Пароль не может содержать пробелы. Повторите попытку." 8 58
         elif [ ${#PW1} -lt 5 ]; then
           whiptail --msgbox "Минимальная длина пароля = 5 символов. Повторите попытку." 8 58
         else
-          if PW2=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --passwordbox "\nПодтвердите паролья для root" 9 58 --title "ПОДТВЕРЖДЕНИЕ ПАРОЛЯ" 3>&1 1>&2 2>&3); then
+          if PW2=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.2" --passwordbox "\nПодтвердите паролья для root" 9 58 --title "ПОДТВЕРЖДЕНИЕ ПАРОЛЯ" 3>&1 1>&2 2>&3); then
             if [[ "$PW1" == "$PW2" ]]; then
               PW="-password $PW1"
               echo -e "${VERIFYPW}${BOLD}${DGN}ПАРОЛЬ ДЛЯ ROOT: ${BGN}********${CL}"
@@ -439,7 +439,7 @@ advanced_settings() {
   done
 
 
-  if CT_ID=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --inputbox "Укажите ID контейнера" 8 58 $NEXTID --title "ID КОНТЕЙНЕРА" 3>&1 1>&2 2>&3); then
+  if CT_ID=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.2" --inputbox "Укажите ID контейнера" 8 58 $NEXTID --title "ID КОНТЕЙНЕРА" 3>&1 1>&2 2>&3); then
     if [ -z "$CT_ID" ]; then
       CT_ID="$NEXTID"
       echo -e "${CONTAINERID}${BOLD}${DGN}ID LXC контейнера: ${BGN}$CT_ID${CL}"
@@ -450,7 +450,7 @@ advanced_settings() {
     exit
   fi
 
-  if CT_NAME=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --inputbox "Укажите имя хоста(hostname)" 8 58 $NSAPP --title "ИМЯ ХОСТА(HOSTNAME)" 3>&1 1>&2 2>&3); then
+  if CT_NAME=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.2" --inputbox "Укажите имя хоста(hostname)" 8 58 $NSAPP --title "ИМЯ ХОСТА(HOSTNAME)" 3>&1 1>&2 2>&3); then
     if [ -z "$CT_NAME" ]; then
       HN="$NSAPP"
     else
@@ -461,7 +461,7 @@ advanced_settings() {
     exit_script
   fi
 
-  if DISK_SIZE=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --inputbox "Укажите размер диска в GB" 8 58 $var_disk --title "РАЗМЕР ДИСКА" 3>&1 1>&2 2>&3); then
+  if DISK_SIZE=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.2" --inputbox "Укажите размер диска в GB" 8 58 $var_disk --title "РАЗМЕР ДИСКА" 3>&1 1>&2 2>&3); then
     if [ -z "$DISK_SIZE" ]; then
       DISK_SIZE="$var_disk"
       echo -e "${DISKSIZE}${BOLD}${DGN}Размер диска: ${BGN}${DISK_SIZE}GB${CL}"
@@ -476,7 +476,7 @@ advanced_settings() {
     exit_script
   fi
 
-  if CORE_COUNT=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --inputbox "Укажите кол-во процессорных ядер(CPU count)" 8 58 $var_cpu --title "КОЛИЧЕСТВО ПРОЦЕССОРНЫХ ЯДЕР(CPU COUNT)" 3>&1 1>&2 2>&3); then
+  if CORE_COUNT=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.2" --inputbox "Укажите кол-во процессорных ядер(CPU count)" 8 58 $var_cpu --title "КОЛИЧЕСТВО ПРОЦЕССОРНЫХ ЯДЕР(CPU COUNT)" 3>&1 1>&2 2>&3); then
     if [ -z "$CORE_COUNT" ]; then
       CORE_COUNT="$var_cpu"
       echo -e "${CPUCORE}${BOLD}${DGN}Процессорных ядер: ${BGN}$CORE_COUNT${CL}"
@@ -487,7 +487,7 @@ advanced_settings() {
     exit_script
   fi
 
-  if RAM_SIZE=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --inputbox "Укажите ОЗУ в MiB" 8 58 $var_ram --title "ОЗУ" 3>&1 1>&2 2>&3); then
+  if RAM_SIZE=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.2" --inputbox "Укажите ОЗУ в MiB" 8 58 $var_ram --title "ОЗУ" 3>&1 1>&2 2>&3); then
     if [ -z "$RAM_SIZE" ]; then
       RAM_SIZE="$var_ram"
       echo -e "${RAMSIZE}${BOLD}${DGN}Размер ОЗУ: ${BGN}${RAM_SIZE}MiB${CL}"
@@ -498,7 +498,7 @@ advanced_settings() {
     exit_script
   fi
 
-  if BRG=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --inputbox "Укажите сетевой мост(bridge)" 8 58 vmbr0 --title "СЕТЕВОЙ МОСТ(BRIDGE)" 3>&1 1>&2 2>&3); then
+  if BRG=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.2" --inputbox "Укажите сетевой мост(bridge)" 8 58 vmbr0 --title "СЕТЕВОЙ МОСТ(BRIDGE)" 3>&1 1>&2 2>&3); then
     if [ -z "$BRG" ]; then
       BRG="vmbr0"
       echo -e "${BRIDGE}${BOLD}${DGN}Сетевой мост(bridge): ${BGN}$BRG${CL}"
@@ -510,7 +510,7 @@ advanced_settings() {
   fi
 
   while true; do
-    NET=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --inputbox "Укажите статичный IPv4 CIDR адрес (/24)" 8 58 dhcp --title "IP АДРЕС" 3>&1 1>&2 2>&3)
+    NET=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.2" --inputbox "Укажите статичный IPv4 CIDR адрес (/24)" 8 58 dhcp --title "IP АДРЕС" 3>&1 1>&2 2>&3)
     exit_status=$?
     if [ $exit_status -eq 0 ]; then
       if [ "$NET" = "dhcp" ]; then
@@ -521,7 +521,7 @@ advanced_settings() {
           echo -e "${NETWORK}${BOLD}${DGN}IP адрес: ${BGN}$NET${CL}"
           break
         else
-          whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --msgbox "$NET is an invalid IPv4 CIDR address. Please enter a valid IPv4 CIDR address or 'dhcp'" 8 58
+          whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.2" --msgbox "$NET is an invalid IPv4 CIDR address. Please enter a valid IPv4 CIDR address or 'dhcp'" 8 58
         fi
       fi
     else
@@ -531,11 +531,11 @@ advanced_settings() {
 
   if [ "$NET" != "dhcp" ]; then
     while true; do
-      GATE1=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --inputbox "Укажите IP адрес шлюза по умолчанию(gateway)" 8 58 --title "IP АДРЕС ШЛЮЗА(Gateway IP)" 3>&1 1>&2 2>&3)
+      GATE1=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.2" --inputbox "Укажите IP адрес шлюза по умолчанию(gateway)" 8 58 --title "IP АДРЕС ШЛЮЗА(Gateway IP)" 3>&1 1>&2 2>&3)
       if [ -z "$GATE1" ]; then
-        whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --msgbox "Поле IP шлюза не может быть пустым" 8 58
+        whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.2" --msgbox "Поле IP шлюза не может быть пустым" 8 58
       elif [[ ! "$GATE1" =~ ^([0-9]{1,3}\.){3}[0-9]{1,3}$ ]]; then
-        whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --msgbox "Неверный формат IP адреса" 8 58
+        whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.2" --msgbox "Неверный формат IP адреса" 8 58
       else
         GATE=",gw=$GATE1"
         echo -e "${GATEWAY}${BOLD}${DGN}IP Шлюза(Gateway IP): ${BGN}$GATE1${CL}"
@@ -551,7 +551,7 @@ advanced_settings() {
     APT_CACHER=""
     APT_CACHER_IP=""
   else
-    if APT_CACHER_IP=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --inputbox "Укажите IP адрес кеширующий прокси-сервер(APT-Cacher) (оставьте пустым для использования параметров по умолчанию)" 8 58 --title "IP КЕШИРУЮЩЕГО ПРОКСИ-СЕРВЕРА(APT-Cacher)" 3>&1 1>&2 2>&3); then
+    if APT_CACHER_IP=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.2" --inputbox "Укажите IP адрес кеширующий прокси-сервер(APT-Cacher) (оставьте пустым для использования параметров по умолчанию)" 8 58 --title "IP КЕШИРУЮЩЕГО ПРОКСИ-СЕРВЕРА(APT-Cacher)" 3>&1 1>&2 2>&3); then
       APT_CACHER="${APT_CACHER_IP:+yes}"
       echo -e "${NETWORK}${BOLD}${DGN}IP адрес кеширующий прокси-сервер(APT-Cacher): ${BGN}${APT_CACHER_IP:-Default}${CL}"
     else
@@ -559,14 +559,14 @@ advanced_settings() {
     fi
   fi
 
-  if (whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --defaultno --title "IPv6" --yesno "Отключить IPv6?" 10 58); then
+  if (whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.2" --defaultno --title "IPv6" --yesno "Отключить IPv6?" 10 58); then
     DISABLEIP6="yes"
   else
     DISABLEIP6="no"
   fi
   echo -e "${DISABLEIPV6}${BOLD}${DGN}Отключить IPv6: ${BGN}$DISABLEIP6${CL}"
 
-  if MTU1=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --inputbox "Set Interface MTU Size (оставьте пустым для использования параметров по умолчанию)" 8 58 --title "MTU SIZE" 3>&1 1>&2 2>&3); then
+  if MTU1=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.2" --inputbox "Set Interface MTU Size (оставьте пустым для использования параметров по умолчанию)" 8 58 --title "MTU SIZE" 3>&1 1>&2 2>&3); then
     if [ -z $MTU1 ]; then
       MTU1="Default"
       MTU=""
@@ -578,7 +578,7 @@ advanced_settings() {
     exit_script
   fi
 
-  if SD=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --inputbox "Set a DNS Домен поиска(оставьте пустым для использования HOST)" 8 58 --title "DNS Домен поиска" 3>&1 1>&2 2>&3); then
+  if SD=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.2" --inputbox "Set a DNS Домен поиска(оставьте пустым для использования HOST)" 8 58 --title "DNS Домен поиска" 3>&1 1>&2 2>&3); then
     if [ -z $SD ]; then
       SX=Host
       SD=""
@@ -591,7 +591,7 @@ advanced_settings() {
     exit_script
   fi
 
-  if NX=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --inputbox "Укажите IP адрес DNS сервера (оставьте пустым для использования HOST)" 8 58 --title "IP АДРЕС DNS СЕРВЕРА" 3>&1 1>&2 2>&3); then
+  if NX=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.2" --inputbox "Укажите IP адрес DNS сервера (оставьте пустым для использования HOST)" 8 58 --title "IP АДРЕС DNS СЕРВЕРА" 3>&1 1>&2 2>&3); then
     if [ -z $NX ]; then
       NX=Host
       NS=""
@@ -603,7 +603,7 @@ advanced_settings() {
     exit_script
   fi
 
-  if MAC1=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --inputbox "Укажите MAC адрес(оставьте пустым для использования параметров по умолчанию)" 8 58 --title "MAC АДРЕС" 3>&1 1>&2 2>&3); then
+  if MAC1=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.2" --inputbox "Укажите MAC адрес(оставьте пустым для использования параметров по умолчанию)" 8 58 --title "MAC АДРЕС" 3>&1 1>&2 2>&3); then
     if [ -z $MAC1 ]; then
       MAC1="Default"
       MAC=""
@@ -615,7 +615,7 @@ advanced_settings() {
     exit_script
   fi
 
-  if VLAN1=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --inputbox "Укажите Vlan(оставьте пустым для использования параметров по умолчанию)" 8 58 --title "VLAN" 3>&1 1>&2 2>&3); then
+  if VLAN1=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.2" --inputbox "Укажите Vlan(оставьте пустым для использования параметров по умолчанию)" 8 58 --title "VLAN" 3>&1 1>&2 2>&3); then
     if [ -z $VLAN1 ]; then
       VLAN1="Default"
       VLAN=""
@@ -627,7 +627,7 @@ advanced_settings() {
     exit_script
   fi
 
-  if ADV_TAGS=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --inputbox "Set Custom Tags?[If you remove all, there will be no tags!]" 8 58 ${TAGS} --title "Advanced Tags" 3>&1 1>&2 2>&3); then
+  if ADV_TAGS=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.2" --inputbox "Set Custom Tags?[If you remove all, there will be no tags!]" 8 58 ${TAGS} --title "Advanced Tags" 3>&1 1>&2 2>&3); then
     if [ -n "${ADV_TAGS}" ]; then
         ADV_TAGS=${ADV_TAGS:-""} 
         ADV_TAGS=$(echo "$ADV_TAGS" | tr -d '[:space:]')
@@ -639,7 +639,7 @@ advanced_settings() {
   fi
 
   if [[ "$PW" == -password* ]]; then
-    if (whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --defaultno --title "SSH ДОСТУП" --yesno "Разрешить доступ Root по SSH?" 10 58); then
+    if (whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.2" --defaultno --title "SSH ДОСТУП" --yesno "Разрешить доступ Root по SSH?" 10 58); then
       SSH="yes"
     else
       SSH="no"
@@ -650,14 +650,14 @@ advanced_settings() {
     echo -e "${ROOTSSH}${BOLD}${DGN}Доступ Root по SSH: ${BGN}$SSH${CL}"
   fi
 
-  if (whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --defaultno --title "РЕЖИМ ОТЛАДКИ" --yesno "Включить режим отладки?(видно каждый этап установки и больше деталей, полезно для поиска ошибок)" 10 58); then
+  if (whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.2" --defaultno --title "РЕЖИМ ОТЛАДКИ" --yesno "Включить режим отладки?(видно каждый этап установки и больше деталей, полезно для поиска ошибок)" 10 58); then
     VERB="yes"
   else
     VERB="no"
   fi
   echo -e "${SEARCH}${BOLD}${DGN}Verbose Mode: ${BGN}$VERB${CL}"
 
-  if (whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --title "РАСШИРЕННЫЕ НАСТРОЙКИ ЗАВЕРШЕНЫ" --yesno "Приступить к созданию ${APP} LXC?" 10 58); then
+  if (whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.2" --title "РАСШИРЕННЫЕ НАСТРОЙКИ ЗАВЕРШЕНЫ" --yesno "Приступить к созданию ${APP} LXC?" 10 58); then
     echo -e "${CREATING}${BOLD}${RD}Создаю ${APP} LXC используя вышеуказанные расширенные настройки${CL}"
   else
     clear
@@ -681,7 +681,7 @@ install_script() {
   timezone=$(cat /etc/timezone)
   header_info
   while true; do
-    CHOICE=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --title "НАСТРОЙКИ" --menu "Выберите вариант установки:" \
+    CHOICE=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.2" --title "НАСТРОЙКИ" --menu "Выберите вариант установки:" \
       12 50 4 \
       "1" "Используя настройки по умолчанию" \
       "2" "Используя настройки по умолчанию(режим отладки)" \
@@ -766,7 +766,7 @@ check_container_storage() {
 
 start() {
   if command -v pveversion >/dev/null 2>&1; then
-    if ! (whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --title "${APP} LXC" --yesno "Будет создан новый LXC контейнер ${APP}?             (не закрывайте\уходите из консоли до конца установки)   Начать создание контейнера?" 10 58); then
+    if ! (whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.2" --title "${APP} LXC" --yesno "Будет создан новый LXC контейнер ${APP}?             (не закрывайте\уходите из консоли до конца установки)   Начать создание контейнера?" 10 58); then
       clear
       exit_script
       exit
@@ -776,7 +776,7 @@ start() {
   fi
 
   if ! command -v pveversion >/dev/null 2>&1; then
-    if ! (whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --title "ОБНОВЛЕНИЕ КОНТЕЙНЕРА ${APP}" --yesno "Запустить обновлениефункцию поддержки для  ${APP} LXC.  Продолжить?" 10 58); then
+    if ! (whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.2" --title "ОБНОВЛЕНИЕ КОНТЕЙНЕРА ${APP}" --yesno "Запустить обновлениефункцию поддержки для  ${APP} LXC.  Продолжить?" 10 58); then
       clear
       exit_script
       exit
