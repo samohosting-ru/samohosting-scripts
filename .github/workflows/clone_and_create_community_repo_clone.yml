@@ -59,7 +59,6 @@ jobs:
           echo "info: switching to samohosting-scripts/community_repo_clone"
           # Switch to the community_repo_clone branch and pull changes from upstream.
           git switch community_repo_clone
-          git show-branch --current
           echo "info: current branch files :"
           ls -a
           git fetch upstream main
@@ -76,7 +75,7 @@ jobs:
           git add -A && echo "info: DONE add -A $(date +'%Y-%m-%d %H:%M:%S')"
           ls -a
           git commit --allow-empty -m "get_update_changes_from_helper-scripts_community $(date +'%Y-%m-%d %H:%M:%S')"
-          echo "info: start pushing origin $(date +'%Y-%m-%d %H:%M:%S')"
+          echo "info: start pushing local community_repo_clone to samohosting-scripts/community_repo_clone  $(date +'%Y-%m-%d %H:%M:%S')"
           git push -u -f samohosting-scripts community_repo_clone:community_repo_clone 
           echo "info: Pushed repo update in samohosting-scripts/community_repo_clone $(date +'%Y-%m-%d %H:%M:%S')"
           else
