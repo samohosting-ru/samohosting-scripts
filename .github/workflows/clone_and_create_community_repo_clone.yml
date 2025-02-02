@@ -31,7 +31,7 @@ jobs:
           echo "info: cant find targeted community_repo_clone branch"
           
           #creating temp_local_community_repo_clone branch
-          git checkout -b --orphan temp_local_community_repo_clone
+          git checkout --orphan temp_local_community_repo_clone
           echo "!!!You are in branch:"
           git show-branch --current
           echo "info: List of files in current dir:"
