@@ -33,6 +33,7 @@ jobs:
           #creating temp_local_community_repo_clone branch
           git branch temp_local_community_repo_clone
           git switch temp_local_community_repo_clone
+          echo "info: List of files in current dir:"
           ls -a
           
           #clone helper-scripts original repo
