@@ -69,13 +69,13 @@ jobs:
           # echo "info: switched and pulled"
           # echo "info: merging upstream/main" && git merge upstream/main --allow-unrelated-histories
           echo "info: sucsessfully merged"
-          echo "info: deleting .github | .vscode | .editorconfig  ..."
-          rm -rf .github && echo "info:  rm -rf .github"
-          rm -rf .vscode && echo "info:  rm -rf .vscode"
-          rm -rf .editorconfig && echo "info:  rm -rf .editorconfig"
+          # echo "info: deleting .github | .vscode | .editorconfig  ..."
+          # rm -rf .github && echo "info:  rm -rf .github"
+          # rm -rf .vscode && echo "info:  rm -rf .vscode"
+          # rm -rf .editorconfig && echo "info:  rm -rf .editorconfig"
           git add -A && echo "info: DONE add -A $(date +'%Y-%m-%d %H:%M:%S')"
-          echo "info: current branch files (after removing):"
-          ls -a
+          # echo "info: current branch files (after removing):"
+          # ls -a
           git commit --allow-empty -m "get_update_changes_from_helper-scripts_community $(date +'%Y-%m-%d %H:%M:%S')"
           echo "info: start pushing local community_repo_clone to samohosting-scripts/community_repo_clone  $(date +'%Y-%m-%d %H:%M:%S')"
           git push -u -f samohosting-scripts community_repo_clone:community_repo_clone 
