@@ -69,10 +69,10 @@ jobs:
           # echo "info: switched and pulled"
           # echo "info: merging upstream/main" && git merge upstream/main --allow-unrelated-histories
           echo "info: sucsessfully merged"
-          # echo "info: deleting .github | .vscode | .editorconfig  ..."
-          # rm -rf .github && echo "info:  rm -rf .github"
-          # rm -rf .vscode && echo "info:  rm -rf .vscode"
-          # rm -rf .editorconfig && echo "info:  rm -rf .editorconfig"
+          echo "info: deleting .github | .vscode | .editorconfig  ..."
+          rm -rf .github && echo "info:  rm -rf .github"
+          rm -rf .vscode && echo "info:  rm -rf .vscode"
+          rm -rf .editorconfig && echo "info:  rm -rf .editorconfig"
           git add -A && echo "info: DONE add -A $(date +'%Y-%m-%d %H:%M:%S')"
           # echo "info: current branch files (after removing):"
           # ls -a
