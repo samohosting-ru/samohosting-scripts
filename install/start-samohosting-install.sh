@@ -90,7 +90,7 @@ msg_info "Настраиваю Ваш линый дашборд by samohosting.r
 msg_ok "Ваш личный дашборд by SAMOHOSTING.RU настроен"
 
 # --------------------------------------------------------------------------------------------------------------------
-msg_info "Устанавливаю Dockge для управления Docker контейнерами и стэками.."
+msg_info "Устанавливаю Dockge для управления Docker стэками.."
 mkdir -p /opt/dockge/stacks
 mkdir -p /opt/dockge/data
 mkdir -p /opt/dockge/stacks/dockge
