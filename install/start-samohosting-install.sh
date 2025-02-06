@@ -82,7 +82,7 @@ services:
     volumes:
       - /opt/dashy/user-data/conf.yml:/app/user-data/conf.yml
       - /opt/dashy/user-data/conf2.yml:/app/user-data/conf2.yml
-    image: mirror.gcr.io/lissy93/dashy:latest
+    image: ghcr.io/lissy93/dashy:latest
 EOF
 $STD docker compose up -d --quiet-pull
 msg_ok "Dashy Dashboard установлен."
