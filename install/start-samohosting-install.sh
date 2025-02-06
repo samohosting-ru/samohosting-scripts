@@ -82,7 +82,7 @@ services:
     volumes:
       - /opt/dashy/user-data/conf.yml:/app/user-data/conf.yml
       - /opt/dashy/user-data/conf2.yml:/app/user-data/conf2.yml
-    image: ghcr.io/lissy93/dashy:latest
+    image: dockerhub.timeweb.cloud/lissy93/dashy:latest
 EOF
 $STD docker compose up -d --quiet-pull
 msg_ok "Dashy Dashboard установлен."
@@ -110,7 +110,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - /opt/dockge/data:/app/data
       - /opt/dockge/stacks:/opt/dockge/stacks
-    image: ghcr.io/louislam/dockge:latest
+    image: dockerhub.timeweb.cloud/louislam/dockge:latest
 EOF
 $STD docker compose up -d --quiet-pull
 msg_ok "Dockge установлен."
@@ -135,7 +135,7 @@ services:
       - /opt/runtipi/logs:/srv/RUNTIPI_LOGS
       - /opt/runtipi/media/downloads:/srv/DOWNLOADS
       - /opt/filebrowser/data/db:/database
-    image: ghcr.io/filebrowser/filebrowser:s6
+    image: dockerhub.timeweb.cloud/filebrowser/filebrowser:s6
 EOF
 $STD docker compose up -d --quiet-pull
 msg_ok "Веб-файл-браузер установлен."
@@ -170,7 +170,7 @@ services:
             - GLANCES_OPT=-w
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock:ro
-        image: ghcr.io/nicolargo/glances:latest-full
+        image: dockerhub.timeweb.cloud/nicolargo/glances:latest-full
 EOF
 $STD docker compose up -d --quiet-pull
 msg_ok "Glances установлен."
@@ -204,7 +204,7 @@ services:
       - 445:445
     volumes:
       - /opt/runtipi/media/downloads:/share
-    image: ghcr.io/dperson/samba
+    image: dockerhub.timeweb.cloud/dperson/samba
     command: -u "LOGIN;PASSWORD" -s "public;/share;yes;no;yes"
 EOF
 $STD docker compose up -d --quiet-pull
@@ -249,7 +249,7 @@ cat <<EOF >/opt/dockge/stacks/openproject/compose.yaml
 # -------------------------------------------------------
 services:
   openproject:
-    image: ghcr.io/openproject/community:13.4
+    image: dockerhub.timeweb.cloud/openproject/community:13.4
     environment:
       - OPENPROJECT_SECRET_KEY_BASE=secret
       - OPENPROJECT_HOST__NAME=92.168.1.18:1080
@@ -298,7 +298,7 @@ cat <<EOF >/opt/dockge/stacks/dockur-windows/compose.yaml
 # -------------------------------------------------------
 services:
   windowstinycore:
-    image: ghcr.io/dockurr/windows
+    image: dockerhub.timeweb.cloud/dockurr/windows
     container_name: windowstinycore
     environment:
       VERSION: core11
@@ -345,7 +345,7 @@ cat <<EOF >/opt/dockge/stacks/dockur-macos/compose.yaml
 # -------------------------------------------------------
 services:
   macos:
-    image: ghcr.io/dockurr/macos
+    image: dockerhub.timeweb.cloud/dockurr/macos
     container_name: macos
     environment:
       VERSION: "13"
