@@ -397,7 +397,7 @@ services:
       # - SUBFOLDER=/ #optional
       - TITLE=SAMOHOSTING #optional
     volumes:
-      - /path/to/data:/config
+      - /opt/webtop/data:/config
       - /var/run/docker.sock:/var/run/docker.sock #optional
     ports:
       - 3000:3000
@@ -412,29 +412,81 @@ msg_ok "Конфигурация для запуска Webtop-linux-in-docker в
 # --------------------------------------------------------------------------------------------------------------------
 
 # --------------------------------------------------------------------------------------------------------------------
-msg_info "Добавляю Firefox3 конфигурацию в Dockge"
-mkdir -p /opt/dockge/stacks/firefox3
-cat <<EOF >/opt/dockge/stacks/firefox3/compose.yaml
+msg_info "Добавляю Emulatorjs конфигурацию в Dockge"
+mkdir -p /opt/dockge/stacks/emulatorjs
+cat <<EOF >/opt/dockge/stacks/emulatorjs/compose.yaml
+# <== "ЗАПУСТИТЬ"- ДЛЯ ЗАПУСКА <==
+# <== "ИЗМЕНИТЬ" - ДЛЯ ИЗМЕНЕНИЯ ВАШИХ ДАННЫХ <==
+# <== "ПЕРЕЗАПУСТИТЬ" - ДЛЯ ПРИМЕНЕНИЯ НОВЫХ НАСТРОЕК <==
+#
+# --------------------Ваши доступы-----------------------
+# Адрес Вашей панели настроек emulatorjs - http://$IP:3005
+# Адрес Вашего игровой страницы emulatorjs - http://$IP:85
+# -------------------------------------------------------
+#
+# --------------------О ПРИЛОЖЕНИИ-----------------------
+# НАЗВАНИЕ: Emulatorjs - Ваши ретро игры в браузере
+# ОПИСАНИЕ: Эмулятор ретро игр в вашем браузере 
+# СТРАНИЦА ПРОЕКТА: https://docs.linuxserver.io/images/docker-emulatorjs/
+# КАК НАСТРОИТЬ? - ВИДЕО\ОБЗОР: https://www.youtube.com/watch?v=h_6UMF1v26s
+# -------------------------------------------------------
 services:
-  firefox:
-    image: lscr.io/linuxserver/firefox:latest
-    container_name: firefox3
+  emulatorjs:
+    image: lscr.io/linuxserver/emulatorjs:latest
+    container_name: emulatorjs
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - SUBFOLDER=/ #optional
+    volumes:
+      - /opt/emulatorjs/config:/config
+      - /opt/emulatorjs/data:/data
+    ports:
+      - 3005:3000 #settings
+      - 85:80 #gaming
+      #- 4001:4001 #optional
+    restart: unless-stopped
+networks: {}
+EOF
+msg_ok "Конфигурация для запуска Emulatorjs в Dockge добавлена в шаблоны конфигураций"
+# --------------------------------------------------------------------------------------------------------------------
+
+# --------------------------------------------------------------------------------------------------------------------
+msg_info "Добавляю LibreOffice конфигурацию в Dockge"
+mkdir -p /opt/dockge/stacks/libreoffice
+cat <<EOF >/opt/dockge/stacks/libreoffice/compose.yaml
+# <== "ЗАПУСТИТЬ"- ДЛЯ ЗАПУСКА <==
+# <== "ИЗМЕНИТЬ" - ДЛЯ ИЗМЕНЕНИЯ ВАШИХ ДАННЫХ <==
+# <== "ПЕРЕЗАПУСТИТЬ" - ДЛЯ ПРИМЕНЕНИЯ НОВЫХ НАСТРОЕК <==
+#
+# --------------------Ваши доступы-----------------------
+# Адрес Вашего LibreOffice - http://$IP:3006
+# -------------------------------------------------------
+#
+# --------------------О ПРИЛОЖЕНИИ-----------------------
+# НАЗВАНИЕ: LibreOffice
+# ОПИСАНИЕ: Офисные приложения в вашем браузере
+# СТРАНИЦА ПРОЕКТА: https://docs.linuxserver.io/images/docker-libreoffice/
+# ВИДЕО\ОБЗОР: найду ссылочку - добавлю..
+# -------------------------------------------------------
+services:
+  libreoffice:
+    image: lscr.io/linuxserver/libreoffice:latest
+    container_name: libreoffice
     security_opt:
       - seccomp:unconfined #optional
     environment:
       - PUID=1000
       - PGID=1000
       - TZ=Etc/UTC
-      - FIREFOX_CLI=https://www.samohosting.ru/ #optional
     volumes:
-      - /opt/firefox3/data/config:/config
+      - /opt/libreoffice/config:/config
     ports:
-      - 3003:3000
-      # - 3001:3001
-    shm_size: 1gb
+      - 3006:3000 #http
     restart: unless-stopped
 EOF
-msg_ok "Конфигурация для запуска Firefox3 в Dockge добавлена в шаблоны конфигураций"
+msg_ok "Конфигурация для запуска LibreOffice в Dockge добавлена в шаблоны конфигураций"
 # --------------------------------------------------------------------------------------------------------------------
 
 # --------------------------------------------------------------------------------------------------------------------
