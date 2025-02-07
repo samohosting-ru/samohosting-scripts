@@ -428,7 +428,8 @@ cat <<EOF >/opt/dockge/stacks/emulatorjs/compose.yaml
 # НАЗВАНИЕ: Emulatorjs - Ваши ретро игры в браузере
 # ОПИСАНИЕ: Эмулятор ретро игр в вашем браузере 
 # СТРАНИЦА ПРОЕКТА: https://docs.linuxserver.io/images/docker-emulatorjs/
-# КАК НАСТРОИТЬ? - ВИДЕО\ОБЗОР: https://www.youtube.com/watch?v=h_6UMF1v26s
+# КАК НАСТРОИТЬ? -> СМОТРИТЕ ВИДЕО\ОБЗОР:
+# https://www.youtube.com/watch?v=h_6UMF1v26s
 # -------------------------------------------------------
 services:
   emulatorjs:
