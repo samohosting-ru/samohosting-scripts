@@ -267,8 +267,8 @@ jobs:
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|No Network After \$RETRY_NUM Tries|Сеть отсутствует после \$RETRY_NUM попыток|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|Check Network Settings"|Проверьте настройки сети"|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_ok "Network Connected:|msg_ok "Контейнер подключен к Вашей сети. IP:|g' {} +
-        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_ok "Internet Connected"|msg_ok "Интернет соеденение доступно"|g' {} +
-        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_error "Internet NOT Connected"|msg_error "Интернет соеденение НЕ доступно"|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_ok "Internet Connected"|msg_ok "Интернет соединение доступно"|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_error "Internet NOT Connected"|msg_error "Интернет соединение НЕ доступно"|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|"Would you like to continue anyway?|"Стоит ли продолжать?|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|Expect Issues Without Internet|Без доступа к интернету - ожидаются проблемы с работой скрипта|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_error "DNS Lookup Failure";|msg_error "Ошибка. DNS сервер не доступен ";|g' {} +
@@ -282,10 +282,10 @@ jobs:
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|local error_message="\${RD}[ERROR]\${CL} in line \${RD}\$line_number\${CL}: exit code \${RD}\$exit_code\${CL}: while executing command \${YW}\$command\${CL}"|local error_message="\${RD}[ERROR]\${CL} в строке \${RD}\$line_number\${CL}: exit code \${RD}\$exit_code\${CL}: в ходе выполенения команды \${YW}\$command\${CL}"|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|echo -e "The silent function has suppressed the error, run the script with verbose mode enabled, which will provide more detailed output.\\n"|echo -e "В процессе тихой установки случились ошибки, включен режим отладки для более детализированого вывода событий в терминал.\\n"|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|No Network! "|Отсутствует Сеть! "|g' {} +
-        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_ok "IPv4 Internet Connected";|msg_ok "IPv4 интернет соеденение установлено.";|g' {} +
-        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_error "IPv4 Internet Not Connected";|msg_error "IPv4 интернет соеденение НЕ установлено.";|g' {} +
-        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_ok "IPv6 Internet Connected";|msg_ok "IPv6 интернет соеденение установлено.";|g' {} +
-        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_error "IPv6 Internet Not Connected";|msg_error "IPv6 интернет соеденение НЕ установлено.";|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_ok "IPv4 Internet Connected";|msg_ok "IPv4 интернет соединение установлено.";|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_error "IPv4 Internet Not Connected";|msg_error "IPv4 интернет соединение НЕ установлено.";|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_ok "IPv6 Internet Connected";|msg_ok "IPv6 интернет соединение установлено.";|g' {} +
+        find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|msg_error "IPv6 Internet Not Connected";|msg_error "IPv6 интернет соединение НЕ установлено.";|g' {} +
         find ./ -type f \(  -name "*.sh" -o -name "*.func" -o -name "LICENSE" \) -exec sed -i 's|Container OS"|операционная система контейнера"|g' {} +
 
         
