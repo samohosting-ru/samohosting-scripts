@@ -82,7 +82,7 @@ services:
     volumes:
       - /opt/dashy/user-data/conf.yml:/app/user-data/conf.yml
       - /opt/dashy/user-data/conf2.yml:/app/user-data/conf2.yml
-    image: cr.yandex/mirror/lissy93/dashy:latest
+    image: dh-mirror.gitverse.ru/lissy93/dashy:latest
 EOF
 $STD docker compose up -d --quiet-pull
 msg_ok "Dashy Dashboard установлен."
@@ -110,7 +110,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - /opt/dockge/data:/app/data
       - /opt/dockge/stacks:/opt/dockge/stacks
-    image: cr.yandex/mirror/louislam/dockge:latest
+    image: dh-mirror.gitverse.ru/louislam/dockge:latest
 EOF
 $STD docker compose up -d --quiet-pull
 msg_ok "Dockge установлен."
@@ -135,7 +135,7 @@ services:
       - /opt/runtipi/logs:/srv/RUNTIPI_LOGS
       - /opt/runtipi/media/downloads:/srv/DOWNLOADS
       - /opt/filebrowser/data/db:/database
-    image: cr.yandex/mirror/filebrowser/filebrowser:s6
+    image: dh-mirror.gitverse.ru/filebrowser/filebrowser:s6
 EOF
 $STD docker compose up -d --quiet-pull
 msg_ok "Веб-файл-браузер установлен."
@@ -170,7 +170,7 @@ services:
             - GLANCES_OPT=-w
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock:ro
-        image: cr.yandex/mirror/nicolargo/glances:latest-full
+        image: dh-mirror.gitverse.ru/nicolargo/glances:latest-full
 EOF
 $STD docker compose up -d --quiet-pull
 msg_ok "Glances установлен."
@@ -204,7 +204,7 @@ services:
       - 445:445
     volumes:
       - /opt/runtipi/media/downloads:/share
-    image: cr.yandex/mirror/dperson/samba
+    image: dh-mirror.gitverse.ru/dperson/samba
     command: -u "LOGIN;PASSWORD" -s "public;/share;yes;no;yes"
 EOF
 $STD docker compose up -d --quiet-pull
@@ -249,7 +249,7 @@ cat <<EOF >/opt/dockge/stacks/openproject/compose.yaml
 # -------------------------------------------------------
 services:
   openproject:
-    image: cr.yandex/mirror/openproject/community:13.4
+    image: dh-mirror.gitverse.ru/openproject/community:13.4
     environment:
       - OPENPROJECT_SECRET_KEY_BASE=secret
       - OPENPROJECT_HOST__NAME=92.168.1.18:1080
@@ -298,7 +298,7 @@ cat <<EOF >/opt/dockge/stacks/dockur-windows/compose.yaml
 # -------------------------------------------------------
 services:
   windowstinycore:
-    image: cr.yandex/mirror/dockurr/windows
+    image: dh-mirror.gitverse.ru/dockurr/windows
     container_name: windowstinycore
     environment:
       VERSION: core11
@@ -345,7 +345,7 @@ cat <<EOF >/opt/dockge/stacks/dockur-macos/compose.yaml
 # -------------------------------------------------------
 services:
   macos:
-    image: cr.yandex/mirror/dockurr/macos
+    image: dh-mirror.gitverse.ru/dockurr/macos
     container_name: macos
     environment:
       VERSION: "13"
