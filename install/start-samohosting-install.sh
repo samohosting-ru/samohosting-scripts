@@ -309,10 +309,10 @@ services:
       CPU_CORES: "4"
       USERNAME: samohosting
       PASSWORD: samohosting
+      KVM: "N"
 #      devices:
 #        - /dev/kvm
 #        - /dev/net/tun
-      KVM: "N"
     cap_add:
       - NET_ADMIN
     ports:
@@ -349,10 +349,10 @@ services:
     container_name: macos
     environment:
       VERSION: "13"
+      KVM: "N" 
     # devices:
     #   - /dev/kvm
-    #   - /dev/net/tun
-    KVM: "N"  
+    #   - /dev/net/tun  
     cap_add:
       - NET_ADMIN
     ports:
