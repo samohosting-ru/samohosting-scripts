@@ -1,0 +1,71 @@
+
+{
+  "breaking change": [
+    {
+      "fileStatus": "renamed",
+      "includeGlobs": ["ct/**", "install/**", "misc/**", "turnkey/**", "vm/**"],
+      "excludeGlobs": []
+    },
+    {
+      "fileStatus": "removed", 
+      "includeGlobs": ["ct/**", "install/**", "misc/**", "turnkey/**", "vm/**"],
+      "excludeGlobs": []
+    }
+  ],
+  "new script": [
+    {
+      "fileStatus": "added",
+      "includeGlobs": ["ct/**", "install/**", "misc/**", "turnkey/**", "vm/**"],
+      "excludeGlobs": []
+    }
+  ],
+  "update script": [
+    {
+      "fileStatus": "modified",
+      "includeGlobs": ["ct/**", "install/**", "misc/**", "turnkey/**", "vm/**"],
+      "excludeGlobs": ["misc/build.func", "misc/install.func", "misc/api.func"]
+    }
+  ],
+  "delete script": [
+    {
+      "fileStatus": "removed", 
+      "includeGlobs": ["ct/**", "install/**", "misc/**", "turnkey/**", "vm/**"],
+      "excludeGlobs": []
+    }
+  ],
+  "rename script": [
+    {
+      "fileStatus": "renamed", 
+      "includeGlobs": ["ct/**", "install/**", "misc/**", "turnkey/**", "vm/**"],
+      "excludeGlobs": []
+    }
+  ],
+  "website": [
+    {
+      "fileStatus": null,
+      "includeGlobs": ["frontend/**", "json/**"],
+      "excludeGlobs": []
+    }
+  ],
+  "maintenance": [
+    {
+      "fileStatus": null,
+      "includeGlobs": ["*.md", ".github/**", "misc/*.func", "ct/create_lxc.sh"],
+      "excludeGlobs": ["misc/api.func"]
+    }
+  ],
+   "api": [
+    {
+      "fileStatus": null,
+      "includeGlobs": ["api/**", "misc/api.func"],
+      "excludeGlobs": []
+    }
+  ],
+  "high risk": [
+    {
+      "fileStatus": null,
+      "includeGlobs": ["misc/build.func", "misc/install.func", "ct/create_lxc.sh"],
+      "excludeGlobs": []
+    }
+  ]
+}
