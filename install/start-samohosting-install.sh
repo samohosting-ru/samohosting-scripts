@@ -133,7 +133,7 @@ services:
       - /:/srv/ALL_FOLDERS_LXC-START-SAMOHOSTING
       - /opt:/srv/APPS_FOLDER
       - /opt/runtipi/logs:/srv/RUNTIPI_LOGS
-      - /opt/runtipi/media/downloads:/srv/DOWNLOADS
+      - /opt/runtipi/media:/srv/DOWNLOADS
       - /opt/filebrowser/data/db:/database
     image: dockerhub.timeweb.cloud/filebrowser/filebrowser:s6
 EOF
@@ -203,7 +203,7 @@ services:
       - 139:139
       - 445:445
     volumes:
-      - /opt/runtipi/media/downloads:/share
+      - /opt/runtipi/media:/share
     image: dockerhub.timeweb.cloud/dperson/samba
     command: -u "LOGIN;PASSWORD" -s "public;/share;yes;no;yes"
 EOF
