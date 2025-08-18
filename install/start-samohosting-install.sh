@@ -538,4 +538,10 @@ msg_ok "Ваш новенький домашний сервер собран и 
 # echo -e "     ${YW}Для регистрации перейдите по ссылке ${CL} ==>> ${BGN}https://${IP}:9443${CL}"
 echo -e "     ${BOLD}${BL}Начните изучать Ваш домашний сервер by samohosting.ru${CL} ==>> ${BGN}http://${IP}:1000${CL} Удачного самохостинга!"
 echo -e "${TAB}${HOSTNAME}${BL} Начните изучать Ваш домашний сервер by samohosting.ru${CL} ==>> ${BGN}http://${IP}:1000${CL} Удачного самохостинга!" >> /etc/motd
+echo -e "       *если runtipi на дашборде не горит зеленым :"
+echo -e "       1. перейдите в каталог runtipi: cd /opt/runtipi/"
+echo -e "       2. выполните команду: ./runtipi-cli start"
+echo -e "       *если runtipi на дашборде не горит зеленым :" >> /etc/motd
+echo -e "       1. перейдите в каталог runtipi: cd /opt/runtipi/" >> /etc/motd
+echo -e "       2. выполните команду: ./runtipi-cli start" >> /etc/motd
 
