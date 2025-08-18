@@ -149,6 +149,7 @@ pve_check() {
     kernel_version=$(pveversion | grep -oE "kernel: [0-9]+\.[0-9]+\.[0-9]+")
       echo "Ваша версия PVE: $pve_version"
       echo "Ваша версия ядра: $kernel_version"
+  fi
   if ! pveversion | grep -Eq "pve-manager/8.[1-9]"; then
         if ! pveversion | grep -Eq "pve-manager/9.[0-0]"; then
             msg_error "${CROSS}${RD}This version of Proxmox Virtual Environment is not supported"
