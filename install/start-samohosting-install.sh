@@ -544,7 +544,6 @@ echo -e "       1. перейдите в каталог runtipi: cd /opt/runtipi
 echo -e "       2. выполните команду: ./runtipi-cli start"
 echo -e "       *если runtipi на дашборде не горит зеленым :" >> /etc/motd
 echo -e "       https://forum.samohosting.ru/t/o-sborke-zachem-ona-na-chem-osnovana-chto-daet/30/7?u=admin"
-echo -e "       0. откройте shell(консоль) контейнера" >> /etc/motd
 echo -e "       1. перейдите в каталог runtipi: cd /opt/runtipi/" >> /etc/motd
 echo -e "       2. выполните команду: ./runtipi-cli start" >> /etc/motd
 echo -e "       https://forum.samohosting.ru/t/o-sborke-zachem-ona-na-chem-osnovana-chto-daet/30/7?u=admin" >> /etc/motd
