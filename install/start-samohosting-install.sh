@@ -39,6 +39,14 @@ motd_ssh
 customize
 
 # --------------------------------------------------------------------------------------------------------------------
+msg_info "Фикс для работы docker в lxc(containerd.io=1.7.28-1~debian.12~bookworm)"
+apt install containerd.io=1.7.28-1~debian.12~bookworm -y --allow-downgrades
+apt-mark hold containerd.io
+systemctl restart containerd
+systemctl restart docker
+msg_ok "Применен фикс для работы docker в lxc(containerd.io=1.7.28-1~debian.12~bookworm)"
+# --------------------------------------------------------------------------------------------------------------------
+
 msg_info "Устанавливаю приложение Runtipi"
 cd /opt
 wget -q https://raw.githubusercontent.com/runtipi/runtipi/master/scripts/install.sh
