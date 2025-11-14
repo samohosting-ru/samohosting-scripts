@@ -50,10 +50,10 @@ msg_ok "Установлено приложение Runtipi"
 
 # --------------------------------------------------------------------------------------------------------------------
 msg_info "Фикс для работы docker в lxc(containerd.io=1.7.28-1~debian.12~bookworm)"
-apt install containerd.io=1.7.28-1~debian.12~bookworm -y --allow-downgrades
-apt-mark hold containerd.io
-systemctl restart containerd
-systemctl restart docker
+$STD apt install containerd.io=1.7.28-1~debian.12~bookworm -y --allow-downgrades
+$STD apt-mark hold containerd.io
+$STD systemctl restart containerd
+$STD systemctl restart docker
 msg_ok "Применен фикс для работы docker в lxc(containerd.io=1.7.28-1~debian.12~bookworm)"
 
 # --------------------------------------------------------------------------------------------------------------------
