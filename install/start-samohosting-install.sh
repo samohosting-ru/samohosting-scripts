@@ -54,6 +54,8 @@ $STD apt install containerd.io=1.7.28-1~debian.12~bookworm -y --allow-downgrades
 $STD apt-mark hold containerd.io
 $STD systemctl restart containerd
 $STD systemctl restart docker
+cd /opt/runtipi/
+$STD ./runtipi-cli start
 msg_ok "Применен фикс для работы docker в lxc(containerd.io=1.7.28-1~debian.12~bookworm)"
 
 # --------------------------------------------------------------------------------------------------------------------
