@@ -554,9 +554,13 @@ echo -e "       *если runtipi на дашборде не горит зеле
 echo -e "       0. откройте shell(консоль) контейнера"
 echo -e "       1. перейдите в каталог runtipi: cd /opt/runtipi/"
 echo -e "       2. выполните команду: ./runtipi-cli start"
+echo -e "       ------------------------------------------------"
+echo -e "       Часто Задаваемые Вопросы(ЧАВО\FAQ):"
+echo -e "       https://faq.start.samohosting.ru"
 echo -e "       *если runtipi на дашборде не горит зеленым :" >> /etc/motd
-echo -e "       https://forum.samohosting.ru/t/o-sborke-zachem-ona-na-chem-osnovana-chto-daet/30/7?u=admin"
 echo -e "       1. перейдите в каталог runtipi: cd /opt/runtipi/" >> /etc/motd
 echo -e "       2. выполните команду: ./runtipi-cli start" >> /etc/motd
-echo -e "       https://forum.samohosting.ru/t/o-sborke-zachem-ona-na-chem-osnovana-chto-daet/30/7?u=admin" >> /etc/motd
+echo -e "       ------------------------------------------------" >> /etc/motd
+echo -e "       Часто Задаваемые Вопросы(ЧАВО\FAQ):" >> /etc/motd
+echo -e "       https://faq.start.samohosting.ru" >> /etc/motd
 
