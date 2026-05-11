@@ -6,7 +6,7 @@ pageInfo:
   description: >-
     #2 Уровень. Еще больше приложений для установки через Dockge(docker web gui)
     или используя Helper-Scripts.
-  footerText: >-
+  footer: >-
     made by samohosting.ru . Big Thanks to @lissy93 for https://dashy.to/ .
     Связь со мной : email@samohosting.ru
   logo: >-
