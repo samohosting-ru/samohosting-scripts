@@ -105,7 +105,7 @@ sections:
       - &ref_4
         title: Runtipi. Магазин приложений
         description: тут вы найдете много интересного
-        icon: https://runtipi.io/_next/static/media/tipi.c0b9b68e.png
+        icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/tipi.png
         url: http://localhost:80
         target: newtab
         statusCheck: true
@@ -115,7 +115,7 @@ sections:
       - &ref_5
         title: SAMBA
         description: Ваш сервис для доступа внешних устройств по протоколу smb
-        icon: https://www.muylinux.com/wp-content/uploads/2016/03/Samba-4.4.jpg
+        icon: https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/refs/heads/ru_dev/icons/smbfolder.png
         url: http://localhost:5001/compose/samba
         target: newtab
         statusCheckAllowInsecure: true
