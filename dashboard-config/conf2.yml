@@ -1,0 +1,277 @@
+pageInfo:
+  title: START.SAMOHOSTING.RU
+  description: >-
+    #2 Уровень. Еще больше приложений для установки через Dockge(docker web gui)
+    или используя Helper-Scripts.
+  footerText: >-
+    made by samohosting.ru . Big Thanks to @lissy93 for https://dashy.to/ .
+    Связь со мной : email@samohosting.ru
+  logo: >-
+    https://raw.githubusercontent.com/LiaGen/samohosting/main/samohostinglogo6round.png
+  navLinks: []
+sections:
+  - name: >-
+      Для установки приложений с этой страницы Вам потребуются базовые знания
+      Dockge(docker web gui) или Proxmox Helper Scripts. Видео о них ниже 
+    icon: fas fa-list
+    displayData:
+      sortBy: default
+      rows: 1
+      cols: 4
+      collapsed: false
+      hideForGuests: false
+    items:
+      - &ref_0
+        title: samohosting.ru
+        description: сайт | youtube | telegram | чаты
+        icon: >-
+          https://raw.githubusercontent.com/LiaGen/samohosting/main/samohostinglogo4round.png
+        url: https://www.samohosting.ru/
+        target: newtab
+        id: 0_89234_samohostingru
+      - &ref_1
+        title: Dockge - как использовать
+        description: by samohosting.ru
+        icon: fab fa-youtube
+        url: https://www.youtube.com/@samohosting
+        target: newtab
+        id: 1_89234_dockge
+      - &ref_2
+        title: Proxmox Скрипты помощники
+        description: о Proxmox Helper-Scripts by samohosting.ru
+        icon: fab fa-youtube
+        url: https://www.youtube.com/watch?v=NItKUQMMU4s
+        target: newtab
+        id: 2_89234_proxmox
+      - &ref_3
+        title: PROXMOX HELPER SCRIPTS
+        description: ВАЖНЫЕ ИЗМЕНЕНИЯ В СКРИПТАХ ПОМОЩНИКАХ ПРОКСМОКС
+        icon: fab fa-youtube
+        url: https://www.youtube.com/watch?v=9cujIWW6azI
+        target: newtab
+        id: 3_89234_proxmoxhelperscripts
+    filteredItems:
+      - *ref_0
+      - *ref_1
+      - *ref_2
+      - *ref_3
+  - name: >-
+      Ссылки на Ваш Dockge(Докдж) с уже предподготовленными шаблонами и на сайт
+      Helper Scripts
+    icon: ''
+    displayData:
+      sortBy: default
+      rows: 1
+      cols: 4
+      collapsed: false
+      hideForGuests: false
+    items:
+      - &ref_4
+        title: Dockge
+        description: GUI для управления Докером
+        icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/dockge.png
+        url: http://localhost:5001/
+        target: newtab
+        id: 0_61845_dockge
+      - &ref_5
+        title: 'Скрипты для Proxmox '
+        description: Proxmox VE Helper-Scripts
+        icon: >-
+          https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/images/logo.png
+        url: https://community-scripts.github.io/ProxmoxVE/
+        target: newtab
+        statusCheck: true
+        statusCheckAllowInsecure: true
+        id: 1_61845_proxmox
+    filteredItems:
+      - *ref_4
+      - *ref_5
+  - name: >-
+      Proxmox Helper-scripts. Установка Готовых LXC контейнеров 1 командой в
+      Proxmox
+    icon: fas fa-terminal
+    displayData:
+      sortBy: default
+      rows: 1
+      cols: 4
+      collapsed: false
+      hideForGuests: false
+    items:
+      - &ref_6
+        title: ПослеУстановочный Скрипт
+        description: >-
+          делает много полезного, в том числе отключает табличку напоминание на
+          входе
+        icon: >-
+          https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/images/logo.png
+        url: >-
+          https://community-scripts.github.io/ProxmoxVE/scripts?id=post-pve-install
+        target: newtab
+        statusCheck: true
+        statusCheckAllowInsecure: true
+        id: 0_42490_
+      - &ref_7
+        title: IP-TAGS
+        description: добавляет ip теги контейнерам
+        icon: >-
+          https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/images/logo.png
+        url: https://community-scripts.github.io/ProxmoxVE/scripts?id=add-lxc-iptag
+        target: newtab
+        statusCheck: true
+        statusCheckAllowInsecure: true
+        id: 1_42490_iptags
+      - &ref_8
+        title: CasaOS LXC
+        description: для тех, кто хочет попробовать CASAOS
+        icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/casaos.png
+        url: https://community-scripts.github.io/ProxmoxVE/scripts?id=casaos
+        target: newtab
+        statusCheck: true
+        statusCheckAllowInsecure: true
+        id: 2_42490_casaoslxc
+      - &ref_9
+        title: Ubuntu LXC
+        description: операционная система Ubuntu в LXC
+        icon: https://assets.ubuntu.com/v1/29985a98-ubuntu-logo32.png
+        url: https://community-scripts.github.io/ProxmoxVE/scripts?id=ubuntu
+        target: newtab
+        statusCheck: true
+        statusCheckAllowInsecure: true
+        id: 3_42490_ubuntulxc
+      - &ref_10
+        title: Debian LXC
+        description: операционная система Debian в LXC
+        icon: https://seeklogo.com/images/D/debian-logo-C136FDAF9E-seeklogo.com.png
+        url: https://community-scripts.github.io/ProxmoxVE/scripts?id=debian
+        target: newtab
+        statusCheck: true
+        statusCheckAllowInsecure: true
+        id: 4_42490_debianlxc
+      - &ref_11
+        title: Docker LXC
+        description: быстрое создание LXC с Docker и Portainer
+        icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/docker.png
+        url: https://community-scripts.github.io/ProxmoxVE/scripts?id=docker
+        target: newtab
+        statusCheck: true
+        statusCheckAllowInsecure: true
+        id: 5_42490_dockerlxc
+      - &ref_12
+        title: OpenWrt VM
+        description: 'для тех, кто хочет попробовать OpenWrt '
+        icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/openwrt.png
+        url: https://community-scripts.github.io/ProxmoxVE/scripts?id=openwrt
+        target: newtab
+        statusCheck: true
+        statusCheckAllowInsecure: true
+        id: 6_42490_openwrtvm
+      - &ref_13
+        title: Nginx Proxy Manager LXC
+        description: смотрите ролик на канале о реверс прокси
+        icon: >-
+          https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/nginx-proxy-manager.png
+        url: >-
+          https://community-scripts.github.io/ProxmoxVE/scripts?id=nginxproxymanager
+        target: newtab
+        statusCheck: true
+        statusCheckAllowInsecure: true
+        id: 7_42490_nginxproxymanagerlxc
+      - &ref_14
+        title: Pi-Alert LXC
+        description: смотрите ролик на канале о Pi-Alert
+        icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/pi-alert.png
+        url: https://community-scripts.github.io/ProxmoxVE/scripts?id=pialert
+        target: newtab
+        statusCheck: true
+        statusCheckAllowInsecure: true
+        id: 8_42490_pialertlxc
+      - &ref_15
+        title: TurnKey LXC
+        description: 'набор LXC от команды TurnKey. например FileServer = Ваш NAS '
+        icon: https://www.turnkeylinux.org/files/images/icons/erver_0.jpg
+        url: https://community-scripts.github.io/ProxmoxVE/scripts?id=turnkey
+        target: newtab
+        statusCheck: true
+        statusCheckAllowInsecure: true
+        id: 9_42490_turnkeylxc
+    filteredItems:
+      - *ref_6
+      - *ref_7
+      - *ref_8
+      - *ref_9
+      - *ref_10
+      - *ref_11
+      - *ref_12
+      - *ref_13
+      - *ref_14
+      - *ref_15
+  - name: >-
+      Dockge(docker). Готовые шаблоны для запуска  контейнера в 1 клик опен сорс
+      приложений для домашнего сервера
+    icon: fab fa-docker
+    displayData:
+      sortBy: default
+      rows: 1
+      cols: 4
+      collapsed: false
+      hideForGuests: false
+    items:
+      - &ref_16
+        title: Windows
+        description: виртуальная машина
+        icon: >-
+          https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/windows-10.png
+        url: http://localhost:5001/compose/dockur-windows
+        target: newtab
+        id: 0_84160_windows
+      - &ref_17
+        title: Linux
+        description: виртуальная машина
+        icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/tux.png
+        url: http://localhost:5001/compose/webtop
+        target: newtab
+        id: 1_84160_linux
+      - &ref_18
+        title: MacOS
+        description: macOS виртуальная машина
+        icon: >-
+          https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/apple-alt.png
+        url: http://localhost:5001/compose/dockur-macos
+        target: newtab
+        id: 2_84160_macos
+      - &ref_19
+        title: OpenProject
+        description: kanban | gantt | задачи | ведение проектов
+        icon: >-
+          https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/openproject.png
+        url: http://localhost:5001/compose/openproject
+        target: newtab
+        id: 3_84160_openproject
+      - &ref_20
+        title: Эмулятор Ретро игр в браузере
+        description: Emulatorjs
+        icon: >-
+          https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/emulatorjs.png
+        url: http://localhost:5001/compose/emulatorjs
+        target: newtab
+        id: 4_84160_
+      - &ref_21
+        title: LibreOffice
+        description: офис в вашем браузере
+        icon: >-
+          https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/libreoffice-logo.png
+        url: http://localhost:5001/compose/libreoffice
+        target: newtab
+        id: 5_84160_libreoffice
+    filteredItems:
+      - *ref_16
+      - *ref_17
+      - *ref_18
+      - *ref_19
+      - *ref_20
+      - *ref_21
+pages:
+  - name: '#2 Уровень. Docker и Helper-Scripts'
+    path: /conf2.yml
+    displayData:
+      hideForGuests: false
