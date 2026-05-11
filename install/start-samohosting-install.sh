@@ -67,6 +67,7 @@ wget -qO/opt/dashy/user-data/conf.yml https://raw.githubusercontent.com/LiaGen/s
 wget -qO/opt/dashy/user-data/conf2.yml https://raw.githubusercontent.com/LiaGen/samohosting/refs/heads/main/files_from_videos/conf2.yml
 sed -i -e "s|localhost|$IP|g" /opt/dashy/user-data/conf.yml
 sed -i -e "s|localhost|$IP|g" /opt/dashy/user-data/conf2.yml
+sudo chown -R 1000:1000 /opt/dashy/user-data
 msg_info "Устанавливаю Dashy Dashboard.."
 mkdir -p /opt/dockge/stacks/samohosting-dashboard
 cd /opt/dockge/stacks/samohosting-dashboard
