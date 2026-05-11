@@ -1,3 +1,6 @@
+appConfig:
+  layout: masonry
+  iconSize: large
 pageInfo:
   title: START.SAMOHOSTING.RU
   description: >-
