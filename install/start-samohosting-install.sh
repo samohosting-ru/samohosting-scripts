@@ -63,8 +63,8 @@ msg_ok "Установлено приложение Runtipi 2\2"
 # --------------------------------------------------------------------------------------------------------------------
 msg_info "Устанавливаю Dashy Dashboard.."
 mkdir -p /opt/dashy/user-data/
-wget -qO/opt/dashy/user-data/conf.yml https://raw.githubusercontent.com/LiaGen/samohosting/refs/heads/main/files_from_videos/conf.yml
-wget -qO/opt/dashy/user-data/conf2.yml https://raw.githubusercontent.com/LiaGen/samohosting/refs/heads/main/files_from_videos/conf2.yml
+wget -qO/opt/dashy/user-data/conf.yml https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/refs/heads/ru_dev/dashboard-config/conf.yml
+wget -qO/opt/dashy/user-data/conf2.yml https://raw.githubusercontent.com/samohosting-ru/samohosting-scripts/refs/heads/ru_dev/dashboard-config/conf2.yml
 sed -i -e "s|localhost|$IP|g" /opt/dashy/user-data/conf.yml
 sed -i -e "s|localhost|$IP|g" /opt/dashy/user-data/conf2.yml
 sudo chown -R 1000:1000 /opt/dashy/user-data
