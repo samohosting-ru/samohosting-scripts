@@ -701,7 +701,17 @@ install_script() {
     systemctl -q stop ping-instances.service
   fi
   NEXTID=$(pvesh get /cluster/nextid)
-  timezone=$(cat /etc/timezone)
+  #old_method timezone=$(cat /etc/timezone)
+  # Get timezone using timedatectl (Debian 13+ compatible)
+  # Fallback to /etc/timezone for older systems
+  if command -v timedatectl >/dev/null 2>&1; then
+    timezone=$(timedatectl show --value --property=Timezone 2>/dev/null || echo "UTC")
+  elif [ -f /etc/timezone ]; then
+    timezone=$(cat /etc/timezone)
+  else
+    timezone="UTC"
+  fi
+  [[ "${timezone:-}" == Etc/* ]] && timezone="host" # pct doesn't accept Etc/* zones
   header_info
   while true; do
     CHOICE=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.3" --title "НАСТРОЙКИ" --menu "Выберите вариант установки:" \
