@@ -261,6 +261,7 @@ header_info() {
     # Ensure the slant font is available
     if [ ! -f "/usr/share/figlet/slant.flf" ]; then
       echo -e "${INFO}${BOLD}${DGN}Скачиваю шрифт slant...${CL}"
+      mkdir -p /usr/share/figlet
       wget -qO /usr/share/figlet/slant.flf "http://www.figlet.org/fonts/slant.flf"
     fi
   fi
