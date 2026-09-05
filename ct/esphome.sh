@@ -1,0 +1,103 @@
+#!/usr/bin/env bash
+_CS_DEFAULT_URL="https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main"
+_cs_boot="${COMMUNITY_SCRIPTS_CORE_DIR:-$(dirname "${BASH_SOURCE[0]}")/../../core}/core/build.func"
+source "$_cs_boot" 2>/dev/null || source <(curl -fsSL "${COMMUNITY_SCRIPTS_CORE_URL:-https://raw.githubusercontent.com/community-scripts/core/main}/core/build.func")
+# Copyright (c) 2021-2026 tteck
+# Author: tteck (tteckster)
+# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# Source: https://esphome.io/
+
+APP="ESPHome"
+var_tags="${var_tags:-automation}"
+var_cpu="${var_cpu:-2}"
+var_ram="${var_ram:-1024}"
+var_disk="${var_disk:-10}"
+var_os="${var_os:-debian}"
+var_version="${var_version:-13}"
+var_arm64="${var_arm64:-yes}"
+var_unprivileged="${var_unprivileged:-1}"
+
+header_info "$APP"
+variables
+color
+catch_errors
+
+function update_script() {
+  header_info
+  check_container_storage
+  check_container_resources
+  if [[ ! -f /etc/systemd/system/esphome-device-builder.service && ! -f /etc/systemd/system/esphomeDashboard.service ]]; then
+    msg_error "No ${APP} Installation Found!"
+    exit
+  fi
+  ensure_dependencies libusb-1.0-0
+
+  msg_info "Stopping Service"
+  systemctl stop esphome-device-builder 2>/dev/null || true
+  systemctl stop esphomeDashboard 2>/dev/null || true
+  msg_ok "Stopped Service"
+
+  VENV_PATH="/opt/esphome/.venv"
+  ESPHOME_BIN="${VENV_PATH}/bin/esphome"
+  export PYTHON_VERSION="3.12"
+
+  if [[ ! -d "$VENV_PATH" || ! -x "$ESPHOME_BIN" ]]; then
+    PYTHON_VERSION="3.12" setup_uv
+    msg_info "Migrating to uv/venv"
+    rm -rf "$VENV_PATH"
+    mkdir -p /opt/esphome
+    cd /opt/esphome
+    $STD uv venv --clear "$VENV_PATH"
+    $STD "$VENV_PATH/bin/python" -m ensurepip --upgrade
+    $STD "$VENV_PATH/bin/python" -m pip install --upgrade pip
+    $STD "$VENV_PATH/bin/python" -m pip install esphome esphome-device-builder esptool
+    msg_ok "Migrated to uv/venv"
+  else
+    msg_info "Updating ESPHome Device Builder"
+    PYTHON_VERSION="3.12" setup_uv
+    $STD "$VENV_PATH/bin/python" -m pip install --upgrade esphome esphome-device-builder esptool
+    msg_ok "Updated ESPHome Device Builder"
+  fi
+
+  msg_info "Migrating to ESPHome Device Builder service"
+  if [[ -f /etc/systemd/system/esphomeDashboard.service ]]; then
+    systemctl disable -q esphomeDashboard 2>/dev/null || true
+    rm -f /etc/systemd/system/esphomeDashboard.service
+  fi
+  cat <<EOF >/etc/systemd/system/esphome-device-builder.service
+[Unit]
+Description=ESPHome Device Builder
+After=network.target
+
+[Service]
+ExecStart=${VENV_PATH}/bin/esphome-device-builder /root/config/
+Restart=always
+User=root
+
+[Install]
+WantedBy=multi-user.target
+EOF
+  $STD systemctl daemon-reload
+  $STD systemctl enable esphome-device-builder
+  msg_ok "Migrated to ESPHome Device Builder service"
+
+  msg_info "Linking esphome to /usr/local/bin"
+  rm -f /usr/local/bin/esphome
+  ln -s /opt/esphome/.venv/bin/esphome /usr/local/bin/esphome
+  msg_ok "Linked esphome binary"
+
+  msg_info "Starting Service"
+  systemctl start esphome-device-builder
+  msg_ok "Started Service"
+  msg_ok "Updated successfully!"
+  exit
+}
+
+start
+build_container
+description
+
+msg_ok "Completed successfully!\n"
+echo -e "${CREATING}${GN}${APP} setup has been successfully initialized!${CL}"
+echo -e "${INFO}${YW}Access it using the following URL:${CL}"
+echo -e "${GATEWAY}${BGN}http://${IP}:6052${CL}"

@@ -1,0 +1,82 @@
+#!/usr/bin/env bash
+_CS_DEFAULT_URL="https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main"
+_cs_boot="${COMMUNITY_SCRIPTS_CORE_DIR:-$(dirname "${BASH_SOURCE[0]}")/../../core}/core/build.func"
+source "$_cs_boot" 2>/dev/null || source <(curl -fsSL "${COMMUNITY_SCRIPTS_CORE_URL:-https://raw.githubusercontent.com/community-scripts/core/main}/core/build.func")
+# Copyright (c) 2021-2026 tteck
+# Author: tteck (tteckster)
+# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# Source: https://jellyfin.org/
+
+APP="Jellyfin"
+var_tags="${var_tags:-media}"
+var_cpu="${var_cpu:-2}"
+var_ram="${var_ram:-2048}"
+var_disk="${var_disk:-16}"
+var_os="${var_os:-ubuntu}"
+var_version="${var_version:-24.04}"
+var_arm64="${var_arm64:-yes}"
+var_unprivileged="${var_unprivileged:-1}"
+var_gpu="${var_gpu:-yes}"
+
+header_info "$APP"
+variables
+color
+catch_errors
+
+function update_script() {
+  header_info
+  check_container_storage
+  check_container_resources
+  if [[ ! -d /usr/lib/jellyfin ]]; then
+    msg_error "No ${APP} Installation Found!"
+    exit
+  fi
+
+  if ! grep -qEi 'ubuntu' /etc/os-release && [[ "$(arch_resolve)" == "amd64" ]]; then
+    msg_info "Updating Intel Dependencies"
+    rm -f ~/.intel-* || true
+
+    # Fetch compute-runtime first so /tmp/gh_rel.json is populated for IGC tag resolution
+    fetch_and_deploy_gh_release "intel-libgdgmm12" "intel/compute-runtime" "binary" "latest" "" "libigdgmm12_*_amd64.deb"
+
+    local igc_tag
+    _resolve_igc_tag igc_tag
+
+    fetch_and_deploy_gh_release "intel-igc-core-2" "intel/intel-graphics-compiler" "binary" "$igc_tag" "" "intel-igc-core-2_*_amd64.deb"
+    fetch_and_deploy_gh_release "intel-igc-opencl-2" "intel/intel-graphics-compiler" "binary" "$igc_tag" "" "intel-igc-opencl-2_*_amd64.deb"
+    fetch_and_deploy_gh_release "intel-opencl-icd" "intel/compute-runtime" "binary" "latest" "" "intel-opencl-icd_*_amd64.deb"
+    msg_ok "Updated Intel Dependencies"
+  fi
+
+  msg_info "Setting up Jellyfin Repository"
+  JELLYFIN_REPO_URL="https://repo.jellyfin.org/$(get_os_info id)"
+  JELLYFIN_SUITE="$(get_fallback_suite "$(get_os_info id)" "$(get_os_info codename)" "$JELLYFIN_REPO_URL")"
+  setup_deb822_repo \
+    "jellyfin" \
+    "https://repo.jellyfin.org/jellyfin_team.gpg.key" \
+    "$JELLYFIN_REPO_URL" \
+    "$JELLYFIN_SUITE"
+  msg_ok "Set up Jellyfin Repository"
+
+  msg_info "Updating Jellyfin"
+  ensure_dependencies libjemalloc2
+  if [[ ! -f /usr/lib/libjemalloc.so ]]; then
+    ln -sf "/usr/lib/$(arch_resolve "x86_64-linux-gnu" "aarch64-linux-gnu")/libjemalloc.so.2" /usr/lib/libjemalloc.so
+  fi
+  $STD apt -y upgrade
+  $STD apt -y --with-new-pkgs upgrade jellyfin jellyfin-server jellyfin-ffmpeg7
+  ln -sf /usr/lib/jellyfin-ffmpeg/ffmpeg /usr/bin/ffmpeg
+  ln -sf /usr/lib/jellyfin-ffmpeg/ffprobe /usr/bin/ffprobe
+  msg_ok "Updated Jellyfin"
+  msg_ok "Updated successfully!"
+  exit
+}
+
+start
+build_container
+description
+
+msg_ok "Completed successfully!\n"
+echo -e "${CREATING}${GN}${APP} setup has been successfully initialized!${CL}"
+echo -e "${INFO}${YW}Access it using the following URL:${CL}"
+echo -e "${GATEWAY}${BGN}http://${IP}:8096${CL}"

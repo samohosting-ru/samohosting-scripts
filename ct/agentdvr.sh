@@ -1,0 +1,67 @@
+#!/usr/bin/env bash
+_CS_DEFAULT_URL="https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main"
+_cs_boot="${COMMUNITY_SCRIPTS_CORE_DIR:-$(dirname "${BASH_SOURCE[0]}")/../../core}/core/build.func"
+source "$_cs_boot" 2>/dev/null || source <(curl -fsSL "${COMMUNITY_SCRIPTS_CORE_URL:-https://raw.githubusercontent.com/community-scripts/core/main}/core/build.func")
+# Copyright (c) 2021-2026 tteck
+# Author: tteck (tteckster)
+# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# Source: https://www.ispyconnect.com/
+
+APP="AgentDVR"
+var_tags="${var_tags:-dvr}"
+var_cpu="${var_cpu:-2}"
+var_ram="${var_ram:-2048}"
+var_disk="${var_disk:-8}"
+var_os="${var_os:-ubuntu}"
+var_version="${var_version:-24.04}"
+var_arm64="${var_arm64:-yes}"
+var_unprivileged="${var_unprivileged:-0}"
+var_gpu="${var_gpu:-yes}"
+
+header_info "$APP"
+variables
+color
+catch_errors
+
+function update_script() {
+  header_info
+  check_container_storage
+  check_container_resources
+  if [[ ! -d /opt/agentdvr ]]; then
+    msg_error "No ${APP} Installation Found!"
+    exit
+  fi
+
+  RELEASE=$(curl -fsSL "https://www.ispyconnect.com/api/Agent/DownloadLocation4?platform=$(arch_resolve "Linux64" "LinuxARM64")&fromVersion=0" | grep -o 'https://.*\.zip')
+  if [[ "${RELEASE}" != "$(cat ~/.agentdvr 2>/dev/null)" ]] || [[ ! -f ~/.agentdvr ]]; then
+    msg_info "Stopping service"
+    systemctl stop AgentDVR
+    msg_ok "Service stopped"
+
+    msg_info "Updating AgentDVR"
+    cd /opt/agentdvr/agent
+    curl -fsSL "$RELEASE" -o $(basename "$RELEASE")
+    $STD unzip -o Agent_$(arch_resolve "Linux64" "LinuxARM64")*.zip
+    chmod +x ./Agent
+    echo $RELEASE >~/.agentdvr
+    rm -rf Agent_$(arch_resolve "Linux64" "LinuxARM64")*.zip
+    msg_ok "Updated AgentDVR"
+
+    msg_info "Starting service"
+    systemctl start AgentDVR
+    msg_ok "Service started"
+    msg_ok "Updated successfully!"
+  else
+    msg_ok "No update required. ${APP} is already at ${RELEASE}"
+  fi
+  exit
+}
+
+start
+build_container
+description
+
+msg_ok "Completed successfully!\n"
+echo -e "${CREATING}${GN}${APP} setup has been successfully initialized!${CL}"
+echo -e "${INFO}${YW}Access it using the following URL:${CL}"
+echo -e "${GATEWAY}${BGN}http://${IP}:8090${CL}"

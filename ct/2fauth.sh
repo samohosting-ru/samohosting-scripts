@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+_CS_DEFAULT_URL="https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main"
+_cs_boot="${COMMUNITY_SCRIPTS_CORE_DIR:-$(dirname "${BASH_SOURCE[0]}")/../../core}/core/build.func"
+source "$_cs_boot" 2>/dev/null || source <(curl -fsSL "${COMMUNITY_SCRIPTS_CORE_URL:-https://raw.githubusercontent.com/community-scripts/core/main}/core/build.func")
+# Copyright (c) 2021-2026 community-scripts ORG
+# Author: jkrgr0
+# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# Source: https://docs.2fauth.app/ | Github: https://github.com/Bubka/2FAuth
+
+APP="2FAuth"
+var_tags="${var_tags:-2fa;authenticator}"
+var_cpu="${var_cpu:-1}"
+var_ram="${var_ram:-512}"
+var_disk="${var_disk:-2}"
+var_os="${var_os:-debian}"
+var_version="${var_version:-13}"
+var_arm64="${var_arm64:-yes}"
+var_unprivileged="${var_unprivileged:-1}"
+
+header_info "$APP"
+variables
+color
+catch_errors
+
+function update_script() {
+  header_info
+  check_container_storage
+  check_container_resources
+
+  if [[ ! -d /opt/2fauth ]]; then
+    msg_error "No ${APP} Installation Found!"
+    exit
+  fi
+  setup_mariadb
+  if check_for_gh_release "2fauth" "Bubka/2FAuth"; then
+    $STD apt update
+    $STD apt -y upgrade
+
+    msg_info "Creating Backup"
+    create_backup \
+      /opt/2fauth/.env \
+      /opt/2fauth/storage
+
+    if ! dpkg -l | grep -q 'php8.4'; then
+      cp /etc/nginx/conf.d/2fauth.conf /etc/nginx/conf.d/2fauth.conf.bak
+    fi
+    msg_ok "Backup Created"
+
+    if ! dpkg -l | grep -q 'php8.4'; then
+      PHP_VERSION="8.4" PHP_FPM="YES" setup_php
+      sed -i 's/php8\.[0-9]/php8.4/g' /etc/nginx/conf.d/2fauth.conf
+    fi
+
+    fetch_and_deploy_gh_release "2fauth" "Bubka/2FAuth" "tarball"
+    setup_composer
+    restore_backup
+
+    msg_info "Configuring 2FAuth"
+    cd /opt/2fauth
+    export COMPOSER_ALLOW_SUPERUSER=1
+    $STD composer install --no-dev --prefer-dist
+    php artisan 2fauth:install
+    chown -R www-data: /opt/2fauth
+    chmod -R 755 /opt/2fauth
+    $STD php artisan 2fauth:fix-passport-key-permissions
+    $STD systemctl restart php8.4-fpm
+    $STD systemctl restart nginx
+    msg_ok "Configured 2FAuth"
+    msg_ok "Updated successfully!"
+  fi
+  exit
+}
+
+start
+build_container
+description
+
+msg_ok "Completed successfully!\n"
+echo -e "${CREATING}${GN}${APP} setup has been successfully initialized!${CL}"
+echo -e "${INFO}${YW}Access it using the following URL:${CL}"
+echo -e "${GATEWAY}${BGN}http://${IP}:80${CL}"
