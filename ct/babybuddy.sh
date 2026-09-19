@@ -1,0 +1,82 @@
+#!/usr/bin/env bash
+_CS_DEFAULT_URL="https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main"
+_cs_boot="${COMMUNITY_SCRIPTS_CORE_DIR:-$(dirname "${BASH_SOURCE[0]}")/../../core}/core/build.func"
+source "$_cs_boot" 2>/dev/null || source <(curl -fsSL "${COMMUNITY_SCRIPTS_CORE_URL:-https://raw.githubusercontent.com/community-scripts/core/main}/core/build.func")
+# Copyright (c) 2021-2026 community-scripts ORG
+# Author: MickLesk (CanbiZ)
+# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# Source: https://github.com/babybuddy/babybuddy
+
+APP="Baby Buddy"
+var_tags="${var_tags:-baby}"
+var_disk="${var_disk:-5}"
+var_cpu="${var_cpu:-2}"
+var_ram="${var_ram:-2048}"
+var_os="${var_os:-debian}"
+var_version="${var_version:-12}"
+var_arm64="${var_arm64:-yes}"
+var_unprivileged="${var_unprivileged:-1}"
+
+header_info "$APP"
+variables
+color
+catch_errors
+
+function update_script() {
+  header_info
+  check_container_storage
+  check_container_resources
+  if [[ ! -d /opt/babybuddy ]]; then
+    msg_error "No ${APP} Installation Found!"
+    exit
+  fi
+
+  if check_for_gh_release "babybuddy" "babybuddy/babybuddy"; then
+    setup_uv
+
+    msg_info "Stopping Services"
+    systemctl stop nginx
+    systemctl stop uwsgi
+    msg_ok "Services Stopped"
+
+    create_backup /opt/babybuddy/babybuddy/settings/production.py
+
+    msg_info "Cleaning old files"
+    cd /opt/babybuddy || exit
+    find . -mindepth 1 -maxdepth 1 ! -name '.venv' -exec rm -rf -- {} +
+    msg_ok "Cleaned old files"
+
+    fetch_and_deploy_gh_release "babybuddy" "babybuddy/babybuddy" "tarball"
+    restore_backup
+
+    msg_info "Updating ${APP}"
+    cd /opt/babybuddy
+    source .venv/bin/activate
+    $STD uv pip install -r requirements.txt
+    export DJANGO_SETTINGS_MODULE=babybuddy.settings.production
+    $STD python manage.py makemigrations
+    $STD python manage.py migrate
+    msg_ok "Updated ${APP}"
+
+    msg_info "Fixing permissions"
+    chown -R www-data:www-data /opt/data
+    chmod 640 /opt/data/db.sqlite3
+    chmod 750 /opt/data
+    msg_ok "Permissions fixed"
+
+    msg_info "Starting Services"
+    systemctl start uwsgi
+    systemctl start nginx
+    msg_ok "Services Started"
+    msg_ok "Updated successfully!"
+  fi
+  exit
+}
+start
+build_container
+description
+
+msg_ok "Completed successfully!\n"
+echo -e "${CREATING}${GN}${APP} setup has been successfully initialized!${CL}"
+echo -e "${INFO}${YW}Access it using the following URL:${CL}"
+echo -e "${GATEWAY}${BGN}http://${IP}${CL}"

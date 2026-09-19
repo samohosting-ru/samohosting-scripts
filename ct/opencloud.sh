@@ -1,0 +1,86 @@
+#!/usr/bin/env bash
+_CS_DEFAULT_URL="https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main"
+_cs_boot="${COMMUNITY_SCRIPTS_CORE_DIR:-$(dirname "${BASH_SOURCE[0]}")/../../core}/core/build.func"
+source "$_cs_boot" 2>/dev/null || source <(curl -fsSL "${COMMUNITY_SCRIPTS_CORE_URL:-https://raw.githubusercontent.com/community-scripts/core/main}/core/build.func")
+# Copyright (c) 2021-2026 community-scripts ORG
+# Author: vhsdream
+# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# Source: https://opencloud.eu | Github: https://github.com/opencloud-eu/opencloud
+
+APP="OpenCloud"
+var_tags="${var_tags:-files;cloud}"
+var_cpu="${var_cpu:-2}"
+var_ram="${var_ram:-2048}"
+var_disk="${var_disk:-20}"
+var_os="${var_os:-debian}"
+var_version="${var_version:-13}"
+var_arm64="${var_arm64:-yes}"
+var_unprivileged="${var_unprivileged:-1}"
+
+header_info "$APP"
+variables
+color
+catch_errors
+
+function update_script() {
+  header_info
+  check_container_storage
+  check_container_resources
+
+  if [[ ! -d /etc/opencloud ]]; then
+    msg_error "No ${APP} Installation Found!"
+    exit
+  fi
+
+  RELEASE="v7.4.0"
+  if check_for_gh_release "OpenCloud" "opencloud-eu/opencloud" "${RELEASE}" "each release is tested individually before the version is updated. Please do not open issues for this"; then
+    msg_info "Stopping services"
+    systemctl stop opencloud opencloud-wopi
+    msg_ok "Stopped services"
+
+    msg_info "Updating packages"
+    $STD apt-get update
+    $STD apt-get dist-upgrade -y
+    ensure_dependencies "inotify-tools"
+    msg_ok "Updated packages"
+
+    rm -f /usr/bin/{OpenCloud,opencloud}
+    CLEAN_INSTALL=1 fetch_and_deploy_gh_release "OpenCloud" "opencloud-eu/opencloud" "singlefile" "${RELEASE}" "/usr/bin" "opencloud-*-linux-$(arch_resolve)"
+    mv /usr/bin/OpenCloud /usr/bin/opencloud
+
+    if ! grep -q 'POSIX_WATCH' /etc/opencloud/opencloud.env; then
+      sed -i '/^## External/i ## Uncomment below to enable PosixFS Collaborative Mode\
+## Increase inotify watch/instance limits on your PVE host:\
+### sysctl -w fs.inotify.max_user_watches=1048576\
+### sysctl -w fs.inotify.max_user_instances=1024\
+# STORAGE_USERS_POSIX_ENABLE_COLLABORATION=true\
+# STORAGE_USERS_POSIX_WATCH_TYPE=inotifywait\
+# STORAGE_USERS_POSIX_WATCH_FS=true\
+# STORAGE_USERS_POSIX_WATCH_PATH=<path-to-storage-or-bind-mount>' /etc/opencloud/opencloud.env
+    fi
+
+    if ! sed -n '/^sharing:/,/^storage_users:/p' /etc/opencloud/opencloud.yaml | grep -q 'service_account'; then
+      ACCOUNT_ID="$(sed -n '/^activitylog:/,/*.$/p' /etc/opencloud/opencloud.yaml | awk -F'id:' '{print $2}' | tr -d '[:space:]')"
+      ACCOUNT_SECRET="$(sed -n '/^activitylog:/,/*.$/p' /etc/opencloud/opencloud.yaml | awk -F'secret:' '{print $2}' | tr -d '[:space:]')"
+      sed -i "/^sharing:/a\\
+  service_account:\\
+    service_account_id: $ACCOUNT_ID\\
+    service_account_secret: $ACCOUNT_SECRET" /etc/opencloud/opencloud.yaml
+    fi
+
+    msg_info "Starting services"
+    systemctl start opencloud opencloud-wopi
+    msg_ok "Started services"
+    msg_ok "Updated successfully"
+  fi
+  exit
+}
+
+start
+build_container
+description
+
+msg_ok "Completed successfully!\n"
+echo -e "${CREATING}${GN}${APP} setup has been successfully initialized!${CL}"
+echo -e "${INFO}${YW}Access it using the following URL:${CL}"
+echo -e "${GATEWAY}${BGN}https://<your-OpenCloud-FQDN>${CL}"
