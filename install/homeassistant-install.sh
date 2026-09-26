@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+
+# Copyright (c) 2021-2026 tteck
+# Author: tteck (tteckster)
+# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# Source: https://www.home-assistant.io/
+
+source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
+color
+verb_ip6
+catch_errors
+setting_up_container
+network_check
+update_os
+
+msg_info "Setup Python3"
+$STD apt install -y \
+  python3 \
+  python3-dev \
+  python3-pip \
+  python3-venv
+rm -rf /usr/lib/python3.*/EXTERNALLY-MANAGED
+msg_ok "Setup Python3"
+
+msg_info "Installing runlike"
+$STD pip install runlike
+msg_ok "Installed runlike"
+
+get_latest_release() {
+  curl -fsSL https://api.github.com/repos/$1/releases/latest | grep '"tag_name":' | cut -d'"' -f4
+}
+
+CORE_LATEST_VERSION=$(get_latest_release "home-assistant/core")
+
+setup_docker
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/tools/addon/portainer.sh)" <<<"y"
+
+msg_info "Pulling Home Assistant $CORE_LATEST_VERSION Image"
+$STD docker pull ghcr.io/home-assistant/home-assistant:stable
+msg_ok "Pulled Home Assistant $CORE_LATEST_VERSION Image"
+
+msg_info "Installing Home Assistant $CORE_LATEST_VERSION"
+$STD docker volume create hass_config
+$STD docker run -d \
+  --name homeassistant \
+  --privileged \
+  --restart unless-stopped \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  -v /dev:/dev \
+  -v hass_config:/config \
+  -v /etc/localtime:/etc/localtime:ro \
+  --net=host \
+  ghcr.io/home-assistant/home-assistant:stable
+mkdir /root/hass_config
+msg_ok "Installed Home Assistant $CORE_LATEST_VERSION"
+
+motd_ssh
+customize
+cleanup_lxc
