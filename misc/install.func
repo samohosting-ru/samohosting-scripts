@@ -88,6 +88,7 @@ spinner() {
 msg_info() {
   local msg="$1"
   if [ -n "${SPINNER_PID:-}" ] && ps -p $SPINNER_PID > /dev/null; then kill $SPINNER_PID > /dev/null 2>&1; fi
+  echo -ne "${TAB}${YW}${HOLD}${msg}${HOLD}"
   spinner &
   SPINNER_PID=$!
 }
