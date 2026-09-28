@@ -50,7 +50,7 @@ function spinner() {
   local frames=('⠋' '⠙' '⠹' '⠸' '⠼' '⠴' '⠦' '⠧' '⠇' '⠏')
   local spin_i=0
   local interval=0.1
-  printf "\e[?25l" 
+  printf "\e[?25l"
 
   local color="${YWB}"
 
@@ -112,9 +112,9 @@ function select_storage() {
     CONTENT='vztmpl'
     CONTENT_LABEL='Container template'
     ;;
-  *) false || exit "Invalid storage class." ;;
+  *) false || { msg_error "Invalid storage class."; exit 1; } ;;
   esac
-  
+
   # This Queries all storage locations
   local -a MENU
   while read -r line; do
@@ -128,7 +128,7 @@ function select_storage() {
     fi
     MENU+=("$TAG" "$ITEM" "OFF")
   done < <(pvesm status -content $CONTENT | awk 'NR>1')
-  
+
   # Select storage location
   if [ $((${#MENU[@]}/3)) -eq 1 ]; then
     printf ${MENU[0]}
@@ -138,27 +138,28 @@ function select_storage() {
       STORAGE=$(whiptail --backtitle "Proxmox VE Helper Scripts: Samohosting Edition v0.6.1" --title "ХРАНИЛИЩЕ ДЛЯ ДАННЫХ" --radiolist \
       "Which storage pool you would like to use for the ${CONTENT_LABEL,,}?\nTo make a selection, use the ПРОБЕЛ.\n" \
       16 $(($MSG_MAX_LENGTH + 23)) 6 \
-      "${MENU[@]}" 3>&1 1>&2 2>&3) || exit "Menu aborted."
+      "${MENU[@]}" 3>&1 1>&2 2>&3) || { msg_error "Menu aborted."; exit 1; }
       if [ $? -ne 0 ]; then
         echo -e "${CROSS}${RD} Меню отменено пользователем.${CL}"
-        exit 0 
+        exit 0
       fi
     done
     printf "%s" "$STORAGE"
   fi
 }
 # Test if required variables are set
-[[ "${CTID:-}" ]] || exit "You need to set 'CTID' variable."
-[[ "${PCT_OSTYPE:-}" ]] || exit "You need to set 'PCT_OSTYPE' variable."
+[[ "${CTID:-}" ]] || { msg_error "You need to set 'CTID' variable."; exit 1; }
+[[ "${PCT_OSTYPE:-}" ]] || { msg_error "You need to set 'PCT_OSTYPE' variable."; exit 1; }
 
 # Test if ID is valid
-[ "$CTID" -ge "100" ] || exit "ID cannot be less than 100."
+[ "$CTID" -ge "100" ] || { msg_error "ID cannot be less than 100."; exit 1; }
 
 # Test if ID is in use
 if pct status $CTID &>/dev/null; then
   echo -e "ID '$CTID' is already in use."
   unset CTID
-  exit "Не могу использовать ID который уже занят другим контейнером."
+  msg_error "Не могу использовать ID который уже занят другим контейнером."
+  exit 1
 fi
 
 # Get template storage
@@ -175,16 +176,19 @@ pveam update >/dev/null
 msg_ok "Обновлен список LXC шаблонов."
 
 # Get LXC template string
+# PVE 9.x prints "section  template  arch" (older PVE printed "template<TAB>size"),
+# so pick the field that is an actual template filename instead of matching to end of line.
 TEMPLATE_SEARCH=${PCT_OSTYPE}-${PCT_OSVERSION:-}
-mapfile -t TEMPLATES < <(pveam available -section system | sed -n "s/.*\($TEMPLATE_SEARCH.*\)/\1/p" | sort -t - -k 2 -V)
-[ ${#TEMPLATES[@]} -gt 0 ] || exit "Unable to find a template when searching for '$TEMPLATE_SEARCH'."
+mapfile -t TEMPLATES < <(pveam available -section system | awk -v s="$TEMPLATE_SEARCH" '{for(i=1;i<=NF;i++) if ($i ~ /\.tar\.(gz|zst)$/ && index($i,s)==1) {print $i; break}}' | sort -t - -k 2 -V)
+[ ${#TEMPLATES[@]} -gt 0 ] || { msg_error "Unable to find a template when searching for '$TEMPLATE_SEARCH'."; exit 1; }
 TEMPLATE="${TEMPLATES[-1]}"
 
 # Download LXC template if needed
-if ! pveam list $TEMPLATE_STORAGE | grep -q $TEMPLATE; then
+# pveam list prints a full volid in column 1 ("local:vztmpl/<file>"), so compare the basename.
+if ! pveam list "$TEMPLATE_STORAGE" | awk -v t="$TEMPLATE" '{n=$1; sub(/^.*\//,"",n); if (n==t) f=1} END {exit !f}'; then
   msg_info "Скачиваю LXC шаблон"
-  pveam download $TEMPLATE_STORAGE $TEMPLATE >/dev/null ||
-    exit "A problem occured while downloading the LXC template."
+  pveam download "$TEMPLATE_STORAGE" "$TEMPLATE" >/dev/null ||
+    { msg_error "A problem occured while downloading the LXC template."; exit 1; }
   msg_ok "Скачиваю LXC шаблон"
 fi
 
@@ -198,5 +202,6 @@ PCT_OPTIONS=(${PCT_OPTIONS[@]:-${DEFAULT_PCT_OPTIONS[@]}})
 # Create container
 msg_info "Создаю LXC контейнер"
 pct create $CTID ${TEMPLATE_STORAGE}:vztmpl/${TEMPLATE} ${PCT_OPTIONS[@]} >/dev/null ||
-  exit "Возникла проблема при попытке создать контейнер!"
+  msg_error "Возникла проблема при попытке создать контейнер!"
+  exit 1
 msg_ok "LXC контейнер ${BL}$CTID${CL} ${GN}был успешно создан."
