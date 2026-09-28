@@ -202,7 +202,8 @@ PCT_OPTIONS=(${PCT_OPTIONS[@]:-${DEFAULT_PCT_OPTIONS[@]}})
 
 # Create container
 msg_info "Создаю LXC контейнер"
-pct create $CTID ${TEMPLATE_STORAGE}:vztmpl/${TEMPLATE} ${PCT_OPTIONS[@]} >/dev/null ||
+pct create $CTID ${TEMPLATE_STORAGE}:vztmpl/${TEMPLATE} ${PCT_OPTIONS[@]} >/dev/null || {
   msg_error "Возникла проблема при попытке создать контейнер!"
   exit 1
+}
 msg_ok "LXC контейнер ${BL}$CTID${CL} ${GN}был успешно создан."
