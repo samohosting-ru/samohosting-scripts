@@ -27,14 +27,7 @@ setup_mariadb
 mariadb-tzinfo-to-sql /usr/share/zoneinfo | mariadb mysql
 MARIADB_DB_NAME="glpi_db" MARIADB_DB_USER="glpi" MARIADB_DB_EXTRA_GRANTS="GRANT SELECT ON \`mysql\`.\`time_zone_name\`" MARIADB_DB_CREDS_FILE="$HOME/glpi_db.creds" setup_mariadb_db
 
-msg_info "Installing GLPi"
-cd /opt
-RELEASE=$(curl -fsSL https://api.github.com/repos/glpi-project/glpi/releases/latest | grep '"tag_name"' | sed -E 's/.*"tag_name": "([^"]+)".*/\1/')
-curl -fsSL "https://github.com/glpi-project/glpi/releases/download/${RELEASE}/glpi-${RELEASE}.tgz" -o $(basename "https://github.com/glpi-project/glpi/releases/download/${RELEASE}/glpi-${RELEASE}.tgz")
-$STD tar -xzvf glpi-${RELEASE}.tgz
-cd /opt/glpi
-echo "${RELEASE}" >/opt/${APPLICATION}_version.txt
-msg_ok "Installed GLPi"
+fetch_and_deploy_gh_release "glpi" "glpi-project/glpi" "prebuild" "latest" "/opt/glpi" "glpi-*.tgz"
 
 msg_info "Setting Downstream file"
 cat <<EOF >/opt/glpi/inc/downstream.php
@@ -119,7 +112,6 @@ $STD a2dissite 000-default.conf
 $STD a2enmod rewrite
 $STD a2ensite glpi.conf
 rm -rf /opt/glpi/install/install.php
-rm -rf /opt/glpi-${RELEASE}.tgz
 msg_ok "Setup Service"
 
 msg_info "Setup Cronjob"
