@@ -77,7 +77,7 @@ EOF
   BASE_DIR=${STAGING_DIR}/base-images
   SOURCE_DIR=${STAGING_DIR}/image-source
   cd /tmp
-  RELEASE="v3.2.4"
+  RELEASE="v3.3.0"
   if [[ -f ~/.intel_version ]]; then
     INTEL_SRC="https://raw.githubusercontent.com/immich-app/immich/${RELEASE}/machine-learning"
     curl -fsSL "${INTEL_SRC}/scripts/install-intel-runtime.sh" -o ./intel-runtime 2>/dev/null ||
@@ -274,12 +274,13 @@ EOF
       msg_info "Updating Intel OpenVINO machine-learning"
       for attempt in $(seq 1 3); do
         $STD sudo --preserve-env=VIRTUAL_ENV,UV_HTTP_TIMEOUT -Pnu immich uv sync --extra openvino --no-dev --active --link-mode copy -n -p "${ML_PYTHON}" --managed-python && break
-        [[ $attempt -lt 3 ]] && msg_warn "uv sync attempt $attempt failed, retrying..." && sleep 10
+        [[ $attempt -eq 3 ]] && { msg_error "uv sync failed three times, the machine-learning environment was not built"; exit 1; }
+        msg_warn "uv sync attempt $attempt failed, retrying..." && sleep 10
       done
       patchelf --clear-execstack "${VIRTUAL_ENV}/lib/python3.13/site-packages/onnxruntime/capi/onnxruntime_pybind11_state.cpython-313-$(arch_resolve "x86_64" "aarch64")-linux-gnu.so"
       msg_ok "Updated Intel OpenVINO machine-learning"
     else
-      ML_PYTHON="python3.11"
+      ML_PYTHON="python3.13"
       msg_info "Pre-installing Python ${ML_PYTHON} for machine-learning"
       for attempt in $(seq 1 3); do
         $STD sudo --preserve-env=VIRTUAL_ENV -Pnu immich uv python install "${ML_PYTHON}" && break
@@ -289,7 +290,8 @@ EOF
       msg_info "Updating machine-learning"
       for attempt in $(seq 1 3); do
         $STD sudo --preserve-env=VIRTUAL_ENV,UV_HTTP_TIMEOUT -Pnu immich uv sync --extra cpu --no-dev --active --link-mode copy -n -p "${ML_PYTHON}" --managed-python && break
-        [[ $attempt -lt 3 ]] && msg_warn "uv sync attempt $attempt failed, retrying..." && sleep 10
+        [[ $attempt -eq 3 ]] && { msg_error "uv sync failed three times, the machine-learning environment was not built"; exit 1; }
+        msg_warn "uv sync attempt $attempt failed, retrying..." && sleep 10
       done
       msg_ok "Updated machine-learning"
     fi
@@ -333,6 +335,10 @@ EOF
       sed -i -e '$a\' "$INSTALL_DIR"/.env
       echo "IMMICH_HELMET_FILE=true" >>"$INSTALL_DIR"/.env
     fi
+    if ! grep -q 'MODEL_REVISION' "$INSTALL_DIR"/.env; then
+      sed -i -e '$a\' "$INSTALL_DIR"/.env
+      echo "MACHINE_LEARNING_MODEL_REVISION=v2" >>"$INSTALL_DIR"/.env
+    fi
 
     if grep -q 'ExecStart=/usr/bin/node' /etc/systemd/system/immich-web.service; then
       sed -i '/^EnvironmentFile=/d' /etc/systemd/system/immich-web.service
@@ -341,25 +347,12 @@ EOF
     fi
 
     # MickLesk temporary patch for HEIC thumbnail gen
-    msg_info "Patching media.repository.js"
     MEDIA_REPO_JS="/opt/immich/app/dist/repositories/media.repository.js"
-    if [[ -f "$MEDIA_REPO_JS" ]]; then
-      python3 - <<'PY'
-from pathlib import Path
-p = Path('/opt/immich/app/dist/repositories/media.repository.js')
-s = p.read_text()
-old = "(0, sharp_1.default)(input).metadata()"
-new = "(0, sharp_1.default)(input, { unlimited: true, limitInputPixels: false }).metadata()"
-if new in s:
-    print('hotfix already there')
-elif old in s:
-    p.write_text(s.replace(old, new, 1))
-    print('hotfix applied')
-else:
-    print('pattern not found, skipped')
-PY
+    if grep -qF "(0, sharp_1.default)(input).metadata()" "$MEDIA_REPO_JS" 2>/dev/null; then
+      msg_info "Patching media.repository.js"
+      sed -i '0,/(0, sharp_1\.default)(input)\.metadata()/s//(0, sharp_1.default)(input, { unlimited: true, limitInputPixels: false }).metadata()/' "$MEDIA_REPO_JS"
+      msg_ok "Patched media.repository.js"
     fi
-    msg_ok "Patched media.repository.js"
 
     # chown excluding upload dir contents (may be a mount with restricted permissions)
     chown immich:immich "$INSTALL_DIR"

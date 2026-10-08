@@ -13,7 +13,7 @@ setting_up_container
 network_check
 update_os
 
-RELEASE="v3.2.4"
+RELEASE="v3.3.0"
 if lscpu | grep -q 'GenuineIntel'; then
   echo ""
   echo ""
@@ -442,12 +442,13 @@ if [[ -f ~/.openvino ]]; then
   msg_info "Installing Intel OpenVINO machine-learning"
   for attempt in $(seq 1 3); do
     $STD sudo --preserve-env=VIRTUAL_ENV,UV_HTTP_TIMEOUT -Pnu immich uv sync --extra openvino --no-dev --active --link-mode copy -n -p "${ML_PYTHON}" --managed-python && break
-    [[ $attempt -lt 3 ]] && msg_warn "uv sync attempt $attempt failed, retrying..." && sleep 10
+    [[ $attempt -eq 3 ]] && { msg_error "uv sync failed three times, the machine-learning environment was not built"; exit 1; }
+    msg_warn "uv sync attempt $attempt failed, retrying..." && sleep 10
   done
   patchelf --clear-execstack "${VIRTUAL_ENV}/lib/python3.13/site-packages/onnxruntime/capi/onnxruntime_pybind11_state.cpython-313-$(arch_resolve "x86_64" "aarch64")-linux-gnu.so"
   msg_ok "Installed Intel OpenVINO machine-learning"
 else
-  ML_PYTHON="python3.11"
+  ML_PYTHON="python3.13"
   msg_info "Pre-installing Python ${ML_PYTHON} for machine-learning"
   for attempt in $(seq 1 3); do
     $STD sudo --preserve-env=VIRTUAL_ENV -Pnu immich uv python install "${ML_PYTHON}" && break
@@ -457,7 +458,8 @@ else
   msg_info "Installing machine-learning"
   for attempt in $(seq 1 3); do
     $STD sudo --preserve-env=VIRTUAL_ENV,UV_HTTP_TIMEOUT -Pnu immich uv sync --extra cpu --no-dev --active --link-mode copy -n -p "${ML_PYTHON}" --managed-python && break
-    [[ $attempt -lt 3 ]] && msg_warn "uv sync attempt $attempt failed, retrying..." && sleep 10
+    [[ $attempt -eq 3 ]] && { msg_error "uv sync failed three times, the machine-learning environment was not built"; exit 1; }
+    msg_warn "uv sync attempt $attempt failed, retrying..." && sleep 10
   done
   msg_ok "Installed machine-learning"
 fi
@@ -488,25 +490,12 @@ ln -s "$GEO_DIR" "$APP_DIR"
 msg_ok "Installed GeoNames data"
 
 # MickLesk temporary patch for HEIC thumbnail gen
-msg_info "Patching media.repository.js"
 MEDIA_REPO_JS="/opt/immich/app/dist/repositories/media.repository.js"
-if [[ -f "$MEDIA_REPO_JS" ]]; then
-  python3 - <<'PY'
-from pathlib import Path
-p = Path('/opt/immich/app/dist/repositories/media.repository.js')
-s = p.read_text()
-old = "(0, sharp_1.default)(input).metadata()"
-new = "(0, sharp_1.default)(input, { unlimited: true, limitInputPixels: false }).metadata()"
-if new in s:
-    print('hotfix already there')
-elif old in s:
-    p.write_text(s.replace(old, new, 1))
-    print('hotfix applied')
-else:
-    print('pattern not found, skipped')
-PY
+if grep -qF "(0, sharp_1.default)(input).metadata()" "$MEDIA_REPO_JS" 2>/dev/null; then
+  msg_info "Patching media.repository.js"
+  sed -i '0,/(0, sharp_1\.default)(input)\.metadata()/s//(0, sharp_1.default)(input, { unlimited: true, limitInputPixels: false }).metadata()/' "$MEDIA_REPO_JS"
+  msg_ok "Patched media.repository.js"
 fi
-msg_ok "Patched media.repository.js"
 
 mkdir -p /var/log/immich
 touch /var/log/immich/{web.log,ml.log}
@@ -537,6 +526,7 @@ MACHINE_LEARNING_CACHE_FOLDER=${INSTALL_DIR}/cache
 ## - inference speed while reducing accuracy
 ## - Default is FP32
 # MACHINE_LEARNING_OPENVINO_PRECISION=FP16
+MACHINE_LEARNING_MODEL_REVISION=v2
 
 IMMICH_MEDIA_LOCATION=${UPLOAD_DIR}
 EOF
