@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+
+# Copyright (c) 2021-2026 tteck
+# Author: tteck (tteckster)
+# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# Source: https://esphome.io/
+
+source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
+color
+verb_ip6
+catch_errors
+setting_up_container
+network_check
+update_os
+
+msg_info "Installing Dependencies"
+$STD apt install -y git \
+  libusb-1.0-0
+msg_ok "Installed Dependencies"
+
+PYTHON_VERSION="3.12" setup_uv
+
+msg_info "Setting up Virtual Environment"
+mkdir -p /opt/esphome
+mkdir -p /root/config
+cd /opt/esphome
+$STD uv venv --clear /opt/esphome/.venv
+$STD /opt/esphome/.venv/bin/python -m ensurepip --upgrade
+$STD /opt/esphome/.venv/bin/python -m pip install --upgrade pip
+$STD /opt/esphome/.venv/bin/python -m pip install esphome esphome-device-builder esptool
+msg_ok "Setup and Installed ESPHome Device Builder"
+
+msg_info "Linking esphome to /usr/local/bin"
+rm -f /usr/local/bin/esphome
+ln -s /opt/esphome/.venv/bin/esphome /usr/local/bin/esphome
+msg_ok "Linked esphome binary"
+
+msg_info "Creating Service"
+mkdir -p /root/config
+cat <<EOF >/etc/systemd/system/esphome-device-builder.service
+[Unit]
+Description=ESPHome Device Builder
+After=network.target
+
+[Service]
+ExecStart=/opt/esphome/.venv/bin/esphome-device-builder /root/config/
+Restart=always
+User=root
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl enable -q --now esphome-device-builder
+msg_ok "Created Service"
+
+motd_ssh
+customize
+cleanup_lxc
