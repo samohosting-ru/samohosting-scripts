@@ -58,6 +58,18 @@ exec uv run mealie
 STARTEOF
     fi
     chmod +x /opt/mealie/start.sh
+    if ! grep -q "REVERSE_PROXY_AUTH_ENABLED" /opt/mealie/mealie.env; then
+      cat <<EOF >>/opt/mealie/mealie.env
+
+# Reverse proxy auth (Mealie v3.29.0+). Disabled by default.
+# To enable: set REVERSE_PROXY_AUTH_ENABLED=true, set a secret, then restart mealie.
+# REVERSE_PROXY_AUTH_ENABLED=false
+# REVERSE_PROXY_AUTH_HEADER=X-Forwarded-User
+# REVERSE_PROXY_AUTH_SIGNUP_ENABLED=false
+# REVERSE_PROXY_AUTH_SECRET=
+# REVERSE_PROXY_AUTH_SECRET_HEADER=X-Mealie-Reverse-Proxy-Secret
+EOF
+    fi
     msg_ok "Configuration restored"
 
     msg_info "Installing Python Dependencies with uv"
