@@ -47,10 +47,13 @@ if [[ ${prompt,,} =~ ^(y|yes)$ ]]; then
 fi
 
 msg_info "Installing Open WebUI"
-for attempt in $(seq 1 3); do
-  $STD uv tool install --python 3.12 --constraint <(echo "numba>=0.60") "${OTEL_ARGS[@]}" open-webui[all] && break
-  [[ $attempt -lt 3 ]] && msg_warn "Open WebUI install attempt $attempt failed, retrying..." && sleep 10
+installed=0
+for attempt in 1 2; do
+  $STD uv tool install --python 3.12 "${OTEL_ARGS[@]}" open-webui[all] && { installed=1; break; }
+  msg_warn "Open WebUI install attempt $attempt failed, retrying..."
+  sleep 10
 done
+((installed)) || $STD uv tool install --python 3.12 "${OTEL_ARGS[@]}" open-webui[all]
 msg_ok "Installed Open WebUI"
 
 prompt="${var_openwebui_ollama:-}"
