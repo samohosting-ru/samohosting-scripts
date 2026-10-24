@@ -1,0 +1,126 @@
+#!/usr/bin/env bash
+
+# Copyright (c) 2021-2026 community-scripts ORG
+# Author: bvdberg01
+# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# Source: https://github.com/pterodactyl/panel
+
+source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
+color
+verb_ip6
+catch_errors
+setting_up_container
+network_check
+update_os
+
+msg_info "Installing Dependencies"
+$STD apt install -y \
+  lsb-release \
+  redis \
+  apache2 \
+  composer \
+  cron
+msg_ok "Installed Dependencies"
+
+setup_mariadb
+
+msg_info "Adding PHP Repository"
+$STD curl -sSLo /tmp/debsuryorg-archive-keyring.deb https://packages.sury.org/debsuryorg-archive-keyring.deb
+$STD dpkg -i /tmp/debsuryorg-archive-keyring.deb
+cat <<EOF >/etc/apt/sources.list.d/php.sources
+Types: deb
+URIs: https://packages.sury.org/php/
+Suites: $(lsb_release -sc)
+Components: main
+Signed-By: /usr/share/keyrings/deb.sury.org-php.gpg
+EOF
+apt_update_safe
+msg_ok "Added PHP Repository"
+
+msg_info "Installing PHP"
+$STD apt remove -y php8.2*
+$STD apt install -y \
+  php8.4 \
+  php8.4-{gd,mysql,mbstring,bcmath,xml,curl,zip,intl,fpm} \
+  libapache2-mod-php8.4
+msg_ok "Installed PHP"
+
+MARIADB_DB_NAME="panel" MARIADB_DB_USER="pterodactyl" MARIADB_DB_CREDS_FILE="$HOME/pterodactyl-panel.creds" setup_mariadb_db
+
+read -p "${TAB3}Provide an email address for admin login, this should be a valid email address: " ADMIN_EMAIL
+read -p "${TAB3}Enter your First Name: " NAME_FIRST
+read -p "${TAB3}Enter your Last Name: " NAME_LAST
+
+fetch_and_deploy_gh_release "pterodactyl-panel" "pterodactyl/panel" "prebuild" "latest" "/opt/pterodactyl-panel" "panel.tar.gz"
+
+msg_info "Installing pterodactyl Panel"
+cd /opt/pterodactyl-panel
+cp .env.example .env
+ADMIN_PASS=$(random_password 13)
+$STD composer install --no-dev --optimize-autoloader --no-interaction
+$STD php artisan key:generate --force
+$STD php artisan p:environment:setup --no-interaction --author "$ADMIN_EMAIL" --url "http://$LOCAL_IP"
+$STD php artisan p:environment:database --no-interaction --database panel --username pterodactyl --password "$MARIADB_DB_PASS"
+$STD php artisan migrate --seed --force --no-interaction
+$STD php artisan p:user:make --no-interaction --admin=1 --email "$ADMIN_EMAIL" --password "$ADMIN_PASS" --name-first "$NAME_FIRST" --name-last "$NAME_LAST" --username "admin"
+echo "* * * * * php /opt/pterodactyl-panel/artisan schedule:run >> /dev/null 2>&1" | crontab -u www-data -
+chown -R www-data:www-data /opt/pterodactyl-panel/*
+chmod -R 755 /opt/pterodactyl-panel/storage/* /opt/pterodactyl-panel/bootstrap/cache/
+ln -s /opt/pterodactyl-panel /var/www/pterodactyl
+cat <<EOF >>~/pterodactyl-panel.creds
+
+pterodactyl Admin Username: admin
+pterodactyl Admin Email: $ADMIN_EMAIL
+pterodactyl Admin Password: $ADMIN_PASS
+EOF
+rm -rf "/tmp/debsuryorg-archive-keyring.deb"
+msg_ok "Installed pterodactyl Panel"
+
+msg_info "Creating Service"
+cat <<EOF >/etc/systemd/system/pteroq.service
+[Unit]
+Description=Pterodactyl Queue Worker
+After=redis-server.service
+
+[Service]
+User=www-data
+Group=www-data
+Restart=always
+ExecStart=/usr/bin/php /opt/pterodactyl-panel/artisan queue:work --queue=high,standard,low --sleep=3 --tries=3
+StartLimitInterval=180
+StartLimitBurst=30
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target
+EOF
+systemctl enable -q --now pteroq
+cat <<EOF >/etc/apache2/sites-available/pterodactyl.conf
+<VirtualHost *:80>
+    ServerName pterodactyl
+    DocumentRoot /opt/pterodactyl-panel/public
+
+    AllowEncodedSlashes On
+    
+    php_value upload_max_filesize 100M
+    php_value post_max_size 100M
+
+    <Directory /opt/pterodactyl-panel/public>
+        Options Indexes FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+
+    ErrorLog /var/log/apache2/pterodactyl_error.log
+    CustomLog /var/log/apache2/pterodactyl_access.log combined
+</VirtualHost>
+EOF
+$STD a2ensite pterodactyl
+$STD a2enmod rewrite
+$STD a2dissite 000-default.conf
+$STD systemctl reload apache2
+msg_ok "Created Service"
+
+motd_ssh
+customize
+cleanup_lxc
