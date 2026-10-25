@@ -80,7 +80,6 @@ set -a
 . /opt/paperless/paperless.conf
 set +a
 $STD uv run -- python manage.py migrate
-$STD uv run -- python manage.py reindex
 msg_ok "Setup Paperless-ngx"
 
 msg_info "Setting up admin Paperless-ngx User & Password"
