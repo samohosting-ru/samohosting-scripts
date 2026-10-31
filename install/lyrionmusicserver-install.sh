@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+# Copyright (c) 2021-2026 community-scripts ORG
+# Author: Omar Minaya
+# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# Source: https://lyrion.org/getting-started/
+
+source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
+color
+verb_ip6
+catch_errors
+setting_up_container
+network_check
+update_os
+
+msg_info "Setup Lyrion Music Server"
+DEB_ARCH=$(arch_resolve "amd64" "arm")
+DEB_URL=$(curl_with_retry 'https://lyrion.org/getting-started/' | grep -oP "<a\s[^>]*href=\"\K[^\"]*${DEB_ARCH}\.deb(?=\"[^>]*>)" | head -n 1)
+RELEASE=$(echo "$DEB_URL" | grep -oP "lyrionmusicserver_\K[0-9.]+(?=_${DEB_ARCH}\.deb)")
+DEB_FILE="/tmp/lyrionmusicserver_${RELEASE}_${DEB_ARCH}.deb"
+curl_with_retry "$DEB_URL" "$DEB_FILE"
+$STD apt install "$DEB_FILE" -y
+rm -f "$DEB_FILE"
+echo "${RELEASE}" >"/opt/lyrion_version.txt"
+msg_ok "Setup Lyrion Music Server v${RELEASE}"
+
+motd_ssh
+customize
+cleanup_lxc
