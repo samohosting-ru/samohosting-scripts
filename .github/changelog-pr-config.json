@@ -1,0 +1,212 @@
+[
+  {
+    "title": "🆕 New Scripts",
+    "labels": [
+      "new script"
+    ]
+  },
+  {
+    "title": "🚀 Updated Scripts",
+    "labels": [
+      "update script"
+    ],
+    "subCategories": [
+      {
+        "title": "🐞 Bug Fixes",
+        "labels": [
+          "bugfix"
+        ],
+        "notes": []
+      },
+      {
+        "title": "✨ New Features",
+        "labels": [
+          "feature"
+        ],
+        "notes": []
+      },
+      {
+        "title": "💥 Breaking Changes",
+        "labels": [
+          "breaking change"
+        ],
+        "notes": []
+      },
+      {
+        "title": "🔧 Refactor",
+        "labels": [
+          "refactor"
+        ],
+        "notes": []
+      }
+    ]
+  },
+  {
+    "title": "🗑️ Deleted Scripts",
+    "labels": [
+      "delete script"
+    ]
+  },
+  {
+    "title": "💾 Core",
+    "labels": [
+      "core"
+    ],
+    "subCategories": [
+      {
+        "title": "🐞 Bug Fixes",
+        "labels": [
+          "bugfix"
+        ],
+        "notes": []
+      },
+      {
+        "title": "✨ New Features",
+        "labels": [
+          "feature"
+        ],
+        "notes": []
+      },
+      {
+        "title": "💥 Breaking Changes",
+        "labels": [
+          "breaking change"
+        ],
+        "notes": []
+      },
+      {
+        "title": "🔧 Refactor",
+        "labels": [
+          "refactor"
+        ],
+        "notes": []
+      }
+    ]
+  },
+  {
+    "title": "🧰 Tools",
+    "labels": [
+      "tools"
+    ],
+    "subCategories": [
+      {
+        "title": "🐞 Bug Fixes",
+        "labels": [
+          "bugfix"
+        ],
+        "notes": []
+      },
+      {
+        "title": "✨ New Features",
+        "labels": [
+          "feature"
+        ],
+        "notes": []
+      },
+      {
+        "title": "💥 Breaking Changes",
+        "labels": [
+          "breaking change"
+        ],
+        "notes": []
+      },
+      {
+        "title": "🔧 Refactor",
+        "labels": [
+          "refactor"
+        ],
+        "notes": []
+      }
+    ]
+  },
+  {
+    "title": "📚 Documentation",
+    "labels": [
+      "documentation"
+    ]
+  },
+  {
+    "title": "📂 Github",
+    "labels": [
+      "github"
+    ]
+  },
+  {
+    "title": "📡 API",
+    "labels": [
+      "api"
+    ],
+    "subCategories": [
+      {
+        "title": "🐞 Bug Fixes",
+        "labels": [
+          "bugfix"
+        ],
+        "notes": []
+      },
+      {
+        "title": "✨ New Features",
+        "labels": [
+          "feature"
+        ],
+        "notes": []
+      },
+      {
+        "title": "💥 Breaking Changes",
+        "labels": [
+          "breaking change"
+        ],
+        "notes": []
+      },
+      {
+        "title": "🔧 Refactor",
+        "labels": [
+          "refactor"
+        ],
+        "notes": []
+      }
+    ]
+  },
+  {
+    "title": "🌐 Website",
+    "labels": [
+      "website"
+    ],
+    "subCategories": [
+      {
+        "title": "🐞 Bug Fixes",
+        "labels": [
+          "bugfix"
+        ],
+        "notes": []
+      },
+      {
+        "title": "✨ New Features",
+        "labels": [
+          "feature"
+        ],
+        "notes": []
+      },
+      {
+        "title": "💥 Breaking Changes",
+        "labels": [
+          "breaking change"
+        ],
+        "notes": []
+      },
+      {
+        "title": "📝 Script Information",
+        "labels": [
+          "json"
+        ],
+        "notes": []
+      }
+    ]
+  },
+  {
+    "title": "❔ Uncategorized",
+    "labels": [
+      "needs triage"
+    ]
+  }
+]
