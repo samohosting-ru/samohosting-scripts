@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+# Copyright (c) 2021-2026 tteck
+# Author: tteck (tteckster)
+# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# Source: https://www.mongodb.com/de-de
+
+source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
+color
+verb_ip6
+catch_errors
+setting_up_container
+network_check
+update_os
+
+if [[ "$(arch_resolve)" == "arm64" ]]; then
+  MONGO_VERSION="8.0" setup_mongodb
+else
+  install_mongodb_8="${var_mongodb_8:-}"
+  [[ -n "$install_mongodb_8" ]] || read -r -p "${TAB3}Do you want to install MongoDB 8.0 instead of 7.0? [y/N]: " install_mongodb_8 || true
+  if [[ "$install_mongodb_8" =~ ^[Yy]([Ee][Ss])?$ ]]; then
+    MONGO_VERSION="8.0" setup_mongodb
+  else
+    MONGO_VERSION="7.0" setup_mongodb
+  fi
+fi
+sed -i 's/bindIp: 127.0.0.1/bindIp: 0.0.0.0/' /etc/mongod.conf
+
+motd_ssh
+customize
+cleanup_lxc
