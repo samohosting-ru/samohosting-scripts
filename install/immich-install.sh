@@ -1,0 +1,514 @@
+#!/usr/bin/env bash
+
+# Copyright (c) 2021-2026 community-scripts ORG
+# Author: vhsdream
+# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# Source: https://immich.app | Github: https://github.com/immich-app/immich
+
+source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
+color
+verb_ip6
+catch_errors
+setting_up_container
+network_check
+update_os
+
+if is_debian && [[ "$(get_os_version_major)" -lt 13 ]]; then
+  msg_error "Immich needs Debian 13: its build dependencies and Intel runtime packages are not available on Debian 12."
+  exit 238
+fi
+
+if [[ "$(arch_resolve)" == "amd64" ]] && ! grep -qm1 sse4_2 /proc/cpuinfo; then
+  msg_error "Immich needs a CPU with SSE4.2: its web build stops with 'Illegal instruction' on older ones."
+  exit 236
+fi
+
+RELEASE="v3.4.1"
+if lscpu | grep -q 'GenuineIntel'; then
+  echo ""
+  echo ""
+  echo -e "🤖 ${BL}Immich Machine-Learning Options${CL}"
+  echo "─────────────────────────────────────────"
+  echo "Please choose your machine-learning type:"
+  echo ""
+  echo " 1) CPU only (default)"
+  echo " 2) **NEW** Intel OpenVINO CPU or iGPU"
+  echo ""
+
+  read -r -p "${TAB3}Select machine-learning type [1]: " ML_TYPE || true
+  ML_TYPE="${ML_TYPE:-1}"
+  if [[ "$ML_TYPE" == "2" ]]; then
+    touch ~/.openvino
+    $STD apt install -y --no-install-recommends patchelf
+    if [[ -d /dev/dri ]]; then
+      msg_info "Installing Intel OpenVINO dependencies"
+      tmp_dir=$(mktemp -d)
+      $STD pushd "$tmp_dir"
+      INTEL_SRC="https://raw.githubusercontent.com/immich-app/immich/${RELEASE}/machine-learning"
+      curl -fsSL "${INTEL_SRC}/scripts/install-intel-runtime.sh" -o ./intel-runtime 2>/dev/null ||
+        curl_with_retry "${INTEL_SRC}/Dockerfile" "./intel-runtime"
+      readarray -t INTEL_URLS < <(grep -oE 'https://github\.com/intel/[^[:space:]]+\.deb' ./intel-runtime)
+      rm -f ./intel-runtime
+      for url in "${INTEL_URLS[@]}"; do
+        curl_with_retry "$url" "$(basename "$url")"
+      done
+      $STD apt install -y ./libigdgmm12*.deb
+      rm ./libigdgmm12*.deb
+      $STD apt install -y ./*.deb
+      $STD apt-mark hold libigdgmm12
+      $STD popd
+      rm -rf "$tmp_dir"
+      dpkg-query -W -f='${Version}\n' intel-opencl-icd >~/.intel_version
+      msg_ok "Installed Intel OpenVINO dependencies"
+    fi
+  fi
+fi
+
+msg_info "Installing dependencies"
+$STD apt install --no-install-recommends -y \
+  git \
+  redis \
+  pigz \
+  build-essential \
+  python3-dev \
+  jq \
+  libltdl-dev \
+  libgdk-pixbuf-2.0-dev \
+  libbrotli-dev \
+  libexif-dev \
+  libexpat1-dev \
+  libglib2.0-dev \
+  libgsf-1-dev \
+  libjpeg62-turbo-dev \
+  libspng-dev \
+  liblcms2-dev \
+  libopenexr-dev \
+  libgif-dev \
+  librsvg2-dev \
+  libexpat1 \
+  libgcc-s1 \
+  libgomp1 \
+  liblqr-1-0 \
+  libltdl7 \
+  libopenjp2-7 \
+  libopenjp2-7-dev \
+  pkg-config \
+  mesa-utils \
+  mesa-va-drivers \
+  mesa-vulkan-drivers \
+  ocl-icd-libopencl1 \
+  tini \
+  zlib1g \
+  libio-compress-brotli-perl \
+  libwebp7 \
+  libwebpdemux2 \
+  libwebpmux3 \
+  libhwy1t64 \
+  libdav1d-dev \
+  libhwy-dev \
+  libwebp-dev \
+  libaom-dev \
+  unzip
+
+setup_deb822_repo \
+  "jellyfin" \
+  "https://repo.jellyfin.org/jellyfin_team.gpg.key" \
+  "https://repo.jellyfin.org/debian" \
+  "$(get_os_info codename)"
+install_packages_with_retry jellyfin-ffmpeg7
+ln -sf /usr/lib/jellyfin-ffmpeg/ffmpeg /usr/bin/ffmpeg
+ln -sf /usr/lib/jellyfin-ffmpeg/ffprobe /usr/bin/ffprobe
+
+# Set permissions for /dev/dri (only in privileged containers and if /dev/dri exists)
+if [[ "$CTTYPE" == "0" && -d /dev/dri ]]; then
+  chgrp video /dev/dri 2>/dev/null || true
+  chmod 755 /dev/dri 2>/dev/null || true
+  chmod 660 /dev/dri/* 2>/dev/null || true
+  $STD adduser "$(id -u -n)" video 2>/dev/null || true
+  $STD adduser "$(id -u -n)" render 2>/dev/null || true
+fi
+msg_ok "Dependencies Installed"
+
+INSTALL_DIR="/opt/${APPLICATION}"
+UPLOAD_DIR="${INSTALL_DIR}/upload"
+SRC_DIR="${INSTALL_DIR}/source"
+APP_DIR="${INSTALL_DIR}/app"
+PLUGIN_DIR="${APP_DIR}/plugins/immich-plugin-core"
+ML_DIR="${APP_DIR}/machine-learning"
+GEO_DIR="${INSTALL_DIR}/geodata"
+mkdir -p {"${APP_DIR}","${UPLOAD_DIR}","${GEO_DIR}","${INSTALL_DIR}"/cache}
+
+msg_info "Installing GeoNames data"
+cd "$GEO_DIR"
+CURL_RETRIES=6 CURL_CONNECT_TO=30 curl_with_retry "https://download.geonames.org/export/dump/admin1CodesASCII.txt" "admin1CodesASCII.txt"
+CURL_RETRIES=6 CURL_CONNECT_TO=30 curl_with_retry "https://download.geonames.org/export/dump/admin2Codes.txt" "admin2Codes.txt"
+CURL_RETRIES=6 CURL_CONNECT_TO=30 curl_with_retry "https://download.geonames.org/export/dump/countryInfo.txt" "countryInfo.txt"
+CURL_RETRIES=6 CURL_CONNECT_TO=30 curl_with_retry "https://download.geonames.org/export/dump/cities500.zip" "cities500.zip"
+curl_with_retry "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_10m_admin_0_countries.geojson" "ne_10m_admin_0_countries.geojson"
+unzip -q cities500.zip
+date --iso-8601=seconds | tr -d "\n" >geodata-date.txt
+rm cities500.zip
+cd ~
+msg_ok "Installed GeoNames data"
+
+MISE_ARCH="x64"
+[[ "$(arch_resolve)" == "arm64" ]] && MISE_ARCH="arm64"
+fetch_and_deploy_gh_release "mise" "jdx/mise" "singlefile" "latest" "/usr/local/bin" "mise-v*-linux-${MISE_ARCH}"
+
+msg_info "Configuring Debian Testing Repo"
+if [[ -f /etc/apt/sources.list.d/debian.sources ]]; then
+  sed -i 's/ trixie-updates/ trixie-updates testing/g' /etc/apt/sources.list.d/debian.sources
+else
+  cat <<EOF >/etc/apt/sources.list.d/testing.sources
+Types: deb
+URIs: http://deb.debian.org/debian
+Suites: testing
+Components: main
+Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
+EOF
+fi
+cat <<EOF >/etc/apt/preferences.d/preferences
+Package: *
+Pin: release a=unstable
+Pin-Priority: 450
+
+Package: *
+Pin:release a=testing
+Pin-Priority: 450
+EOF
+apt_update_safe
+msg_ok "Configured Debian Testing repo"
+msg_info "Installing packages from Debian Testing repo"
+$STD apt install -t testing --no-install-recommends -yqq libmimalloc3 libde265-dev
+msg_ok "Installed packages from Debian Testing repo"
+
+setup_uv
+PG_VERSION="16" PG_MODULES="pgvector" setup_postgresql
+
+ACTUAL_PG_VERSION=$(ls /etc/postgresql/ 2>/dev/null | sort -V | tail -1)
+ACTUAL_PG_VERSION=${ACTUAL_PG_VERSION:-16}
+
+VCHORD_RELEASE="1.1.1"
+fetch_and_deploy_gh_release "VectorChord" "supervc-stack/VectorChord" "binary" "${VCHORD_RELEASE}" "/tmp" "postgresql-${ACTUAL_PG_VERSION}-vchord_*_$(arch_resolve).deb"
+
+sed -i "s/^#shared_preload.*/shared_preload_libraries = 'vchord.so'/" /etc/postgresql/${ACTUAL_PG_VERSION}/main/postgresql.conf
+systemctl restart postgresql.service
+PG_DB_NAME="immich" PG_DB_USER="immich" PG_DB_GRANT_SUPERUSER="true" PG_DB_SKIP_ALTER_ROLE="true" setup_postgresql_db
+
+LD_LIBRARY_PATH=/usr/local/lib
+export LD_RUN_PATH=/usr/local/lib
+
+# Immich ships the custom photo-processing libraries (libjxl, jpegli, libheif,
+# libraw, ImageMagick, libvips) prebuilt in its own OCI base image. Pull the one
+# the release's Dockerfile pins (skopeo + umoci, no container runtime) and use its
+# /usr/local. There is no compile fallback: this needs Proxmox VE 9.1 or newer.
+msg_info "Deploying prebuilt image-processing libraries"
+BASE_REF="$(curl -fsSL "https://raw.githubusercontent.com/immich-app/immich/${RELEASE}/server/Dockerfile" | awk '/^FROM ghcr.io\/immich-app\/base-server-dev/ {print $2; exit}')" || true
+if [[ -z "$BASE_REF" ]]; then
+  msg_error "Could not read the base image from Immich ${RELEASE}'s Dockerfile."
+  exit 115
+fi
+# skopeo refuses a reference with both a tag and a digest; the digest is the pin.
+BASE_IMAGE="$BASE_REF"
+[[ "$BASE_REF" == *@sha256:* ]] && BASE_IMAGE="ghcr.io/immich-app/base-server-dev@${BASE_REF#*@}"
+if ! $STD apt install -y --no-install-recommends skopeo umoci; then
+  msg_error "Could not install skopeo and umoci, which Immich needs for its image-processing libraries."
+  exit 105
+fi
+OCI_DIR="$(mktemp -d)"
+OCI_BUNDLE="$(mktemp -d)"
+if ! $STD skopeo copy --override-os linux --override-arch "$(arch_resolve amd64 arm64)" "docker://${BASE_IMAGE}" "oci:${OCI_DIR}:img"; then
+  rm -rf "$OCI_DIR" "$OCI_BUNDLE"
+  msg_error "Could not download Immich's base image (${BASE_IMAGE})."
+  exit 115
+fi
+if ! $STD umoci unpack --image "${OCI_DIR}:img" "$OCI_BUNDLE"; then
+  rm -rf "$OCI_DIR" "$OCI_BUNDLE"
+  msg_error "Could not unpack Immich's base image. Immich needs Proxmox VE 9.1 or newer."
+  exit 105
+fi
+# The libraries, headers and ImageMagick data, without the node runtime, global
+# node modules and ffmpeg of the node base image: this script provides those.
+tar -C "${OCI_BUNDLE}/rootfs/usr/local" \
+  --exclude=./bin/node --exclude=./bin/npm --exclude=./bin/npx --exclude=./bin/corepack \
+  --exclude=./bin/ffmpeg --exclude=./bin/ffprobe \
+  --exclude=./lib/node_modules --exclude=./include/node \
+  -cf - . | tar -C /usr/local -xf -
+rm -rf "$OCI_DIR" "$OCI_BUNDLE"
+export LD_LIBRARY_PATH=/usr/local/lib
+ldconfig /usr/local/lib
+if ! vips --version >/dev/null 2>&1 || ! pkg-config --exists vips; then
+  msg_error "The prebuilt libvips from ${BASE_IMAGE} does not work in this container."
+  exit 1
+fi
+echo "$BASE_REF" >~/.immich_base_image
+msg_ok "Deployed prebuilt image-processing libraries"
+
+fetch_and_deploy_gh_release "Immich" "immich-app/immich" "tarball" "${RELEASE}" "$SRC_DIR"
+PNPM_VERSION="$(jq -r '.packageManager | split("@")[1] | split("+")[0]' ${SRC_DIR}/package.json)"
+export COREPACK_ENABLE_DOWNLOAD_PROMPT=0
+NODE_VERSION="24" NODE_MODULE="corepack" setup_nodejs
+# Provision the exact pnpm pinned in package.json's packageManager field via corepack instead
+# of `npm i -g pnpm@X`, which collides (EEXIST) with the corepack pnpm shim shipped by the
+$STD corepack prepare "pnpm@${PNPM_VERSION}" --activate
+export PATH="/root/.local/share/pnpm/bin:$PATH"
+$STD pnpm config set --global dangerouslyAllowAllBuilds true
+
+msg_info "Installing Immich (patience)"
+
+cd "$SRC_DIR"/server
+export COREPACK_ENABLE_DOWNLOAD_PROMPT=0
+export CI=1
+
+# server build
+$STD pnpm --filter @immich/sdk --filter @immich/plugin-sdk --filter immich build
+$STD pnpm --filter immich --prod --no-optional deploy "$APP_DIR"
+export SHARP_FORCE_GLOBAL_LIBVIPS=true
+$STD pnpm --dir "$APP_DIR/node_modules/sharp" exec npm run build
+
+# Patch helmet.json: disable upgrade-insecure-requests for HTTP access
+if [[ -f "$APP_DIR/helmet.json" ]]; then
+  jq '.contentSecurityPolicy.directives["upgrade-insecure-requests"] = null' "$APP_DIR/helmet.json" >"$APP_DIR/helmet.json.tmp" && mv "$APP_DIR/helmet.json.tmp" "$APP_DIR/helmet.json"
+fi
+
+cp "$APP_DIR"/package.json "$APP_DIR"/bin
+sed -i "s|^start|${APP_DIR}/bin/start|" "$APP_DIR"/bin/immich-admin
+
+# sdk, cli & web build
+cd "$SRC_DIR"
+echo "packageImportMethod: hardlink" >>./pnpm-workspace.yaml
+unset SHARP_FORCE_GLOBAL_LIBVIPS
+$STD pnpm --filter @immich/sdk --filter immich-web --filter @immich/cli build
+$STD pnpm --filter @immich/cli --prod --no-optional deploy "$APP_DIR"/cli
+cp -a web/build "$APP_DIR"/www
+cp LICENSE "$APP_DIR"
+cd "$SRC_DIR"
+export MISE_TRUSTED_CONFIG_PATHS="$SRC_DIR"/mise.toml
+export MISE_DISABLE_TOOLS=github:jellyfin/jellyfin-ffmpeg,java,terragrunt,opentofu,restic,npm:@openapitools/openapi-generator-cli,npm:oazapfts
+export MISE_LOCKFILE_MODE=merge MISE_LOCKFILE_PLATFORMS="linux-$(arch_resolve x64 arm64)"
+mise_ok=0
+for i in 1 2 3; do
+  $STD mise install && {
+    mise_ok=1
+    break
+  }
+  msg_warn "mise install failed (attempt $i/3) - retrying"
+  sleep 5
+done
+[[ "$mise_ok" -eq 1 ]] || exit 1
+export PATH="$(mise bin-paths 2>/dev/null | tr '\n' ':')$PATH"
+if ! command -v extism-js >/dev/null 2>&1; then
+  # extism-js is published as a bare gzip-compressed single binary (.gz), which
+  # fetch_and_deploy_gh_release cannot deploy (singlefile leaves it compressed,
+  # prebuild only handles zip/tar). Fetch + gunzip it directly.
+  EXTISM_ARCH="$(arch_resolve x86_64 aarch64)"
+  EXTISM_VERSION="$(grep -oP '"github:extism/js-pdk"\s*=\s*"\K[^"]+' "$SRC_DIR"/mise.toml)"
+  curl_download /tmp/extism-js.gz "https://github.com/extism/js-pdk/releases/download/${EXTISM_VERSION}/extism-js-${EXTISM_ARCH}-linux-${EXTISM_VERSION}.gz"
+  gunzip -f /tmp/extism-js.gz
+  install -m 0755 /tmp/extism-js /usr/local/bin/extism-js
+  rm -f /tmp/extism-js
+fi
+$STD mise exec -- pnpm --filter @immich/sdk --filter @immich/plugin-sdk --filter @immich/plugin-core install --frozen-lockfile
+$STD mise exec -- pnpm --filter @immich/sdk --filter @immich/plugin-sdk --filter @immich/plugin-core build
+mkdir -p "$PLUGIN_DIR"
+cp -r ./packages/plugin-core/dist "$PLUGIN_DIR"/dist
+cp ./packages/plugin-core/manifest.json "$PLUGIN_DIR"
+msg_ok "Installed Immich Server, Web and Plugin Components"
+
+RESTIC_REF="$(grep -oP 'futo-org/restic:sha-\K[0-9a-f]+' "$SRC_DIR"/server/Dockerfile)"
+RESTIC_PROXY_REF="$(grep -oP 'futo-org/backups/restic-proxy:\K[^@]+' "$SRC_DIR"/server/Dockerfile)"
+FUTO_DIR=/opt/staging/futo
+rm -rf "$FUTO_DIR"
+$STD git clone --filter=blob:none --no-checkout https://github.com/futo-org/restic "$FUTO_DIR"/restic
+$STD git -C "$FUTO_DIR"/restic checkout "$RESTIC_REF"
+$STD git clone --depth 1 --filter=blob:none --sparse -b "$RESTIC_PROXY_REF" https://github.com/futo-org/backups "$FUTO_DIR"/backups
+$STD git -C "$FUTO_DIR"/backups sparse-checkout set packages/restic-proxy
+GO_VERSION="$(awk '/^go /{print $2}' "$FUTO_DIR"/backups/packages/restic-proxy/go.mod)" setup_go
+msg_info "Building restic for FUTO Backups"
+cd "$FUTO_DIR"/restic
+$STD env CGO_ENABLED=0 go build -o /usr/local/bin/restic ./cmd/restic
+cd "$FUTO_DIR"/backups/packages/restic-proxy
+$STD env CGO_ENABLED=0 go build -o /usr/local/bin/restic-proxy .
+cd "$SRC_DIR"
+rm -rf "$FUTO_DIR"
+echo "${RESTIC_REF} ${RESTIC_PROXY_REF}" >~/.immich_restic
+msg_ok "Built restic for FUTO Backups"
+
+cd "$SRC_DIR"/machine-learning
+$STD useradd -U -s /usr/sbin/nologin -r -M -d "$INSTALL_DIR" immich
+mkdir -p "$ML_DIR"
+# chown excluding upload dir contents (may be a mount with restricted permissions)
+chown immich:immich "$INSTALL_DIR"
+find "$INSTALL_DIR" -maxdepth 1 -mindepth 1 ! -name upload -exec chown -R immich:immich {} +
+chown immich:immich "$UPLOAD_DIR" 2>/dev/null || true
+export VIRTUAL_ENV="${ML_DIR}/ml-venv"
+if [[ -f ~/.openvino ]]; then
+  ML_PYTHON="python3.13"
+  msg_info "Pre-installing Python ${ML_PYTHON} for machine-learning"
+  for attempt in $(seq 1 3); do
+    $STD sudo --preserve-env=VIRTUAL_ENV -Pnu immich uv python install "${ML_PYTHON}" && break
+    [[ $attempt -lt 3 ]] && msg_warn "Python download attempt $attempt failed, retrying..." && sleep 5
+  done
+  msg_ok "Pre-installed Python ${ML_PYTHON}"
+  msg_info "Installing Intel OpenVINO machine-learning"
+  for attempt in $(seq 1 3); do
+    $STD sudo --preserve-env=VIRTUAL_ENV,UV_HTTP_TIMEOUT,UV_CONCURRENT_DOWNLOADS,UV_CONCURRENT_BUILDS,UV_CONCURRENT_INSTALLS -Pnu immich uv sync --extra openvino --no-dev --upgrade-package watchfiles --active --link-mode copy -n -p "${ML_PYTHON}" --managed-python && break
+    [[ $attempt -eq 3 ]] && { msg_error "uv sync failed three times, the machine-learning environment was not built"; exit 1; }
+    # Parallel fetches can trip DNS rate limits (AdGuard, Pi-hole); retry one at a time.
+    export UV_CONCURRENT_DOWNLOADS=1 UV_CONCURRENT_BUILDS=1 UV_CONCURRENT_INSTALLS=1
+    msg_warn "uv sync attempt $attempt failed, retrying one download at a time..." && sleep 10
+  done
+  patchelf --clear-execstack "${VIRTUAL_ENV}/lib/python3.13/site-packages/onnxruntime/capi/onnxruntime_pybind11_state.cpython-313-$(arch_resolve "x86_64" "aarch64")-linux-gnu.so"
+  msg_ok "Installed Intel OpenVINO machine-learning"
+else
+  ML_PYTHON="python3.13"
+  msg_info "Pre-installing Python ${ML_PYTHON} for machine-learning"
+  for attempt in $(seq 1 3); do
+    $STD sudo --preserve-env=VIRTUAL_ENV -Pnu immich uv python install "${ML_PYTHON}" && break
+    [[ $attempt -lt 3 ]] && msg_warn "Python download attempt $attempt failed, retrying..." && sleep 5
+  done
+  msg_ok "Pre-installed Python ${ML_PYTHON}"
+  msg_info "Installing machine-learning"
+  for attempt in $(seq 1 3); do
+    $STD sudo --preserve-env=VIRTUAL_ENV,UV_HTTP_TIMEOUT,UV_CONCURRENT_DOWNLOADS,UV_CONCURRENT_BUILDS,UV_CONCURRENT_INSTALLS -Pnu immich uv sync --extra cpu --no-dev --upgrade-package watchfiles --active --link-mode copy -n -p "${ML_PYTHON}" --managed-python && break
+    [[ $attempt -eq 3 ]] && { msg_error "uv sync failed three times, the machine-learning environment was not built"; exit 1; }
+    # Parallel fetches can trip DNS rate limits (AdGuard, Pi-hole); retry one at a time.
+    export UV_CONCURRENT_DOWNLOADS=1 UV_CONCURRENT_BUILDS=1 UV_CONCURRENT_INSTALLS=1
+    msg_warn "uv sync attempt $attempt failed, retrying one download at a time..." && sleep 10
+  done
+  msg_ok "Installed machine-learning"
+fi
+cd "$SRC_DIR"
+cp -a machine-learning/{ann,immich_ml} "$ML_DIR"
+[[ -f ~/.openvino ]] && sed -i "/intra_op/s/int = 0/int = os.cpu_count() or 0/" "$ML_DIR"/immich_ml/config.py
+ln -sf "$APP_DIR"/resources "$INSTALL_DIR"
+
+cd "$APP_DIR"
+grep -rl /usr/src | xargs -n1 sed -i "s|\/usr/src|$INSTALL_DIR|g"
+grep -rlE "'/build'" | xargs -n1 sed -i "s|'/build'|'$APP_DIR'|g"
+sed -i "s@\"/cache\"@\"$INSTALL_DIR/cache\"@g" "$ML_DIR"/immich_ml/config.py
+ln -s "$UPLOAD_DIR" "$APP_DIR"/upload
+ln -s "$UPLOAD_DIR" "$ML_DIR"/upload
+cd "$INSTALL_DIR"
+ln -s "$GEO_DIR" "$APP_DIR"
+
+# MickLesk temporary patch for HEIC thumbnail gen
+MEDIA_REPO_JS="/opt/immich/app/dist/repositories/media.repository.js"
+if grep -qF "(0, sharp_1.default)(input).metadata()" "$MEDIA_REPO_JS" 2>/dev/null; then
+  msg_info "Patching media.repository.js"
+  sed -i '0,/(0, sharp_1\.default)(input)\.metadata()/s//(0, sharp_1.default)(input, { unlimited: true, limitInputPixels: false }).metadata()/' "$MEDIA_REPO_JS"
+  msg_ok "Patched media.repository.js"
+fi
+
+mkdir -p /var/log/immich
+touch /var/log/immich/{web.log,ml.log}
+msg_ok "Installed Immich"
+
+msg_info "Modifying user, creating env file, scripts & services"
+usermod -aG video,render immich
+
+cat <<EOF >"${INSTALL_DIR}"/.env
+TZ=$(cat /etc/timezone)
+IMMICH_VERSION=release
+NODE_ENV=production
+IMMICH_ALLOW_SETUP=true
+
+## Change to 'false' to disable CSP
+IMMICH_HELMET_FILE=true
+
+DB_HOSTNAME=127.0.0.1
+DB_USERNAME=${PG_DB_USER}
+DB_PASSWORD=${PG_DB_PASS}
+DB_DATABASE_NAME=${PG_DB_NAME}
+DB_VECTOR_EXTENSION=vectorchord
+
+REDIS_HOSTNAME=127.0.0.1
+IMMICH_MACHINE_LEARNING_URL=http://127.0.0.1:3003
+MACHINE_LEARNING_CACHE_FOLDER=${INSTALL_DIR}/cache
+## - For OpenVINO only - uncomment below to increase
+## - inference speed while reducing accuracy
+## - Default is FP32
+# MACHINE_LEARNING_OPENVINO_PRECISION=FP16
+MACHINE_LEARNING_MODEL_REVISION=v2
+
+IMMICH_MEDIA_LOCATION=${UPLOAD_DIR}
+EOF
+cat <<EOF >"${ML_DIR}"/ml_start.sh
+#!/usr/bin/env bash
+
+cd ${ML_DIR}
+. ${VIRTUAL_ENV}/bin/activate
+
+set -a
+. ${INSTALL_DIR}/.env
+set +a
+
+python3 -m immich_ml
+EOF
+cat <<EOF >"$APP_DIR"/bin/start.sh
+#!/usr/bin/env bash
+
+set -a
+. ${INSTALL_DIR}/.env
+set +a
+
+/usr/bin/node --no-warnings ${APP_DIR}/dist/main.js "\$@"
+EOF
+chmod +x "$ML_DIR"/ml_start.sh "$APP_DIR"/bin/start.sh
+ln -sf "$APP_DIR"/cli/bin/immich /usr/bin/immich
+ln -sf "$APP_DIR"/bin/immich-admin /usr/bin/immich-admin
+cat <<EOF >/etc/systemd/system/immich-web.service
+[Unit]
+Description=Immich Web Service
+After=network.target
+Requires=redis-server.service
+Requires=postgresql.service
+Requires=immich-ml.service
+
+[Service]
+Type=simple
+User=immich
+Group=immich
+UMask=0077
+WorkingDirectory=${APP_DIR}
+ExecStart=${APP_DIR}/bin/start.sh
+Restart=on-failure
+SyslogIdentifier=immich-web
+StandardOutput=append:/var/log/immich/web.log
+StandardError=append:/var/log/immich/web.log
+
+[Install]
+WantedBy=multi-user.target
+EOF
+cat <<EOF >/etc/systemd/system/immich-ml.service
+[Unit]
+Description=Immich Machine-Learning
+After=network.target
+
+[Service]
+Type=simple
+UMask=0077
+User=immich
+Group=immich
+WorkingDirectory=${APP_DIR}
+EnvironmentFile=${INSTALL_DIR}/.env
+ExecStart=${ML_DIR}/ml_start.sh
+Restart=on-failure
+SyslogIdentifier=immich-machine-learning
+StandardOutput=append:/var/log/immich/ml.log
+StandardError=append:/var/log/immich/ml.log
+
+[Install]
+WantedBy=multi-user.target
+EOF
+chown -R immich:immich /var/log/immich
+# chown excluding upload dir contents (may be a mount with restricted permissions)
+chown immich:immich "$INSTALL_DIR"
+find "$INSTALL_DIR" -maxdepth 1 -mindepth 1 ! -name upload -exec chown -R immich:immich {} +
+chown immich:immich "$UPLOAD_DIR" 2>/dev/null || true
+systemctl enable -q --now immich-ml.service immich-web.service
+msg_ok "Modified user, created env file, scripts and services"
+
+motd_ssh
+customize
+cleanup_lxc

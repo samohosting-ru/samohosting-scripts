@@ -1,0 +1,37 @@
+# General OS files
+.DS_Store
+Thumbs.db
+
+# Editor & IDE files
+!.vscode/
+.vscode/*.workspace
+.vscode/*.tmp
+
+# Log files
+logs/
+*.log
+
+# Install scripts and temporary files
+install/tmp/
+install/*.bak
+
+# VM and Container-specific exclusions
+vm/tmp/
+vm/*.qcow2
+vm/*.img
+vm/*.vmdk
+vm/*.iso
+vm/*.bak
+
+# Miscellaneous temporary files
+*.bak
+*.swp
+*.swo
+*.swn
+*.tmp
+*.backup
+
+# JSON temporary files
+json/
+json/*.bak
+json/*.tmp
