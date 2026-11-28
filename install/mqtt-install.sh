@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+# Copyright (c) 2021-2026 tteck
+# Author: tteck (tteckster)
+# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# Source: https://mosquitto.org/
+
+source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
+color
+verb_ip6
+catch_errors
+setting_up_container
+network_check
+update_os
+
+setup_deb822_repo \
+  "mqtt" \
+  "https://repo.mosquitto.org/debian/mosquitto-repo.gpg" \
+  "https://repo.mosquitto.org/debian" \
+  "trixie"
+
+msg_info "Installing Mosquitto MQTT Broker"
+$STD apt install -y \
+  mosquitto \
+  mosquitto-clients
+msg_ok "Installed Mosquitto MQTT Broker"
+
+msg_info "Configuring Mosquitto MQTT Broker"
+cat <<EOF >/etc/mosquitto/conf.d/default.conf
+allow_anonymous false
+persistence true
+password_file /etc/mosquitto/passwd
+listener 1883
+EOF
+msg_ok "Configured Mosquitto MQTT Broker"
+
+motd_ssh
+customize
+cleanup_lxc

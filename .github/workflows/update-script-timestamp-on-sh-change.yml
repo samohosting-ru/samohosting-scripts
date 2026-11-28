@@ -1,0 +1,32 @@
+name: Update script timestamp on .sh changes
+
+# After a push to main, stamps the PocketBase record of every script whose .sh
+# files changed. The workflow lives in community-scripts/ci (shared with
+# DevScripts); this file only holds the trigger and what differs here.
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "ct/**/*.sh"
+      - "install/**/*.sh"
+      - "tools/**/*.sh"
+      - "turnkey/**/*.sh"
+      - "vm/**/*.sh"
+
+permissions: {}
+
+jobs:
+  update-script-timestamp:
+    permissions:
+      contents: read
+    uses: community-scripts/ci/.github/workflows/update-script-timestamp.yml@main
+    with:
+      mode: main
+      paths: "ct/ install/ tools/ turnkey/ vm/"
+      pocketbase_url: ${{ vars.POCKETBASE_URL }}
+      pocketbase_collection: ${{ vars.POCKETBASE_COLLECTION }}
+    secrets:
+      pocketbase_admin_email: ${{ secrets.POCKETBASE_ADMIN_EMAIL }}
+      pocketbase_admin_password: ${{ secrets.POCKETBASE_ADMIN_PASSWORD }}
